@@ -1055,7 +1055,7 @@ public class SalesSituationController extends BaseController {
 
 		if (model.getSalesProgressCode() != null && (model.getSalesProgressCode().equals("2"))) {
 			if (model.getCustomer() == null || model.getCustomer().equals("")) {
-				errorsMessage += "確定客様 ";
+				errorsMessage += "結果待ちお客様 ";
 			}
 			if (!errorsMessage.equals("")) {
 				errorsMessage += "を入力してください。";

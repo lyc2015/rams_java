@@ -50,6 +50,8 @@
 		employeeNo,max(admissionStartDate) as admissionStartDate FROM
 		T006EmployeeSiteInfo
 		where
+		customerNo = ifnull(#{customerNo},customerNo)
+		and
 		admissionStartDate &lt;=
 		concat(#{yearAndMonth},"99")
 		and (admissionEndDate is null or
