@@ -1,9 +1,12 @@
 package jp.co.lyc.cms.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.lyc.cms.common.BaseController;
+import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.SalesSendLetterModel;
 import jp.co.lyc.cms.model.SalesSendLettersListName;
 import jp.co.lyc.cms.model.SendRepotModel;
 import jp.co.lyc.cms.model.SendRepotsListName;
 import jp.co.lyc.cms.service.SendRepotService;
+import jp.co.lyc.cms.util.UtilsController;
 
 @Controller
 @RequestMapping(value = "/sendRepot")
@@ -28,6 +33,8 @@ public class SendRepotController extends BaseController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	SendRepotService sendRepotService;
+	@Autowired
+	UtilsController utils;
 
 	/**
 	 * データを取得
@@ -458,5 +465,92 @@ public class SendRepotController extends BaseController {
 		}
 		logger.info("deleteCustomerListByNo" + "検索結束");
 		return newCtmNos;
+	}
+
+	@RequestMapping(value = "/sendLetter", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> sendLetter(@RequestBody ArrayList<EmailModel> emailModel) {
+		logger.info("sendLetter:" + "送信開始");
+		String errorsMessage = "";
+		Map<String, Object> resulterr = new HashMap<>();
+		for (int i = 0; i < emailModel.size(); i++) {
+			if (emailModel.get(i).getMailFrom() == null || emailModel.get(i).getMailFrom().equals("")) {
+				errorsMessage = "登録者メールアドレス入力されてない、確認してください。";
+
+				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+				return resulterr;
+			}
+
+			logger.info("sendMailWithFile:" + "送信開始");
+
+			// 受信人のメール
+			emailModel.get(i).setUserName(getSession().getAttribute("employeeName").toString());
+			emailModel.get(i).setPassword("Lyc2020-0908-");
+			emailModel.get(i).setContextType("text/html;charset=utf-8");
+
+			Calendar cal = Calendar.getInstance();
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH) + 1;
+			String folderPath = "c:/file/作業報告書フォルダ/" + String.valueOf(year) + "/"
+					+ (month < 10 ? "0" + String.valueOf(month) : String.valueOf(month));
+
+			String[] names = emailModel.get(i).getResumePath().split(",");
+			String[] paths = emailModel.get(i).getResumePath().split(",");
+			for (int j = 0; j < names.length; j++) {
+				Map<String, Object> file = getFilesName(folderPath, names[j].replace(" ", ""));
+				List<String> fileNameList = (List<String>) file.get("fileNameList");
+				if (fileNameList.size() > 0) {
+					names[j] = fileNameList.get(0);
+					paths[j] = folderPath + "/" + fileNameList.get(0);
+				}
+			}
+			emailModel.get(i).setNames(names);
+			emailModel.get(i).setPaths(paths);
+			try {
+				// 送信
+				utils.sendMailWithFile(emailModel.get(i));
+			} catch (Exception e) {
+				errorsMessage = "送信エラー発生しました。";
+
+				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+				return resulterr;
+			}
+		}
+		logger.info("sendLetter" + "送信結束");
+		return resulterr;
+
+	}
+
+	public static HashMap<String, Object> getFilesName(String folderPath, String queryStr) {
+		HashMap<String, Object> map = new HashMap<>();
+		List<String> fileNameList = new ArrayList<>();// 文件名列表
+		List<String> folderNameList = new ArrayList<>();// 文件夹名列表
+		File f = new File(folderPath);
+		if (!f.exists()) { // 路径不存在
+			map.put("retType", "1");
+		} else {
+			boolean flag = f.isDirectory();
+			if (flag == false) { // 路径为文件
+				map.put("retType", "2");
+				map.put("fileName", f.getName());
+			} else { // 路径为文件夹
+				map.put("retType", "3");
+				File fa[] = f.listFiles();
+				queryStr = queryStr == null ? "" : queryStr;// 若queryStr传入为null,则替换为空（indexOf匹配值不能为null）
+				for (int i = 0; i < fa.length; i++) {
+					File fs = fa[i];
+					if (fs.getName().indexOf(queryStr) != -1) {
+						if (fs.isDirectory()) {
+							folderNameList.add(fs.getName());
+						} else {
+							fileNameList.add(fs.getName());
+						}
+					}
+				}
+				map.put("fileNameList", fileNameList);
+				map.put("folderNameList", folderNameList);
+			}
+		}
+		return map;
 	}
 }

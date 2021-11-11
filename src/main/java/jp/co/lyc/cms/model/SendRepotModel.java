@@ -1,6 +1,7 @@
 package jp.co.lyc.cms.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SendRepotModel {
 	String customerNo;// お客様番号
@@ -70,6 +71,34 @@ public class SendRepotModel {
 	String approvalStatus;
 	String sentReportStatus;
 	String noChargeList;
+
+	List<String> customerNameList;
+	List<String> purchasingManagersMailList;
+	List<String> sendRepotsAppendList;
+
+	public List<String> getCustomerNameList() {
+		return customerNameList;
+	}
+
+	public void setCustomerNameList(List<String> customerNameList) {
+		this.customerNameList = customerNameList;
+	}
+
+	public List<String> getPurchasingManagersMailList() {
+		return purchasingManagersMailList;
+	}
+
+	public void setPurchasingManagersMailList(List<String> purchasingManagersMailList) {
+		this.purchasingManagersMailList = purchasingManagersMailList;
+	}
+
+	public List<String> getSendRepotsAppendList() {
+		return sendRepotsAppendList;
+	}
+
+	public void setSendRepotsAppendList(List<String> sendRepotsAppendList) {
+		this.sendRepotsAppendList = sendRepotsAppendList;
+	}
 
 	public String getNoChargeList() {
 		return noChargeList;
