@@ -406,6 +406,13 @@ public class CustomerSalesListController {
 			}
 		}
 
+		for (int i = 0; i < newResultData.size(); i++) {
+			newResultData.get(i).setCalPeoCount(newResultData.get(0).getCalPeoCount());
+			newResultData.get(i).setUnitPTotal(newResultData.get(0).getUnitPTotal());
+			newResultData.get(i).setTotalgrossProfit(newResultData.get(0).getTotalgrossProfit());
+			newResultData.get(i).setTotalSales(newResultData.get(0).getTotalSales());
+		}
+
 		// ソート(合計単価降順)
 		for (int i = 0; i < newResultData.size() - 1; i++) {
 			for (int j = 0; j < newResultData.size() - 1 - i; j++) {

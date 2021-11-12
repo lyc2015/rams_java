@@ -163,7 +163,8 @@
 		null,T006EmployeeSiteInfo.unitPrice,T019SalesSentence.unitPrice) as
 		unitPrice,
 		T011.bpUnitPrice,
-		ifnull(T006EmployeeSiteInfo.customerNo, '') AS customer,
+		ifnull(T006EmployeeSiteInfo.customerNo, '')
+		AS customer,
 		T006EmployeeSiteInfo.customerNo as nowCustomer,
 		CONCAT(T001Employee.employeeFristName,T001Employee.employeeLastName)
 		AS
@@ -200,15 +201,19 @@
 		T006EmployeeSiteInfo.employeeNo
 		=
 		T001Employee.employeeNo
-		LEFT JOIN 
+		LEFT JOIN
 		(SELECT T011.* FROM T011BpInfoSupplement as T011
-		inner join 
-		(SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth FROM T011BpInfoSupplement
+		inner join
+		(SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth FROM
+		T011BpInfoSupplement
 		group by bpEmployeeNo) as temp
-		on T011.bpEmployeeNo = temp.bpEmployeeNo
-		and T011.unitPriceStartMonth = temp.unitPriceStartMonth)
+		on T011.bpEmployeeNo
+		= temp.bpEmployeeNo
+		and T011.unitPriceStartMonth =
+		temp.unitPriceStartMonth)
 		AS T011
-		on T011.bpEmployeeNo = T006EmployeeSiteInfo.employeeNo
+		on T011.bpEmployeeNo =
+		T006EmployeeSiteInfo.employeeNo
 		LEFT JOIN
 		T003AddressInfo AS
 		T003AddressInfo
@@ -217,11 +222,14 @@
 		T003AddressInfo.employeeNo
 		LEFT JOIN
 		M013Station AS M013Station
-		on T003AddressInfo.stationCode =
+		on
+		T003AddressInfo.stationCode =
 		M013Station.stationCode
-		Left Join T019SalesSentence as
+		Left Join
+		T019SalesSentence as
 		T019SalesSentence
-		on T006EmployeeSiteInfo.employeeNo =
+		on
+		T006EmployeeSiteInfo.employeeNo =
 		T019SalesSentence.employeeNo
 		LEFT JOIN
 		T015ResumeManagement AS
@@ -286,7 +294,8 @@
 		on
 		T015ResumeManagement.employeeNo =
 		T002EmployeeDetail.employeeNo
-		LEFT JOIN
+		LEFT
+		JOIN
 		T003AddressInfo AS
 		T003AddressInfo
 		on
@@ -306,12 +315,17 @@
 		=
 		T001Employee.employeeNo
 		LEFT JOIN
-		(SELECT T011.* from T011BpInfoSupplement as T011
-		inner join (SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth from T011BpInfoSupplement
+		(SELECT T011.* from
+		T011BpInfoSupplement as T011
+		inner join (SELECT
+		bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth from
+		T011BpInfoSupplement
 		group by bpEmployeeNo
 		) as temp
-		on T011.bpEmployeeNo = temp.bpEmployeeNo
-		and T011.unitPriceStartMonth = temp.unitPriceStartMonth
+		on T011.bpEmployeeNo
+		= temp.bpEmployeeNo
+		and T011.unitPriceStartMonth =
+		temp.unitPriceStartMonth
 		)
 		AS
 		T011BpInfoSupplement
@@ -319,7 +333,8 @@
 		T002EmployeeDetail.employeeNo
 		=
 		T011BpInfoSupplement.bpEmployeeNo
-		Where T002EmployeeDetail.employeeNo
+		Where
+		T002EmployeeDetail.employeeNo
 		in
 		<foreach item="item" collection="list" open="(" close=")"
 			separator=",">
@@ -638,8 +653,16 @@
 
 	<select id="getInterviewLists" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		SELECT concat(T001.employeeFristName,T001.employeeLastName) as
-		employeeName,T010.* FROM T010SalesSituation as T010
+
+		SELECT
+		T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
+		as
+		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
+		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.interviewDate2,T010.stationCode2,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.hopeLowestPrice,
+		T010.hopeHighestPrice,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
+		T010SalesSituation as T010
 		inner join
 		(SELECT
 		employeeNo,max(salesYearAndMonth) as salesYearAndMonth FROM
@@ -652,11 +675,30 @@
 		inner join T001Employee as T001
 		on
 		T001.employeeNo = T010.employeeNo
-		where T010.employeeNo in
+		where T001.employeeNo in
 		<foreach item="item" collection="list" open="(" close=")"
 			separator=",">
 			#{item}
 		</foreach>
+		union
+		SELECT T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
+		as
+		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
+		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.interviewDate2,T010.stationCode2,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.hopeLowestPrice,
+		T010.hopeHighestPrice,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
+		T001Employee as T001
+		left join T010SalesSituation as T010
+		on
+		T001.employeeNo = T010.employeeNo
+		where T010.salesYearAndMonth is null
+		and T001.employeeNo in
+		<foreach item="item" collection="list" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+		order by employeeNo
 		;
 	</select>
 
@@ -671,14 +713,18 @@
 		T010.employeeNo,T010.salesYearAndMonth FROM T010SalesSituation
 		as T010
 		inner join (
-		SELECT employeeNo,max(salesYearAndMonth) as salesYearAndMonth FROM
+		SELECT employeeNo,max(salesYearAndMonth) as
+		salesYearAndMonth FROM
 		T010SalesSituation
-		where salesYearAndMonth &lt;= #{salesDate}
+		where salesYearAndMonth &lt;=
+		#{salesDate}
 		group by employeeNo
 		) as temp
-		on T010.employeeNo = temp.employeeNo
+		on T010.employeeNo =
+		temp.employeeNo
 		and T010.salesYearAndMonth = temp.salesYearAndMonth)
-		as T010
+		as
+		T010
 		left join
 		(SELECT
 		T006.employeeNo,T006.admissionStartDate,T006.admissionEndDate,T006.scheduledEndDate
@@ -698,12 +744,9 @@
 		on T006.employeeNo = T010.employeeNo
 		group by employeeNo) as
 		T010
-		<!-- where (salesYearAndMonth &lt;= #{salesDate} and
-		salesYearAndMonth
-		&gt; #{curDate} and
-		if(salesYearAndMonth &lt;=
-		#{sysDate},(ifnull(scheduledEndDate,admissionEndDate) !=
-		#{curDate}),1=1)) -->
+		<!-- where (salesYearAndMonth &lt;= #{salesDate} and salesYearAndMonth 
+			&gt; #{curDate} and if(salesYearAndMonth &lt;= #{sysDate},(ifnull(scheduledEndDate,admissionEndDate) 
+			!= #{curDate}),1=1)) -->
 		;
 	</select>
 
@@ -1400,7 +1443,8 @@
 		M012SiteRole M012 ON
 		M012.siteRoleCode =
 		t002.siteRoleCode
-		LEFT JOIN
+		LEFT
+		JOIN
 
 		M011DevelopLanguage M011a ON
 		M011a.developLanguageCode =
@@ -1448,7 +1492,8 @@
 		LEFT JOIN T011BpInfoSupplement t011
 		ON t001.employeeNo = t011.bpEmployeeNo
 		WHERE
-		t001.employeeNo =#{employeeNo}
+		t001.employeeNo
+		=#{employeeNo}
 	</select>
 	<select id="getPersonalSalesInfoFromT019" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
@@ -1514,17 +1559,22 @@
 		M003Nationality m003 ON t002.nationalityCode
 		=
 		m003.nationalityCode
-		LEFT JOIN
+		LEFT
+		JOIN
 		T010SalesSituation t010 ON
 		t001.employeeNo = t010.employeeNo
-		LEFT JOIN
+		LEFT
+		JOIN
 		T019SalesSentence t019 ON
 		t019.employeeNo = t001.employeeNo
-		LEFT JOIN
+		LEFT
+		JOIN
 		M027ProjectPhase M027 ON
-		M027.projectPhaseCode = t019.projectPhaseCode
+		M027.projectPhaseCode =
+		t019.projectPhaseCode
 		LEFT JOIN T011BpInfoSupplement t011
-		ON t001.employeeNo = t011.bpEmployeeNo
+		ON
+		t001.employeeNo = t011.bpEmployeeNo
 		WHERE
 		t001.employeeNo
 		=#{employeeNo}
