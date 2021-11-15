@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jp.co.lyc.cms.model.CostRegistrationModel;
-import jp.co.lyc.cms.model.DutyManagementModel;
+import jp.co.lyc.cms.model.SendInvoiceModel;
+import jp.co.lyc.cms.model.SendInvoiceWorkTimeModel;
 import jp.co.lyc.cms.service.SendInvoiceService;
 
 @Controller
@@ -26,77 +26,49 @@ public class SendInvoiceController {
 	SendInvoiceService sendInvoiceService;
 
 	/**
-	 * 登録ボタン
+	 * データ検索
 	 * 
 	 * @param topCustomerMod
 	 * @return
 	 */
-	@RequestMapping(value = "/selectDutyManagement", method = RequestMethod.POST)
+	@RequestMapping(value = "/selectSendInvoice", method = RequestMethod.POST)
 	@ResponseBody
-	public List<DutyManagementModel> selectDutyManagement(@RequestBody HashMap<String, String> dutyManagementModel) {
+	public List<SendInvoiceModel> selectSendInvoice(@RequestBody HashMap<String, String> dutyManagementModel) {
 		logger.info("DutyManagementController.selectDutyManagement:" + "検索開始");
-		logger.info(dutyManagementModel.toString());
-		List<DutyManagementModel> checkMod = sendInvoiceService.selectDutyManagement(dutyManagementModel);
-		List<DutyManagementModel> workTimeList = sendInvoiceService.selectWorkTime(dutyManagementModel);
-		List<CostRegistrationModel> costRegistrationModelList = sendInvoiceService
-				.selectCostRegistration(dutyManagementModel);
-		for (int i = 0; i < checkMod.size(); i++) {
-			for (int j = 0; j < workTimeList.size(); j++) {
-				if (checkMod.get(i).getEmployeeNo().equals(workTimeList.get(j).getEmployeeNo())) {
-					if (checkMod.get(i).getWorkTime() == null || checkMod.get(i).getWorkTime().equals("")) {
-						String workTime = workTimeList.get(j).getWorkTime();
-						if (workTime != null)
-							checkMod.get(i).setWorkTime(workTime.replace(".0", ""));
-					}
-				}
+		List<SendInvoiceModel> returnList = new ArrayList<SendInvoiceModel>();
+		List<SendInvoiceModel> sendInvoiceList = sendInvoiceService.selectSendInvoice(dutyManagementModel);
+		List<SendInvoiceWorkTimeModel> sendInvoiceWorkTimeList = new ArrayList<SendInvoiceWorkTimeModel>();
+		int rowNo = 0;
+		for (int i = 0; i < sendInvoiceList.size(); i++) {
+			SendInvoiceWorkTimeModel sendInvoiceWorkTimeModel = new SendInvoiceWorkTimeModel();
+			rowNo++;
+			sendInvoiceWorkTimeModel.setRowNo(rowNo);
+			sendInvoiceWorkTimeModel.setEmployeeNo(sendInvoiceList.get(i).getEmployeeNo());
+			sendInvoiceWorkTimeModel.setEmployeeName(sendInvoiceList.get(i).getEmployeeName());
+			sendInvoiceWorkTimeModel.setPayOffRange1(sendInvoiceList.get(i).getPayOffRange1());
+			sendInvoiceWorkTimeModel.setPayOffRange2(sendInvoiceList.get(i).getPayOffRange2());
+			sendInvoiceWorkTimeModel.setSumWorkTime(sendInvoiceList.get(i).getSumWorkTime());
+			sendInvoiceWorkTimeModel.setDeductionsAndOvertimePayOfUnitPrice(
+					sendInvoiceList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
+			sendInvoiceWorkTimeList.add(sendInvoiceWorkTimeModel);
+
+			if (i != sendInvoiceList.size() - 1
+					&& !sendInvoiceList.get(i).getCustomerNo().equals(sendInvoiceList.get(i + 1).getCustomerNo())) {
+				sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
+				returnList.add(sendInvoiceList.get(i));
+				sendInvoiceWorkTimeList = new ArrayList<SendInvoiceWorkTimeModel>();
+				rowNo = 0;
+			} else if (i == sendInvoiceList.size() - 1) {
+				sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
+				returnList.add(sendInvoiceList.get(i));
 			}
 		}
 
-		for (int i = 0; i < checkMod.size(); i++) {
-			if (checkMod.get(i).getDeductionsAndOvertimePay() != null) {
-				checkMod.get(i)
-						.setDeductionsAndOvertimePay(checkMod.get(i).getDeductionsAndOvertimePay().replace(".0", ""));
-			}
-			if (checkMod.get(i).getDeductionsAndOvertimePayOfUnitPrice() != null) {
-				checkMod.get(i).setDeductionsAndOvertimePayOfUnitPrice(
-						checkMod.get(i).getDeductionsAndOvertimePayOfUnitPrice().replace(".0", ""));
-			}
-			checkMod.get(i).setRowNo(i + 1);
-			List<CostRegistrationModel> newCostRegistrationModelList = new ArrayList<CostRegistrationModel>();
-			for (int j = 0; j < costRegistrationModelList.size(); j++) {
-				if (checkMod.get(i).getEmployeeNo().equals(costRegistrationModelList.get(j).getEmployeeNo())) {
-					CostRegistrationModel costRegistrationModel = new CostRegistrationModel();
-					costRegistrationModel.setRowNo(j);
-					costRegistrationModel.setHappendDate(costRegistrationModelList.get(j).getHappendDate());
-					costRegistrationModel.setDueDate(costRegistrationModelList.get(j).getDueDate());
-					costRegistrationModel
-							.setCostClassificationCode(costRegistrationModelList.get(j).getCostClassificationCode());
-					costRegistrationModel.setRegularStatus(costRegistrationModelList.get(j).getRegularStatus());
-					costRegistrationModel
-							.setDetailedNameOrLine(costRegistrationModelList.get(j).getDetailedNameOrLine() == null ? ""
-									: costRegistrationModelList.get(j).getDetailedNameOrLine());
-					costRegistrationModel.setCost(costRegistrationModelList.get(j).getCost());
-					costRegistrationModel.setRemark(costRegistrationModelList.get(j).getRemark() == null ? ""
-							: costRegistrationModelList.get(j).getRemark());
-					costRegistrationModel.setCostFile(costRegistrationModelList.get(j).getCostFile());
-					newCostRegistrationModelList.add(costRegistrationModel);
-				}
-			}
-			int cost = 0;
-			int costTotal = 0;
-			for (int j = 0; j < newCostRegistrationModelList.size(); j++) {
-				cost += Integer.parseInt(newCostRegistrationModelList.get(j).getCost());
-				if (!newCostRegistrationModelList.get(j).getCostClassificationCode().equals("0")) {
-					costTotal += Integer.parseInt(newCostRegistrationModelList.get(j).getCost());
-				}
-				if (j == newCostRegistrationModelList.size() - 1) {
-					newCostRegistrationModelList.get(j).setCostTotal(String.valueOf(costTotal));
-				}
-			}
-			checkMod.get(i).setCostRegistrationModel(newCostRegistrationModelList);
-			checkMod.get(i).setCost(String.valueOf(cost));
+		for (int i = 0; i < returnList.size(); i++) {
+			returnList.get(i).setRowNo(i + 1);
 		}
+
 		logger.info("DutyManagementController.selectDutyManagement:" + "検索終了");
-		return checkMod;
+		return returnList;
 	}
 }

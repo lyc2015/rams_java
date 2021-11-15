@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jp.co.lyc.cms.mapper.SendInvoiceMapper">
+	<resultMap id="SendInvoice"
+		type="jp.co.lyc.cms.model.SendInvoiceModel" />
+	<select id="selectSendInvoice" resultMap="SendInvoice"
+		parameterType="String">
+		SELECT T006.employeeNo,concat(T001.employeeFristName,"
+		",T001.employeeLastName) as employeeName,ifnull(T006.payOffRange1,0)
+		as payOffRange1,ifnull(T006.payOffRange2,ifnull(T006.payOffRange1,0))
+		as payOffRange2,
+		T006.customerNo,T007.customerName,T007.purchasingManagers,T007.purchasingManagersMail,
+		if(T018.sumWorkTime is null || T018.sumWorkTime =
+		"",temp.workTime,T018.sumWorkTime) as
+		sumWorkTime,T018.DeductionsAndOvertimePayOfUnitPrice
+		FROM
+		T006EmployeeSiteInfo as T006
+		left join T018WorkTotalTime as T018
+		on
+		T018.employeeNo = T006.employeeNo
+		and T018.attendanceYearAndMonth =
+		#{yearAndMonth}
+		left join
+		(SELECT employeeNo,yearAndMonth,sum(workTime)
+		as
+		workTime FROM
+		T016EmployeeWorkTime
+		group by employeeNo,yearAndMonth)
+		as
+		temp
+		on temp.employeeNo = T006.employeeNo
+		and temp.yearAndMonth =
+		#{yearAndMonth}
+		left join T007CustomerInfo as T007
+		on T007.customerNo =
+		T006.customerNo
+		left join T001Employee as T001
+		on T001.employeeNo =
+		T006.employeeNo
+		where T006.admissionStartDate &lt;=
+		concat(#{yearAndMonth},"00")
+		and
+		(T006.admissionEndDate &gt;=
+		concat(#{yearAndMonth},"31") or T006.admissionEndDate is
+		null)
+		and
+		T006.customerNo = ifnull(#{customerNo},T006.customerNo)
+		order by
+		T006.customerNo
+	</select>
+</mapper>
