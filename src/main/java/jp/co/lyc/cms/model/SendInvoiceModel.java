@@ -7,6 +7,7 @@ public class SendInvoiceModel {
 	int rowNo;
 	String employeeNo;
 	String employeeName;
+	String unitPrice;
 	String payOffRange1;
 	String payOffRange2;
 	String customerNo;
@@ -14,9 +15,26 @@ public class SendInvoiceModel {
 	String purchasingManagers;
 	String purchasingManagersMail;
 	String sumWorkTime;
+	String systemName;
 	String DeductionsAndOvertimePayOfUnitPrice;
 
 	List<SendInvoiceWorkTimeModel> sendInvoiceWorkTimeModel;
+
+	public String getSystemName() {
+		return systemName;
+	}
+
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+	}
+
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
 
 	public int getRowNo() {
 		return rowNo;

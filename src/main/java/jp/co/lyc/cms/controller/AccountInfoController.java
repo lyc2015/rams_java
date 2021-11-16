@@ -79,6 +79,34 @@ public class AccountInfoController extends BaseController{
 		result.put("result", bankInfoSer.update(bankInfoSer.setSendMap(accountInfoModel)));
 		return result;
 	}
+	
+	/**
+	 * 削除
+	 * @param accountInfoModel
+	 * @return
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> delete(@RequestBody AccountInfoModel accountInfoModel) {
+		errorsMessage = "";
+		DataBinder binder = new DataBinder(accountInfoModel);
+		binder.setValidator(new AccountInfoValidation());
+		binder.validate();
+		BindingResult results = binder.getBindingResult();
+		Map<String, Object> result = new HashMap<>();
+		if (results.hasErrors()) {
+			results.getAllErrors().forEach(o -> {
+				FieldError error = (FieldError) o;
+				errorsMessage += error.getDefaultMessage();// エラーメッセージ
+			});
+			result.put("errorsMessage", errorsMessage);// エラーメッセージ
+			return result;
+		}
+		accountInfoModel.setUpdateUser((String)getSession().getAttribute("employeeName"));
+		result.put("result", bankInfoSer.delete(bankInfoSer.setSendMap(accountInfoModel)));
+		return result;
+	}
+	
 	/**
 	 * データを取得
 	 * @param employeeOrCustomerNo

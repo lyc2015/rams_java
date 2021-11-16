@@ -5,10 +5,28 @@ public class SendInvoiceWorkTimeModel {
 	int rowNo;
 	String employeeNo;
 	String employeeName;
+	String systemName;
+	String unitPrice;
 	String payOffRange1;
 	String payOffRange2;
 	String sumWorkTime;
 	String DeductionsAndOvertimePayOfUnitPrice;
+
+	public String getSystemName() {
+		return systemName;
+	}
+
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
+	}
+
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
 
 	public int getRowNo() {
 		return rowNo;

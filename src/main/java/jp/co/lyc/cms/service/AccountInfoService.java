@@ -45,6 +45,23 @@ public class AccountInfoService {
 		}
 	}
 	/**
+	 * 削除
+	 * @param sendMap
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean delete(HashMap<String, String> sendMap) {
+		try {
+			bankMapper.deleteAccount(sendMap);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/**
 	 * インサートとアップデートの値を設定
 	 * @param bankCol
 	 * @return

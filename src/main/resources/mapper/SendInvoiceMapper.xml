@@ -6,11 +6,28 @@
 	<select id="selectSendInvoice" resultMap="SendInvoice"
 		parameterType="String">
 		SELECT T006.employeeNo,concat(T001.employeeFristName,"
-		",T001.employeeLastName) as employeeName,ifnull(T006.payOffRange1,0)
-		as payOffRange1,ifnull(T006.payOffRange2,ifnull(T006.payOffRange1,0))
-		as payOffRange2,
-		T006.customerNo,T007.customerName,T007.purchasingManagers,T007.purchasingManagersMail,
-		if(T018.sumWorkTime is null || T018.sumWorkTime =
+		",T001.employeeLastName) as
+		employeeName,T006.systemName,T006.unitPrice,ifnull(T006.payOffRange1,0)
+		as
+		payOffRange1,ifnull(T006.payOffRange2,ifnull(T006.payOffRange1,0))
+		as
+		payOffRange2,
+		T006.customerNo,T007.customerName,
+		if(T009.responsiblePerson is null || T009.responsiblePerson = "" ||
+		T009.customerDepartmentMail is null || T009.customerDepartmentMail =
+		"",T007.purchasingManagers,T009.responsiblePerson) as
+		purchasingManagers,
+		if(T009.responsiblePerson is null ||
+		T009.responsiblePerson = "" || T009.customerDepartmentMail
+		is null ||
+		T009.customerDepartmentMail =
+		"",if(T007.purchasingManagersMail is null
+		||
+		T007.purchasingManagersMail =
+		"",T007.commonMail,T007.purchasingManagersMail),T009.customerDepartmentMail)
+		as purchasingManagersMail,
+		if(T018.sumWorkTime is null ||
+		T018.sumWorkTime =
 		"",temp.workTime,T018.sumWorkTime) as
 		sumWorkTime,T018.DeductionsAndOvertimePayOfUnitPrice
 		FROM
@@ -37,14 +54,18 @@
 		left join T001Employee as T001
 		on T001.employeeNo =
 		T006.employeeNo
+		left join T009CustomerDepartmentInfo as T009
+		on T009.customerNo = T007.customerNo
+		and T009.customerDepartmentCode = "8"
 		where T006.admissionStartDate &lt;=
-		concat(#{yearAndMonth},"00")
+		concat(#{yearAndMonth},"31")
 		and
 		(T006.admissionEndDate &gt;=
-		concat(#{yearAndMonth},"31") or T006.admissionEndDate is
+		concat(#{yearAndMonth},"00") or T006.admissionEndDate is
 		null)
 		and
 		T006.customerNo = ifnull(#{customerNo},T006.customerNo)
+		and T018.approvalStatus = "1"
 		order by
 		T006.customerNo
 	</select>
