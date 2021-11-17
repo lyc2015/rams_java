@@ -5,8 +5,9 @@
 		type="jp.co.lyc.cms.model.SendInvoiceModel" />
 	<select id="selectSendInvoice" resultMap="SendInvoice"
 		parameterType="String">
-		SELECT T006.employeeNo,concat(T001.employeeFristName,"
-		",T001.employeeLastName) as
+		SELECT
+		T006.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
+		as
 		employeeName,T006.systemName,T006.unitPrice,ifnull(T006.payOffRange1,0)
 		as
 		payOffRange1,ifnull(T006.payOffRange2,ifnull(T006.payOffRange1,0))
@@ -55,16 +56,19 @@
 		on T001.employeeNo =
 		T006.employeeNo
 		left join T009CustomerDepartmentInfo as T009
-		on T009.customerNo = T007.customerNo
+		on
+		T009.customerNo = T007.customerNo
 		and T009.customerDepartmentCode = "8"
 		where T006.admissionStartDate &lt;=
 		concat(#{yearAndMonth},"31")
 		and
 		(T006.admissionEndDate &gt;=
-		concat(#{yearAndMonth},"00") or T006.admissionEndDate is
+		concat(#{yearAndMonth},"00") or
+		T006.admissionEndDate is
 		null)
 		and
-		T006.customerNo = ifnull(#{customerNo},T006.customerNo)
+		T006.customerNo =
+		ifnull(#{customerNo},T006.customerNo)
 		and T018.approvalStatus = "1"
 		order by
 		T006.customerNo
