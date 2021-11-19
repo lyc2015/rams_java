@@ -243,4 +243,22 @@
 		where employeeOrCustomerNo = "C074"
 	</select>
 
+	<select id="getAccountInfo"
+		resultType="jp.co.lyc.cms.model.AccountInfoModel">
+		SELECT
+		T004.bankCode,M001.bankName as
+		bankNameString,T004.bankBranchCode,M002.bankBranchName,T004.accountNo,T004.accountName
+		FROM T004AccountInfo as T004
+		left join M001Bank as M001
+		on M001.bankCode
+		= T004.bankCode
+		left join M002BankBranch as M002
+		on M002.bankCode =
+		T004.bankCode
+		and M002.bankBranchCode = T004.bankBranchCode
+		where
+		T004.employeeOrCustomerNo = "C074"
+		and T004.bankCode = #{bankCode}
+	</select>
+
 </mapper>

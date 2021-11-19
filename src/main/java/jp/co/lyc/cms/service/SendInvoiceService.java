@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.SendInvoiceModel;
@@ -62,5 +63,9 @@ public class SendInvoiceService {
 
 	public List<ModelClass> selectBankAccountInfo() {
 		return sendInvoiceMapper.selectBankAccountInfo();
+	}
+
+	public AccountInfoModel getAccountInfo(String bankCode) {
+		return sendInvoiceMapper.getAccountInfo(bankCode);
 	}
 }

@@ -1,11 +1,19 @@
 package jp.co.lyc.cms.controller;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +23,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import jp.co.lyc.cms.common.BaseController;
+import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;
+import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.SendInvoiceModel;
 import jp.co.lyc.cms.model.SendInvoiceWorkTimeModel;
 import jp.co.lyc.cms.service.SendInvoiceService;
 import jp.co.lyc.cms.service.UtilsService;
+import jp.co.lyc.cms.util.UtilsController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @RequestMapping(value = "/sendInvoice")
@@ -286,5 +307,172 @@ public class SendInvoiceController extends BaseController {
 	public List<ModelClass> selectBankAccountInfo() {
 		logger.info("SendInvoiceController.selectBankAccountInfo:" + "銀行データ取得開始");
 		return sendInvoiceService.selectBankAccountInfo();
+	}
+
+	/**
+	 * PDF作成
+	 * 
+	 * @param topCustomerMod
+	 * @return
+	 */
+	@RequestMapping(value = "/downloadPDF", method = RequestMethod.POST)
+	@ResponseBody
+	public String downloadPDF(@RequestBody HashMap<String, String> dutyManagementModel) {
+		logger.info("SendInvoiceController.downloadPDF:" + "PDF作成開始");
+		List<SendInvoiceWorkTimeModel> dataList = selectSendInvoiceByCustomerNo(dutyManagementModel);
+		ArrayList<Map<String, Object>> newDataList = dataSelect(dataList, dutyManagementModel.get("taxRate"));
+		DecimalFormat df = new DecimalFormat("#,###");
+
+		File nowFile = new File(".").getAbsoluteFile();
+		File inputFile = new File(nowFile.getParentFile(), "src/main/resources/PDFTemplate/invoicePDF.jrxml");
+		File outputFile = new File(UtilsController.DOWNLOAD_PATH_BASE + "certificate/",
+				dutyManagementModel.get("customerNo") + "-請求書.pdf");
+		outputFile.getParentFile().mkdirs();
+		try {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+
+			ArrayList<Map<String, ?>> tableData = new ArrayList<>();
+			Map<String, Object> rowData = new Hashtable<>();
+			for (int i = 0; i < newDataList.size(); i++) {
+				rowData = newDataList.get(i);
+				tableData.add(rowData);
+			}
+			JRDataSource ds = new JRBeanCollectionDataSource(tableData);
+			parameters.put("dataTableResource", ds);
+			parameters.put("customerName", dataList.get(0).getCustomerName());
+			parameters.put("invoiceDate", dataList.get(0).getInvoiceDate());
+			parameters.put("deadLine", dataList.get(0).getDeadLine());
+			parameters.put("invoiceNo", dutyManagementModel.get("invoiceNo"));
+			parameters.put("remark", dataList.get(0).getRemark());
+			parameters.put("subTotalAmount", "￥" + df
+					.format(Integer.parseInt((String) newDataList.get(newDataList.size() - 1).get("subTotalAmount"))));
+			parameters.put("consumptionTax", dutyManagementModel.get("taxRate") + "%");
+			parameters.put("totalAmount", "￥"
+					+ df.format(Integer.parseInt((String) newDataList.get(newDataList.size() - 1).get("totalAmount"))));
+
+			AccountInfoModel accountInfoModel = sendInvoiceService.getAccountInfo(dataList.get(0).getBankCode());
+			if (accountInfoModel == null) {
+				parameters.put("bankInfo", "銀行情報存在しません。");
+			} else {
+				parameters.put("bankInfo",
+						"振込先銀行　" + accountInfoModel.getBankNameString() + "　" + accountInfoModel.getBankBranchName()
+								+ "支店\n普通預金　店番 　" + accountInfoModel.getBankBranchCode() + "\n口座番号 "
+								+ accountInfoModel.getAccountNo() + "　口座名　" + accountInfoModel.getAccountName());
+			}
+
+			JasperReport report = JasperCompileManager.compileReport(inputFile.getAbsolutePath());
+			JasperPrint print = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+			JasperExportManager.exportReportToPdfFile(print, outputFile.getAbsolutePath());
+		} catch (JRException e) {
+			logger.error(e.getMessage());
+		}
+		logger.info("SendInvoiceController.downloadPDF:" + "PDF作成終了");
+		return outputFile.getAbsolutePath();
+	}
+
+	private ArrayList<Map<String, Object>> dataSelect(List<SendInvoiceWorkTimeModel> dataList, String taxRate) {
+		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		Map<String, Object> tempMap = new HashMap<String, Object>();
+		int subTotalAmount = 0;
+		int subTotalAmountNoTax = 0;
+		DecimalFormat df = new DecimalFormat("#,###");
+		for (int i = 0; i < dataList.size(); i++) {
+			tempMap = new HashMap<String, Object>();
+			Calendar now = Calendar.getInstance();
+			int year = now.get(Calendar.YEAR);
+			int month = now.get(Calendar.MONTH) + 1;
+			String day = "";
+			switch (month) {
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				day = "31";
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				day = "30";
+				break;
+			default:
+				day = "28";
+				break;
+			}
+			String workPeriod = String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + "01~"
+					+ String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + day;
+			String workContents = (dataList.get(i).getWorkContents() == null
+					|| dataList.get(i).getWorkContents().equals("") ? "" : dataList.get(i).getWorkContents() + " (")
+					+ dataList.get(i).getEmployeeName()
+					+ (dataList.get(i).getWorkContents() == null || dataList.get(i).getWorkContents().equals("") ? ""
+							: ")")
+					+ "\n"
+					+ (dataList.get(i).getWorkPeriod() == null || dataList.get(i).getWorkPeriod().equals("")
+							? workPeriod
+							: dataList.get(i).getWorkPeriod() + (dataList.get(i).getSumWorkTime() == null
+									|| dataList.get(i).getSumWorkTime().equals("") ? "" : " ("))
+					+ (dataList.get(i).getSumWorkTime() == null || dataList.get(i).getSumWorkTime().equals("") ? ""
+							: dataList.get(i).getSumWorkTime() + "H")
+					+ (dataList.get(i).getWorkPeriod() == null || dataList.get(i).getWorkPeriod().equals("") ? ""
+							: (dataList.get(i).getSumWorkTime() == null || dataList.get(i).getSumWorkTime().equals("")
+									? ""
+									: ")"));
+			tempMap.put("workContents", workContents);
+			tempMap.put("requestUnit", dataList.get(i).getRequestUnitCode().equals("1") ? "件" : "人月");
+			tempMap.put("quantity", dataList.get(i).getQuantity());
+			tempMap.put("unitPrice", "￥" + df.format(Integer.parseInt(dataList.get(i).getUnitPrice())));
+			String deductionsAndOvertimePayOfUnitPrice = dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice();
+			String payOffRange1 = dataList.get(i).getPayOffRange1();
+			switch (payOffRange1) {
+			case "0":
+				payOffRange1 = "固定";
+				break;
+			case "1":
+				payOffRange1 = "出勤日";
+				break;
+			default:
+				payOffRange1 += "H";
+				break;
+			}
+			String payOffRange2 = dataList.get(i).getPayOffRange2();
+			switch (payOffRange2) {
+			case "0":
+				payOffRange2 = "固定";
+				break;
+			case "1":
+				payOffRange2 = "出勤日";
+				break;
+			default:
+				payOffRange2 += "H";
+				break;
+			}
+			tempMap.put("payOffRange1",
+					deductionsAndOvertimePayOfUnitPrice == null ? ""
+							: payOffRange1 + (Integer.parseInt(deductionsAndOvertimePayOfUnitPrice) >= 0 ? ""
+									: ("\n" + "￥" + df.format(Integer.parseInt(deductionsAndOvertimePayOfUnitPrice)))));
+			tempMap.put("payOffRange2",
+					deductionsAndOvertimePayOfUnitPrice == null ? ""
+							: payOffRange2 + (Integer.parseInt(deductionsAndOvertimePayOfUnitPrice) > 0
+									? ("\n" + "￥" + df.format(Integer.parseInt(deductionsAndOvertimePayOfUnitPrice)))
+									: ""));
+			int sum = Integer.parseInt(dataList.get(i).getUnitPrice())
+					* Integer.parseInt(dataList.get(i).getQuantity() == null ? "0" : dataList.get(i).getQuantity())
+					+ Integer.parseInt(dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice() == null ? "0"
+							: dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
+			tempMap.put("sum", "￥" + df.format(sum) + (dataList.get(i).getRequestUnitCode().equals("0") ? "" : "(税込)"));
+			if (dataList.get(i).getRequestUnitCode().equals("0"))
+				subTotalAmount += sum;
+			else
+				subTotalAmountNoTax += sum;
+			tempMap.put("subTotalAmount", String.valueOf(subTotalAmount + subTotalAmountNoTax));
+			tempMap.put("totalAmount", String.valueOf((int) (subTotalAmount * (Double.parseDouble(taxRate) / 100))
+					+ subTotalAmount + subTotalAmountNoTax));
+
+			result.add(tempMap);
+		}
+		return result;
 	}
 }

@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b5b61236-31bc-42f8-aff2-ed4b3f77724c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Style1" isDefault="true" vTextAlign="Middle" fontName="游明朝標準"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF" hTextAlign="Center" vTextAlign="Middle" pattern="">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH_TEXT" mode="Opaque" backcolor="#FFFFFF">
+		<box leftPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF" hTextAlign="Left" vTextAlign="Justified">
+		<box leftPadding="0">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD_TEXT" style="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box leftPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataTable1Dataset" uuid="6344ea2a-4d91-4402-a21c-70f8e34b31e2">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<parameter name="dataTableResource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
+			<parameterDescription><![CDATA[resource of table]]></parameterDescription>
+		</parameter>
+		<parameter name="bankInfo" class="java.lang.String"/>
+		<parameter name="subTotalAmount" class="java.lang.String"/>
+		<parameter name="consumptionTax" class="java.lang.String"/>
+		<parameter name="totalAmount" class="java.lang.String"/>
+		<parameter name="remark" class="java.lang.String"/>
+		<parameter name="bankInfo1" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="workContents" class="java.lang.String"/>
+		<field name="requestUnit" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.String"/>
+		<field name="unitPrice" class="java.lang.String"/>
+		<field name="payOffRange1" class="java.lang.String"/>
+		<field name="payOffRange2" class="java.lang.String"/>
+		<field name="sum" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="dataTableResource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
+		<parameterDescription><![CDATA[resource of table]]></parameterDescription>
+	</parameter>
+	<parameter name="bankInfo" class="java.lang.String"/>
+	<parameter name="subTotalAmount" class="java.lang.String"/>
+	<parameter name="consumptionTax" class="java.lang.String"/>
+	<parameter name="totalAmount" class="java.lang.String"/>
+	<parameter name="remark" class="java.lang.String"/>
+	<parameter name="customerName" class="java.lang.String"/>
+	<parameter name="invoiceDate" class="java.lang.String"/>
+	<parameter name="deadLine" class="java.lang.String"/>
+	<parameter name="invoiceNo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="93" splitType="Stretch">
+			<textField>
+				<reportElement style="Style1" x="0" y="30" width="127" height="20" uuid="b863c3a5-7420-427b-ba8d-48c460ee2d10">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{customerName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="127" y="30" width="20" height="20" uuid="312367d7-a3d5-4f5f-8aa2-21d9e8929482"/>
+				<text><![CDATA[御中]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="45" y="53" width="102" height="20" uuid="e09b2005-6046-4d94-be1d-4b4421bd3598">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{totalAmount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="0" y="53" width="45" height="20" uuid="007a1b3f-9aa9-4969-a31e-ad72dee3417c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[請求金額]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="210" y="53" width="40" height="20" uuid="428f46ca-bf85-470f-8e4a-2ffe86088f8b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[請求番号]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="250" y="53" width="100" height="20" uuid="0805dba3-9d6f-4a58-8805-15591107a2fd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{invoiceNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Style1" x="486" y="53" width="74" height="20" uuid="86d8ab51-bde9-4751-ac9a-3150ee9238cb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement markup="none"/>
+				<textFieldExpression><![CDATA[$P{deadLine}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="430" y="53" width="56" height="20" uuid="a199187f-0c45-4ce3-a147-1e6c771e4dcb">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[お支払期限]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="486" y="30" width="74" height="20" uuid="caafc2b3-c583-477f-95d9-2127d270eb45">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$P{invoiceDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Style1" x="430" y="30" width="56" height="20" uuid="a49edd85-f219-4bfd-98e8-7616352d0a40">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[請求日]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="-20" y="-10" width="594" height="40" uuid="837f16e4-4400-4fbf-be9e-6d8e98182bc6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[請求書]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="258" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="-10" width="560" height="268" uuid="9621b88a-ac11-401f-b2b4-3f533590594c">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataTable1Dataset" uuid="07a45f45-9e63-44c2-acf5-4fa96d363ab0">
+						<datasetParameter name="bankInfo">
+							<datasetParameterExpression><![CDATA[$P{bankInfo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="consumptionTax">
+							<datasetParameterExpression><![CDATA[$P{consumptionTax}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="remark">
+							<datasetParameterExpression><![CDATA[$P{remark}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="subTotalAmount">
+							<datasetParameterExpression><![CDATA[$P{subTotalAmount}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="totalAmount">
+							<datasetParameterExpression><![CDATA[$P{totalAmount}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[$P{dataTableResource}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="140" uuid="6cf45495-9090-47b8-9cad-c386ce04fee3">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:tableFooter style="Table_TH" height="60" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_CH" x="0" y="0" width="140" height="60" uuid="b6d5c7aa-51a3-4986-9e04-4df8b9bec798"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<text><![CDATA[備考]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_CH" x="0" y="0" width="140" height="50" uuid="c1109749-3faf-4786-95d9-f13607d3b2c5"/>
+								<text><![CDATA[作業内容　(作業者)
+作業期間　(時間)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="60" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_CH" x="0" y="0" width="140" height="60" uuid="f23699ef-9ce9-47bc-821e-7b09ed17cac5"/>
+								<textElement>
+									<font size="14"/>
+								</textElement>
+								<text><![CDATA[銀行情報]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="40">
+							<textField>
+								<reportElement x="0" y="0" width="140" height="40" uuid="54f542a3-4fb1-44d6-9b4c-7b6077a5049d"/>
+								<textElement>
+									<font size="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{workContents}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:columnGroup width="420" uuid="48151349-f994-4367-afdc-5b05fd39107e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [6]"/>
+						<jr:tableFooter style="Table_TH" height="60" rowSpan="1">
+							<textField>
+								<reportElement style="Table_TD" x="0" y="0" width="420" height="60" uuid="6b7d5460-79f9-4449-9a65-d95ec2ab1b7e"/>
+								<textElement>
+									<font size="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{remark}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnGroup width="260" uuid="6400cb65-3bb7-4a36-ab0e-ff634e05aa20">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
+							<jr:columnFooter style="Table_CH" height="60" rowSpan="1">
+								<textField>
+									<reportElement style="Table_TD" x="0" y="0" width="260" height="60" uuid="234efc81-0143-4287-8e2e-9305e663b1e2"/>
+									<textElement>
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{bankInfo}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:column width="49" uuid="d5a647b6-ac14-4406-91ef-4b4e77c8c00a">
+								<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+								<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+									<staticText>
+										<reportElement style="Table_CH" x="0" y="0" width="49" height="50" uuid="151da184-eec8-481f-bbbe-0ebd32e65643"/>
+										<text><![CDATA[単位]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="Table_TD" height="40">
+									<textField>
+										<reportElement x="0" y="0" width="49" height="40" uuid="d181eac0-e940-4fe5-ab3d-149d384d1f07"/>
+										<textElement textAlignment="Center">
+											<font size="10"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{requestUnit}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="60" uuid="75e66610-5c6e-400c-9ef1-8dd3427fd8ba">
+								<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+								<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+									<staticText>
+										<reportElement style="Table_CH" x="0" y="0" width="60" height="50" uuid="ab2eb7c1-8450-4c38-a999-14e7cb59ad7c"/>
+										<text><![CDATA[数量]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="Table_TD" height="40">
+									<textField>
+										<reportElement x="0" y="0" width="60" height="40" uuid="3fe74f29-e3a2-4291-8550-4c603821821b"/>
+										<textElement textAlignment="Center">
+											<font size="10"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="100" uuid="f64c704d-3baa-483f-962b-05dab0c0d7e6">
+								<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+								<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+									<staticText>
+										<reportElement style="Table_CH" x="0" y="0" width="100" height="50" uuid="6bc78de0-1555-48b4-9a86-b8456eedf8a8"/>
+										<text><![CDATA[単価]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="Table_TD" height="40">
+									<textField>
+										<reportElement x="0" y="0" width="100" height="40" uuid="aa772350-b24e-4cc5-b600-706cc490e80f"/>
+										<textElement textAlignment="Center">
+											<font size="10"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="51" uuid="d28c164e-de13-4457-ade3-00ec0ae44681">
+								<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+								<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+									<staticText>
+										<reportElement style="Table_CH" x="0" y="0" width="51" height="50" uuid="30c0b465-6ad6-4515-969f-15821a817d9d"/>
+										<text><![CDATA[下限時間
+　　単価]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="Table_TD" height="40">
+									<textField>
+										<reportElement x="0" y="0" width="51" height="40" uuid="9f4e530a-bd96-4bf3-ad9d-a5356ece3870"/>
+										<textElement textAlignment="Center">
+											<font size="10"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{payOffRange1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+						<jr:column width="60" uuid="de3e1047-d396-4faa-9eff-0126176afc61">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+							<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+								<staticText>
+									<reportElement style="Table_CH" x="0" y="0" width="60" height="50" uuid="d438ec29-881c-4f3a-aa5b-b1c36c0bc98e"/>
+									<text><![CDATA[上限時間
+　　単価]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter style="Table_CH" height="60" rowSpan="1">
+								<staticText>
+									<reportElement style="Table_CH" x="0" y="0" width="60" height="20" uuid="ecd8c0e0-1cf2-4f1a-9731-2089702c68be"/>
+									<text><![CDATA[小計]]></text>
+								</staticText>
+								<staticText>
+									<reportElement style="Table_CH" x="0" y="20" width="60" height="20" uuid="6e28d99e-f6a7-4327-b91c-6356b724c8aa"/>
+									<text><![CDATA[消費税]]></text>
+								</staticText>
+								<staticText>
+									<reportElement style="Table_CH" x="0" y="40" width="60" height="20" uuid="aab79924-81cf-4cf6-970a-656e0d2705f1"/>
+									<text><![CDATA[合計]]></text>
+								</staticText>
+							</jr:columnFooter>
+							<jr:detailCell style="Table_TD" height="40">
+								<textField>
+									<reportElement x="0" y="0" width="60" height="40" uuid="000dd108-acff-4e58-aca6-fe61db14e260"/>
+									<textElement textAlignment="Center">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{payOffRange2}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="100" uuid="7dc23995-6757-45d8-8bf1-f5363088c99e">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+							<jr:columnHeader style="Table_CH" height="50" rowSpan="1">
+								<staticText>
+									<reportElement style="Table_CH" x="0" y="0" width="100" height="50" uuid="f8a512d3-42ba-475b-9f98-432a1db1fe22"/>
+									<text><![CDATA[請求額]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter style="Table_CH" height="60" rowSpan="1">
+								<textField>
+									<reportElement style="Table_TD" x="0" y="0" width="100" height="20" uuid="70833d2c-0311-488a-8d78-a36bb78ff748"/>
+									<textElement textAlignment="Center">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{subTotalAmount}]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement style="Table_TD" x="0" y="20" width="100" height="20" uuid="5d02e82c-b3c2-434a-b178-089c5e48cb18"/>
+									<textElement textAlignment="Center">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{consumptionTax}]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement style="Table_TD" x="0" y="40" width="100" height="20" uuid="062a1d5f-a475-4917-a57a-85b150a86ea4"/>
+									<textElement textAlignment="Center">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{totalAmount}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:detailCell style="Table_TD" height="40">
+								<textField>
+									<reportElement x="0" y="0" width="100" height="40" uuid="9eca4323-0a15-4740-b7e3-b11b6bbe3b86"/>
+									<textElement textAlignment="Center">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{sum}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

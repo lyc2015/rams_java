@@ -3,6 +3,7 @@ package jp.co.lyc.cms.mapper;
 import java.util.HashMap;
 import java.util.List;
 
+import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.SendInvoiceModel;
@@ -36,4 +37,6 @@ public interface SendInvoiceMapper {
 	public void updateAllInvoiceData(HashMap<String, String> model);
 
 	public List<ModelClass> selectBankAccountInfo();
+
+	public AccountInfoModel getAccountInfo(String bankCode);
 }
