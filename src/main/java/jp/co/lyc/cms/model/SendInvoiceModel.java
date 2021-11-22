@@ -12,13 +12,31 @@ public class SendInvoiceModel {
 	String payOffRange2;
 	String customerNo;
 	String customerName;
+	String customerAbbreviation;
 	String purchasingManagers;
 	String purchasingManagersMail;
 	String sumWorkTime;
 	String systemName;
 	String DeductionsAndOvertimePayOfUnitPrice;
+	String havePDF;
+
+	public String getHavePDF() {
+		return havePDF;
+	}
+
+	public void setHavePDF(String havePDF) {
+		this.havePDF = havePDF;
+	}
 
 	List<SendInvoiceWorkTimeModel> sendInvoiceWorkTimeModel;
+
+	public String getCustomerAbbreviation() {
+		return customerAbbreviation;
+	}
+
+	public void setCustomerAbbreviation(String customerAbbreviation) {
+		this.customerAbbreviation = customerAbbreviation;
+	}
 
 	public String getSystemName() {
 		return systemName;

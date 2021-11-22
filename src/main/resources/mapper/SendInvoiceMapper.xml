@@ -18,9 +18,14 @@
 		payOffRange1,ifnull(T006.payOffRange2,ifnull(T006.payOffRange1,0))
 		as
 		payOffRange2,
-		T006.customerNo,T007.customerName,
-		if(T009.responsiblePerson is null || T009.responsiblePerson = "" ||
-		T009.customerDepartmentMail is null || T009.customerDepartmentMail =
+		T006.customerNo,T007.customerName,if(T007.customerAbbreviation is null
+		|| T007.customerAbbreviation =
+		"",T007.customerName,T007.customerAbbreviation) as
+		customerAbbreviation,
+		if(T009.responsiblePerson is null ||
+		T009.responsiblePerson = "" ||
+		T009.customerDepartmentMail is null ||
+		T009.customerDepartmentMail =
 		"",T007.purchasingManagers,T009.responsiblePerson) as
 		purchasingManagers,
 		if(T009.responsiblePerson is null ||
@@ -155,7 +160,7 @@
 		T024.yearAndMonth =
 		#{yearAndMonth}
 		order by
-		T024.employeeNo,requestUnitCode;
+		T024.employeeNo is null,T024.employeeNo,requestUnitCode;
 
 	</select>
 
@@ -240,7 +245,7 @@
 		on
 		M001.bankCode =
 		T004.bankCode
-		where employeeOrCustomerNo = "C074"
+		where employeeOrCustomerNo = "C000"
 	</select>
 
 	<select id="getAccountInfo"
@@ -257,7 +262,7 @@
 		T004.bankCode
 		and M002.bankBranchCode = T004.bankBranchCode
 		where
-		T004.employeeOrCustomerNo = "C074"
+		T004.employeeOrCustomerNo = "C000"
 		and T004.bankCode = #{bankCode}
 	</select>
 

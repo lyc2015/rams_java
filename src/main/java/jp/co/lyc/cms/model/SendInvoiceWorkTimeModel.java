@@ -3,6 +3,7 @@ package jp.co.lyc.cms.model;
 public class SendInvoiceWorkTimeModel {
 
 	int rowNo;
+	String showNo;
 	String employeeNo;
 	String employeeName;
 	String customerNo;
@@ -24,6 +25,14 @@ public class SendInvoiceWorkTimeModel {
 	String quantity;
 	String bankCode;
 	String remark;
+
+	public String getShowNo() {
+		return showNo;
+	}
+
+	public void setShowNo(String showNo) {
+		this.showNo = showNo;
+	}
 
 	public String getOldWorkContents() {
 		return oldWorkContents;

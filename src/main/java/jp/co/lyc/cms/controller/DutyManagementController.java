@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sun.mail.handlers.image_gif;
 
+import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.CostRegistrationModel;
 import jp.co.lyc.cms.model.DutyManagementModel;
 import jp.co.lyc.cms.service.DutyManagementService;
 
 @Controller
 @RequestMapping(value = "/dutyManagement")
-public class DutyManagementController {
+public class DutyManagementController extends BaseController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -114,6 +115,10 @@ public class DutyManagementController {
 		logger.info("DutyManagementController.updateDutyManagement:" + "アップデート開始");
 		boolean result = false;
 		HashMap<String, String> sendMap = dutyManagementModel;
+		String employeeFirstName = dutyManagementService
+				.getFirstName(getSession().getAttribute("employeeNo").toString());
+		sendMap.put("approvalUser", employeeFirstName);
+
 		result = dutyManagementService.updateDutyManagement(sendMap);
 		logger.info("DutyManagementController.updateDutyManagement:" + "アップデート終了");
 		return result;

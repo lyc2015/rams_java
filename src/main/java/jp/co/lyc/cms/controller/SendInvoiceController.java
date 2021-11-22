@@ -27,6 +27,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;
+import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.SendInvoiceModel;
@@ -53,6 +54,8 @@ public class SendInvoiceController extends BaseController {
 	SendInvoiceService sendInvoiceService;
 	@Autowired
 	UtilsService utilsService;
+	@Autowired
+	UtilsController utils;
 
 	/**
 	 * データ検索
@@ -97,6 +100,13 @@ public class SendInvoiceController extends BaseController {
 
 		for (int i = 0; i < returnList.size(); i++) {
 			returnList.get(i).setRowNo(i + 1);
+			File file = new File("C:\\file\\certificate\\" + dutyManagementModel.get("yearAndMonth") + "_"
+					+ returnList.get(i).getCustomerNo() + "_" + returnList.get(i).getCustomerAbbreviation() + ".pdf");
+			if (file.exists()) {
+				returnList.get(i).setHavePDF("true");
+			} else {
+				returnList.get(i).setHavePDF("false");
+			}
 		}
 
 		logger.info("SendInvoiceController.selectSendInvoice:" + "検索終了");
@@ -195,8 +205,21 @@ public class SendInvoiceController extends BaseController {
 				}
 			}
 
+			int showNo = 0;
 			for (int i = 0; i < returnList.size(); i++) {
 				returnList.get(i).setRowNo(i + 1);
+				if (i < 1 || returnList.get(i).getEmployeeNo() == null
+						|| returnList.get(i).getEmployeeNo().equals("")) {
+					showNo++;
+					returnList.get(i).setShowNo(String.valueOf(showNo));
+				} else {
+					if (!returnList.get(i).getEmployeeNo().equals(returnList.get(i - 1).getEmployeeNo())) {
+						showNo++;
+						returnList.get(i).setShowNo(String.valueOf(showNo));
+					} else {
+						returnList.get(i).setShowNo("");
+					}
+				}
 				HashMap<String, String> model = new HashMap<String, String>();
 				model.put("customerNo", returnList.get(i).getCustomerNo());
 				model.put("yearAndMonth", dutyManagementModel.get("yearAndMonth"));
@@ -221,8 +244,22 @@ public class SendInvoiceController extends BaseController {
 			return returnList;
 		} else {
 			logger.info("SendInvoiceController.selectSendInvoiceByCustomerNo:" + "検索終了");
+			int showNo = 0;
 			for (int i = 0; i < selectSendInvoiceByCustomerNoList.size(); i++) {
 				selectSendInvoiceByCustomerNoList.get(i).setRowNo(i + 1);
+				if (i < 1 || selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo() == null
+						|| selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo().equals("")) {
+					showNo++;
+					selectSendInvoiceByCustomerNoList.get(i).setShowNo(String.valueOf(showNo));
+				} else {
+					if (!selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo()
+							.equals(selectSendInvoiceByCustomerNoList.get(i - 1).getEmployeeNo())) {
+						showNo++;
+						selectSendInvoiceByCustomerNoList.get(i).setShowNo(String.valueOf(showNo));
+					} else {
+						selectSendInvoiceByCustomerNoList.get(i).setShowNo("");
+					}
+				}
 			}
 			return selectSendInvoiceByCustomerNoList;
 		}
@@ -326,7 +363,8 @@ public class SendInvoiceController extends BaseController {
 		File nowFile = new File(".").getAbsoluteFile();
 		File inputFile = new File(nowFile.getParentFile(), "src/main/resources/PDFTemplate/invoicePDF.jrxml");
 		File outputFile = new File(UtilsController.DOWNLOAD_PATH_BASE + "certificate/",
-				dutyManagementModel.get("customerNo") + "-請求書.pdf");
+				dutyManagementModel.get("yearAndMonth") + "_" + dutyManagementModel.get("customerNo") + "_"
+						+ dutyManagementModel.get("customerAbbreviation") + ".pdf");
 		outputFile.getParentFile().mkdirs();
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
@@ -339,6 +377,10 @@ public class SendInvoiceController extends BaseController {
 			}
 			JRDataSource ds = new JRBeanCollectionDataSource(tableData);
 			parameters.put("dataTableResource", ds);
+			String workTimeFlag = dutyManagementModel.get("workTimeFlag");
+			parameters.put("workTimeFlag", workTimeFlag.equals("true") ? true : false);
+			String employeeNameFlag = dutyManagementModel.get("employeeNameFlag");
+			parameters.put("employeeNameFlag", employeeNameFlag.equals("true") ? true : false);
 			parameters.put("customerName", dataList.get(0).getCustomerName());
 			parameters.put("invoiceDate", dataList.get(0).getInvoiceDate());
 			parameters.put("deadLine", dataList.get(0).getDeadLine());
@@ -404,26 +446,16 @@ public class SendInvoiceController extends BaseController {
 			}
 			String workPeriod = String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + "01~"
 					+ String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + day;
-			String workContents = (dataList.get(i).getWorkContents() == null
-					|| dataList.get(i).getWorkContents().equals("") ? "" : dataList.get(i).getWorkContents() + " (")
-					+ dataList.get(i).getEmployeeName()
-					+ (dataList.get(i).getWorkContents() == null || dataList.get(i).getWorkContents().equals("") ? ""
-							: ")")
-					+ "\n"
-					+ (dataList.get(i).getWorkPeriod() == null || dataList.get(i).getWorkPeriod().equals("")
-							? workPeriod
-							: dataList.get(i).getWorkPeriod() + (dataList.get(i).getSumWorkTime() == null
-									|| dataList.get(i).getSumWorkTime().equals("") ? "" : " ("))
-					+ (dataList.get(i).getSumWorkTime() == null || dataList.get(i).getSumWorkTime().equals("") ? ""
-							: dataList.get(i).getSumWorkTime() + "H")
-					+ (dataList.get(i).getWorkPeriod() == null || dataList.get(i).getWorkPeriod().equals("") ? ""
-							: (dataList.get(i).getSumWorkTime() == null || dataList.get(i).getSumWorkTime().equals("")
-									? ""
-									: ")"));
-			tempMap.put("workContents", workContents);
+
+			tempMap.put("workContents", dataList.get(i).getWorkContents());
+			tempMap.put("employeeName", dataList.get(i).getEmployeeName());
+			tempMap.put("workPeriod", dataList.get(i).getWorkPeriod());
+			tempMap.put("sumWorkTime", dataList.get(i).getSumWorkTime());
+
 			tempMap.put("requestUnit", dataList.get(i).getRequestUnitCode().equals("1") ? "件" : "人月");
 			tempMap.put("quantity", dataList.get(i).getQuantity());
-			tempMap.put("unitPrice", "￥" + df.format(Integer.parseInt(dataList.get(i).getUnitPrice())));
+			tempMap.put("unitPrice", "￥" + df.format(Integer
+					.parseInt(dataList.get(i).getUnitPrice().equals("") ? "0" : dataList.get(i).getUnitPrice())));
 			String deductionsAndOvertimePayOfUnitPrice = dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice();
 			String payOffRange1 = dataList.get(i).getPayOffRange1();
 			switch (payOffRange1) {
@@ -458,7 +490,7 @@ public class SendInvoiceController extends BaseController {
 							: payOffRange2 + (Integer.parseInt(deductionsAndOvertimePayOfUnitPrice) > 0
 									? ("\n" + "￥" + df.format(Integer.parseInt(deductionsAndOvertimePayOfUnitPrice)))
 									: ""));
-			int sum = Integer.parseInt(dataList.get(i).getUnitPrice())
+			int sum = Integer.parseInt(dataList.get(i).getUnitPrice().equals("") ? "0" : dataList.get(i).getUnitPrice())
 					* Integer.parseInt(dataList.get(i).getQuantity() == null ? "0" : dataList.get(i).getQuantity())
 					+ Integer.parseInt(dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice() == null ? "0"
 							: dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
@@ -474,5 +506,34 @@ public class SendInvoiceController extends BaseController {
 			result.add(tempMap);
 		}
 		return result;
+	}
+
+	/**
+	 * 送信
+	 * 
+	 * @param topCustomerMod
+	 * @return
+	 */
+	@RequestMapping(value = "/sendLetter", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, String> sendLetter(@RequestBody HashMap<String, String> dutyManagementModel) {
+		logger.info("SendInvoiceController.sendLetter:" + "送信開始");
+		HashMap<String, String> requst = new HashMap<String, String>();
+
+		EmailModel emailModel = new EmailModel();
+		// 受信人のメール
+		emailModel.setMailTitle("請求書");
+		emailModel.setSelectedmail(dutyManagementModel.get("mail"));
+		emailModel.setUserName(getSession().getAttribute("employeeName").toString());
+		emailModel.setPassword("Lyc2020-0908-");
+		emailModel.setContextType("text/html;charset=utf-8");
+		String file = dutyManagementModel.get("yearAndMonth") + "_" + dutyManagementModel.get("customerNo") + "_" + dutyManagementModel.get("customerAbbreviation") + ".pdf";
+		String[] names = { file };
+		String[] paths = { "c:/file/certificate/" + file };
+		emailModel.setNames(names);
+		emailModel.setPaths(paths);
+		// 送信
+		utils.sendMailWithFile(emailModel);
+		return requst;
 	}
 }
