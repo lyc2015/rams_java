@@ -522,7 +522,9 @@ public class SendInvoiceController extends BaseController {
 
 		EmailModel emailModel = new EmailModel();
 		// 受信人のメール
-		emailModel.setMailTitle("請求書");
+		emailModel.setMailTitle(dutyManagementModel.get("mailTitle"));
+		emailModel.setMailConfirmContont(dutyManagementModel.get("mailConfirmContont"));
+		emailModel.setMailFrom(dutyManagementModel.get("mailFrom"));
 		emailModel.setSelectedmail(dutyManagementModel.get("mail"));
 		emailModel.setUserName(getSession().getAttribute("employeeName").toString());
 		emailModel.setPassword("Lyc2020-0908-");
