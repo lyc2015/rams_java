@@ -4,6 +4,7 @@
 	<resultMap id="customerInfo"
 		type="jp.co.lyc.cms.model.CustomerInfoModel" />
 	<resultMap id="stringResult" type="String" />
+	
 	<!-- お客様情報検索 -->
 	<select id="SelectCustomerInfo" parameterType="String"
 		resultMap="customerInfo">
