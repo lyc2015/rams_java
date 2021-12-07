@@ -91,13 +91,28 @@ public class DataShareController extends BaseController {
 	 * @param topCustomerMod
 	 * @return
 	 */
-	@RequestMapping(value = "/updateDataShares", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateDataSharesTo2", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean updateDataShares(@RequestBody ArrayList<String> fileNoList){
-		logger.info("dataShare.updateDataShare:" + "アップデート開始");
+	public boolean updateDataSharesTo2(@RequestBody ArrayList<String> fileNoList){
+		logger.info("dataShare.updateDataSharesTo2:" + "アップデート開始");
 		boolean result = false;	
-		result  = dataShareService.updateDataShares(fileNoList);
-		logger.info("dataShare.updateDataShare:" + "アップデート終了");
+		result  = dataShareService.updateDataSharesTo2(fileNoList);
+		logger.info("dataShare.updateDataSharesTo2:" + "アップデート終了");
+		return result;	
+	}
+	
+	/**
+	 * アップデート
+	 * @param topCustomerMod
+	 * @return
+	 */
+	@RequestMapping(value = "/updateDataSharesTo3", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean updateDataSharesTo3(@RequestBody ArrayList<String> fileNoList){
+		logger.info("dataShare.updateDataSharesTo3:" + "アップデート開始");
+		boolean result = false;	
+		result  = dataShareService.updateDataSharesTo3(fileNoList);
+		logger.info("dataShare.updateDataSharesTo3:" + "アップデート終了");
 		return result;	
 	}
 	/**
