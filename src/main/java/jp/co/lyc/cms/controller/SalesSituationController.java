@@ -203,9 +203,14 @@ public class SalesSituationController extends BaseController {
 							.setDevelopLanguage4(developLanguageList.get(j).getDevelopLanguageName() + ",");
 				// developLanguage += developLanguageList.get(j).getDevelopLanguageName() + ",";
 			}
-			String developLanguage = salesSituationList.get(i).getDevelopLanguage1()
-					+ salesSituationList.get(i).getDevelopLanguage2() + salesSituationList.get(i).getDevelopLanguage3()
-					+ salesSituationList.get(i).getDevelopLanguage4();
+			String developLanguage = (salesSituationList.get(i).getDevelopLanguage1().equals(",") ? ""
+					: salesSituationList.get(i).getDevelopLanguage1())
+					+ (salesSituationList.get(i).getDevelopLanguage2().equals(",") ? ""
+							: salesSituationList.get(i).getDevelopLanguage2())
+					+ (salesSituationList.get(i).getDevelopLanguage3().equals(",") ? ""
+							: salesSituationList.get(i).getDevelopLanguage3())
+					+ (salesSituationList.get(i).getDevelopLanguage4().equals(",") ? ""
+							: salesSituationList.get(i).getDevelopLanguage4());
 
 			if (developLanguage.length() > 0)
 				developLanguage = developLanguage.substring(0, developLanguage.length() - 1);
