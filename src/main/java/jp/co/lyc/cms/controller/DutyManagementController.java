@@ -99,8 +99,36 @@ public class DutyManagementController extends BaseController {
 			checkMod.get(i).setCostRegistrationModel(newCostRegistrationModelList);
 			checkMod.get(i).setCost(String.valueOf(cost));
 		}
+
+		// ソート
+		List<DutyManagementModel> returnMod = new ArrayList<DutyManagementModel>();
+		// 承認済み
+		for (int i = 0; i < checkMod.size(); i++) {
+			if (checkMod.get(i).getApprovalStatus() != null && checkMod.get(i).getApprovalStatus().equals("1")) {
+				returnMod.add(checkMod.get(i));
+				checkMod.remove(i);
+				i--;
+			}
+		}
+		// 報告書あり
+		for (int i = 0; i < checkMod.size(); i++) {
+			if (checkMod.get(i).getWorkTime() != null) {
+				returnMod.add(checkMod.get(i));
+				checkMod.remove(i);
+				i--;
+			}
+		}
+		// 他
+		for (int i = 0; i < checkMod.size(); i++) {
+			returnMod.add(checkMod.get(i));
+		}
+		// 番号つけ
+		for (int i = 0; i < returnMod.size(); i++) {
+			returnMod.get(i).setRowNo(i + 1);
+		}
+
 		logger.info("DutyManagementController.selectDutyManagement:" + "検索終了");
-		return checkMod;
+		return returnMod;
 	}
 
 	/**

@@ -117,7 +117,7 @@
 		<if test="approvalStatus == 4">
 			and T018.approvalStatus = "1"
 		</if>
-		order by T018.attendanceYearAndMonth desc,t001.employeeNo
+		order by t001.employeeNo,T018.attendanceYearAndMonth desc
 	</select>
 
 	<select id="selectCostRegistration" resultMap="CostRegistration"
