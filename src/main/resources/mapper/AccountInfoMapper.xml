@@ -135,4 +135,13 @@
 		NOW(),
 		#{updateUser})
 	</update>
+
+	<!-- <select id="getAccountCount" parameterType="String" resultMap="map">
+		SELECT
+		count(T004.employeeOrCustomerNo)
+		FROM
+		T004AccountInfo AS T004
+		WHERE
+		employeeOrCustomerNo = #{employeeOrCustomerNo}
+	</select> -->
 </mapper>

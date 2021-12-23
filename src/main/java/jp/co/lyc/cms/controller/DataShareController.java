@@ -23,6 +23,7 @@ import com.alibaba.fastjson.TypeReference;
 
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.DataShareModel;
+import jp.co.lyc.cms.model.S3Model;
 import jp.co.lyc.cms.model.WorkRepotModel;
 import jp.co.lyc.cms.service.DataShareService;
 
@@ -33,6 +34,8 @@ public class DataShareController extends BaseController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	DataShareService dataShareService;
+	@Autowired
+	S3Controller s3Controller;
 	/**
 	 * 検索
 	 * @param topCustomerMod
@@ -137,6 +140,16 @@ public class DataShareController extends BaseController {
 		String getFilename;
 		try {
 			getFilename=upload(dataShareFile);
+		} catch (Exception e) {
+			return null;
+		}
+		try {
+			S3Model s3Model = new S3Model();
+			String filePath = getFilename.replaceAll("\\\\", "/");
+			String fileKey = filePath.split("file/")[1];
+			s3Model.setFileKey(fileKey);
+			s3Model.setFilePath(filePath);
+			s3Controller.uploadFile(s3Model);
 		} catch (Exception e) {
 			return null;
 		}

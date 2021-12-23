@@ -36,4 +36,6 @@ public interface AccountInfoMapper {
 	 * @param sendMap
 	 */
 	public void replaceAccount(HashMap<String, String> sendMap);
+	
+	//public int getAccountCount(HashMap<String, String> sendMap);
 }
