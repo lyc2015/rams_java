@@ -48,7 +48,7 @@
 			inner join (
 			select bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth
 			from T011BpInfoSupplement
-			where unitPriceStartMonth &lt;= #{getYandM}
+			where unitPriceStartMonth &lt;= #{yearAndMonth}
 			group by bpEmployeeNo
 			) as temp
 			on T011.bpEmployeeNo =

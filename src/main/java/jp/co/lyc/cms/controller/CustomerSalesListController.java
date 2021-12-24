@@ -160,13 +160,16 @@ public class CustomerSalesListController {
 										.equals(MonthData.get(n).getEmployeeNo())) {
 									if (CustomerSalesListModel.get(i).getDailyCalculationStatus() != null
 											&& CustomerSalesListModel.get(i).getDailyCalculationStatus().equals("0")) {
-										Double totalCost = Double
-												.parseDouble(CustomerSalesListModel.get(i).getBpUnitPrice())
+										Double totalCost = Double.parseDouble(
+												CustomerSalesListModel.get(i).getBpUnitPrice() == null ? "0.0"
+														: CustomerSalesListModel.get(i).getBpUnitPrice())
 												* CustomerSalesListModel.get(i).getPercent();
 										DecimalFormat cost = new DecimalFormat("#.#");
 										customerEmpDe.setCost(cost.format(totalCost));
 									} else {
-										customerEmpDe.setCost(CustomerSalesListModel.get(i).getBpUnitPrice());
+										customerEmpDe
+												.setCost(CustomerSalesListModel.get(i).getBpUnitPrice() == null ? ""
+														: CustomerSalesListModel.get(i).getBpUnitPrice());
 									}
 								}
 							}
