@@ -135,6 +135,9 @@
 		<if test="contactDate != null">
 			AND T007.contactDate >= concat(#{contactDate},"00")
 		</if>
+		<if test="salesStaff != null">
+			AND T007.salesStaff = #{salesStaff}
+		</if>
 		ORDER BY
 		T007.customerNo
 	</select>
