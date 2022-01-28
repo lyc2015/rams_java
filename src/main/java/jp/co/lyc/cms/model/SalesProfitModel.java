@@ -29,6 +29,24 @@ public class SalesProfitModel {
 	Date startDate;// 現場開始時間
 	Date endDate;// 現場終了時間
 	String pdf; // pdf
+	String startTime; // 現場開始時間
+	String endTime; // 現場終了時間
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
 
 	public String getPdf() {
 		return pdf;
