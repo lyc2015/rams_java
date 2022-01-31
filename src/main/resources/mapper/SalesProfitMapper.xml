@@ -136,9 +136,6 @@
 		and
 		T006EmployeeSiteInfo.admissionStartDate=T011BpInfoSupplement.admissionStartDate
 		where
-		T006EmployeeSiteInfo.admissionStartDate <![CDATA[ > ]]>
-		#{startDate}
-		AND
 		(T006EmployeeSiteInfo.admissionStartDate  <![CDATA[ < ]]>
 		#{endDate}
 		OR
