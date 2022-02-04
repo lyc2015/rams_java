@@ -34,7 +34,7 @@ public class SalesProfitService {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
 		String startTime = salesProfitModel.getStartTime() + "00";
-		String endTime = salesProfitModel.getEndDate() + "99";
+		String endTime = salesProfitModel.getEndTime() + "99";
 
 		return salesProfitMapper.getSalesInfo(salesProfitModel.getEmployeeName(), salesProfitModel.getEmployeeStatus(),
 				startTime, endTime);
