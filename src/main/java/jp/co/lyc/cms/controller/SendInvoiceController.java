@@ -492,7 +492,7 @@ public class SendInvoiceController extends BaseController {
 			String workPeriod = String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + "01~"
 					+ String.valueOf(year) + (month < 10 ? "0" + month : String.valueOf(month)) + day;
 
-			tempMap.put("rowNo", String.valueOf(dataList.get(i).getRowNo()));
+			tempMap.put("rowNo", String.valueOf(dataList.get(i).getShowNo()));
 
 			tempMap.put("workContents", dataList.get(i).getWorkContents());
 			tempMap.put("employeeName", dataList.get(i).getEmployeeName());
