@@ -1,5 +1,7 @@
 package jp.co.lyc.cms.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EmailModel {
 
 	private static final long serialVersionUID = 1L;
@@ -37,6 +39,19 @@ public class EmailModel {
 	private String[] paths;
 
 	private String[] names;
+	/**
+	 * 附件
+	 */
+	private MultipartFile[] files;
+	
+	
+	public MultipartFile[] getFiles() {
+		return files;
+	}
+
+	public void setFiles(MultipartFile[] files) {
+		this.files = files;
+	}
 
 	public String[] getNames() {
 		return names;

@@ -1388,20 +1388,40 @@ public class UtilsController {
 			contentPart.setContent(mailConfirmContont, "text/plain;charset=UTF-8");
 			multipart.addBodyPart(contentPart);
 
-			for (int i = 0; i < emailMod.getPaths().length; i++) {
-				// 添加附件
-				MimeBodyPart filePart = new MimeBodyPart();
-				DataSource source = new FileDataSource(emailMod.getPaths()[i]);
-				// DataSource source = new
-				// FileDataSource("C:\\file\\履歴書\\LYC168_営業文章\\営業EE_aaa.xls");
-				// 添加附件的内容
-				filePart.setDataHandler(new DataHandler(source));
-				// 添加附件的标题
-				String filenames = MimeUtility.encodeText(source.getName());
-				filenames = filenames.replace("\\r", "").replace("\\n", "").replace(" ", "");
-				filePart.setFileName(filenames);
-				multipart.addBodyPart(filePart);
+			if(emailMod.getPaths() != null && emailMod.getPaths().length != 0) {
+				for (int i = 0; i < emailMod.getPaths().length; i++) {
+					// 添加附件
+					MimeBodyPart filePart = new MimeBodyPart();
+					DataSource source = new FileDataSource(emailMod.getPaths()[i]);
+					// DataSource source = new
+					// FileDataSource("C:\\file\\履歴書\\LYC168_営業文章\\営業EE_aaa.xls");
+					// 添加附件的内容
+					filePart.setDataHandler(new DataHandler(source));
+					// 添加附件的标题
+					String filenames = MimeUtility.encodeText(source.getName());
+					filenames = filenames.replace("\\r", "").replace("\\n", "").replace(" ", "");
+					filePart.setFileName(filenames);
+					multipart.addBodyPart(filePart);
+				}
 			}
+			//处理附件
+			MultipartFile[] files = emailMod.getFiles();
+			if(files != null && files.length != 0) {
+				for (int i = 0; i < files.length; i++) {
+					// 添加附件
+					MimeBodyPart filePart = new MimeBodyPart();
+					File file = MultipartFileToFile(files[i]);
+					DataSource source = new FileDataSource(file);
+					// 添加附件的内容
+					filePart.setDataHandler(new DataHandler(source));
+					// 添加附件的标题
+					String filenames = MimeUtility.encodeText(source.getName());
+					filenames = filenames.replace("\\r", "").replace("\\n", "").replace(" ", "");
+					filePart.setFileName(filenames);
+					multipart.addBodyPart(filePart);
+				}
+			}
+			
 			// multipart.addBodyPart(filePart);
 			multipart.setSubType("mixed");
 			// 将multipart对象放到message中
@@ -1441,6 +1461,28 @@ public class UtilsController {
 		}
 
 	}
+	
+	/**
+     * 将MultipartFile转换为File
+     * @param multiFile
+     * @return
+     */
+    private File MultipartFileToFile(MultipartFile multiFile) {
+        // 获取文件名
+        String fileName = multiFile.getOriginalFilename();
+        // 获取文件后缀
+        String prefix = fileName.substring(fileName.lastIndexOf("."));
+        // 若须要防止生成的临时文件重复,能够在文件名后添加随机码
+        try {
+            File file = File.createTempFile(fileName, prefix);
+            multiFile.transferTo(file);
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 	/**
 	 * enterPeriodを取得する

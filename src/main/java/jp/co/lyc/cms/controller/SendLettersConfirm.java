@@ -20,8 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.AllEmployName;
@@ -177,10 +182,14 @@ public class SendLettersConfirm extends BaseController {
 	}
 
 	@RequestMapping(value = "/sendMailWithFile", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> sendMailWithFile(@RequestBody EmailModel emailModel) {
+	@ResponseBody 
+	public Map<String, Object> sendMailWithFile(@RequestParam(value = "emailModel") String JSONEmailModel,@RequestParam(value = "myfiles") MultipartFile[] files) {
 		String errorsMessage = "";
 		Map<String, Object> resulterr = new HashMap<>();
+		EmailModel emailModel = JSON.parseObject(JSONEmailModel, new TypeReference<EmailModel>() {
+		});
+
+		
 		if (emailModel.getMailFrom() == null || emailModel.getMailFrom().equals("")) {
 			errorsMessage = "登録者メールアドレス入力されてない、確認してください。";
 
@@ -195,6 +204,7 @@ public class SendLettersConfirm extends BaseController {
 		// 受信人のメール
 		emailModel.setUserName(getSession().getAttribute("employeeName").toString());
 		emailModel.setPassword("Lyc2020-0908-");
+		emailModel.setFiles(files);
 		// emailModel.setFromAddress(model.getMailFrom());
 		emailModel.setContextType("text/html;charset=utf-8");
 		if (emailModel.getPaths() != null) {
@@ -209,10 +219,12 @@ public class SendLettersConfirm extends BaseController {
 		}
 		try {
 			// checkEmail(emailModel.getSelectedmail());
-			if (emailModel.getPaths() == null || emailModel.getPaths().length == 0)
+			if ((emailModel.getPaths() == null || emailModel.getPaths().length == 0)&&(files == null || files.length == 0))
 				utils.EmailSend(emailModel);
-			else
+			else  {
 				utils.sendMailWithFile(emailModel);
+			}
+				
 		} catch (Exception e) {
 			errorsMessage = "送信エラー発生しました。";
 
