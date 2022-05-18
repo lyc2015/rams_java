@@ -104,11 +104,12 @@ public class SendLettersConfirm extends BaseController {
 			} else {
 				sendLettersConfirmModelList.get(j).setResumeInfoName("");
 			}
-
+ 
 			if (sendLettersConfirmModelList.get(j).getUnitPrice() != null
 					&& !sendLettersConfirmModelList.get(j).getUnitPrice().equals("")) {
-				sendLettersConfirmModelList.get(j).setUnitPrice(
-						String.valueOf(Integer.parseInt(sendLettersConfirmModelList.get(j).getUnitPrice()) / 10000));
+        // 统一向前端传円，而不是万円
+				// sendLettersConfirmModelList.get(j).setUnitPrice(
+				// 		String.valueOf(Double.parseDouble(sendLettersConfirmModelList.get(j).getUnitPrice()) / 10000));
 			}
 		}
 		logger.info("getSalesEmps" + "検索結束");
@@ -120,12 +121,12 @@ public class SendLettersConfirm extends BaseController {
 	public void updateSalesSentence(@RequestBody SendLettersConfirmModel model) {
 
 		logger.info("updateSalesSentence:" + "更新開始");
-		if (model.getUnitPrice() != null && !model.getUnitPrice().equals(""))
-			model.setUnitPrice(String.valueOf(Integer.parseInt(model.getUnitPrice()) * 10000));
+//		if (model.getUnitPrice() != null && !model.getUnitPrice().equals(""))
+//			model.setUnitPrice(String.valueOf(Double.parseDouble(model.getUnitPrice()) * 10000));
 		model.setUpdateUser(getSession().getAttribute("employeeName").toString());
-		sendLettersConfirmService.updateSalesSentence(model);
+		sendLettersConfirmService.updateSalesSentence(model); 
 		logger.info("updateSalesSentence" + "更新結束");
-	}
+	} 
 
 	@RequestMapping(value = "/getAllEmpsWithResume", method = RequestMethod.POST)
 	@ResponseBody
