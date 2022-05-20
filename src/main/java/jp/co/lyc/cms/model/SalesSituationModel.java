@@ -108,6 +108,16 @@ public class SalesSituationModel implements Serializable {
 
 	String bpUnitPrice;
 	String bpOtherCompanyAdmissionEndDate;
+	String customerAbbreviation;
+
+
+	public String getCustomerAbbreviation() {
+		return customerAbbreviation;
+	}
+
+	public void setCustomerAbbreviation(String customerAbbreviation) {
+		this.customerAbbreviation = customerAbbreviation;
+	}
 
 	public String getBpOtherCompanyAdmissionEndDate() {
 		return bpOtherCompanyAdmissionEndDate;

@@ -149,7 +149,10 @@ public class SalesSituationController extends BaseController {
 			if (salesSituationList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(BPR)");
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
-				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(BP)");
+				String name = salesSituationList.get(i).getEmployeeName() + "(BP)";
+				if(salesSituationList.get(i).getCustomerAbbreviation()!=null)
+					name = salesSituationList.get(i).getEmployeeName() + "(BP)" +salesSituationList.get(i).getCustomerAbbreviation();
+				salesSituationList.get(i).setEmployeeName(name);
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SP)");
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
@@ -1046,9 +1049,10 @@ public class SalesSituationController extends BaseController {
 				if (model.getSalesProgressCode().equals("1")) {
 					String nextAdmission = salesSituationService.getEmpNextAdmission(model.getEmployeeNo());
 					if (nextAdmission != null && nextAdmission.equals("0")) {
-						errorsMessage += "稼働中の現場存在しています、現場データをチェックしてください。";
-						result.put("errorsMessage", errorsMessage);
-						return result;
+						salesSituationService.updateEmpNextAdmission(model);
+//						errorsMessage += "稼働中の現場存在しています、現場データをチェックしてください。";
+//						result.put("errorsMessage", errorsMessage);
+//						return result;
 					} else {
 						salesSituationService.insertEmpNextAdmission(model);
 					}

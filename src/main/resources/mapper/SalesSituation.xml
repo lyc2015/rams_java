@@ -163,6 +163,7 @@
 		null,T006EmployeeSiteInfo.unitPrice,T019SalesSentence.unitPrice) as
 		unitPrice,
 		T011.bpUnitPrice,
+        T011.customerAbbreviation,
 		ifnull(T006EmployeeSiteInfo.customerNo, '')
 		AS customer,
 		T006EmployeeSiteInfo.customerNo as nowCustomer,
@@ -202,11 +203,16 @@
 		=
 		T001Employee.employeeNo
 		LEFT JOIN
-		(SELECT T011.* FROM T011BpInfoSupplement as T011
+		(SELECT T011.*, temp.customerAbbreviation FROM T011BpInfoSupplement as T011
 		inner join
-		(SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth FROM
-		T011BpInfoSupplement
-		group by bpEmployeeNo) as temp
+		(SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth,
+            t007.customerAbbreviation 
+        FROM
+			T011BpInfoSupplement t011,T007CustomerInfo t007
+		WHERE
+        	t011.bpBelongCustomerCode = t007.customerNo
+		group by 
+			bpEmployeeNo) as temp
 		on T011.bpEmployeeNo
 		= temp.bpEmployeeNo
 		and T011.unitPriceStartMonth =
@@ -260,7 +266,8 @@
 	<select id="getBpSalesSituationList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT T002EmployeeDetail.employeeNo,
-		T002EmployeeDetail.developLanguage1,
+        T007CustomerInfo.customerAbbreviation,
+        T002EmployeeDetail.developLanguage1,
 		T002EmployeeDetail.developLanguage2,
 		T002EmployeeDetail.developLanguage3,
 		T002EmployeeDetail.developLanguage4,
@@ -333,6 +340,18 @@
 		T002EmployeeDetail.employeeNo
 		=
 		T011BpInfoSupplement.bpEmployeeNo
+        
+        #开始 这段sql可以直接考到xml文件中的这个位置即可
+        LEFT
+		JOIN
+		T007CustomerInfo
+		AS T007CustomerInfo
+		on
+        T007CustomerInfo.customerNo 
+        =
+        T011BpInfoSupplement.bpBelongCustomerCode
+        #结束
+        
 		Where
 		T002EmployeeDetail.employeeNo
 		in
