@@ -56,6 +56,8 @@
 		T007.purchasingManagersMail,
 		T007.proposeClassificationCode,
 		T007.levelCode,
+		T007.sendLetterMonth,
+		T007.sendLetterCount,
 		'' AS
 		monthCount,
 		'' AS
@@ -221,6 +223,8 @@
 		T007.commonMail,
 		T007.purchasingManagersMail,
 		T007.proposeClassificationCode,
+		T007.sendLetterMonth,
+		T007.sendLetterCount,
 		M008.levelName AS
 		levelCode,
 		'' AS
