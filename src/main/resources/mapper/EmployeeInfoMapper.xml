@@ -651,9 +651,6 @@
 		UPDATE
 		T001Employee
 		SET
-		<if test="employeeNo!=  null">
-			employeeNo =#{employeeNo},
-		</if>
 		<if test="employeeFristName!=  null">
 			employeeFristName =#{employeeFristName},
 		</if>
@@ -678,9 +675,6 @@
 		UPDATE
 		T002EmployeeDetail
 		SET
-		<if test="employeeNo!=  null">
-			employeeNo =#{employeeNo},
-		</if>
 		<if test="genderStatus!=  null">
 			genderStatus =#{genderStatus},
 		</if>
@@ -1100,9 +1094,6 @@
 		UPDATE
 		T015ResumeManagement
 		SET
-		<if test="employeeNo!=  null">
-			employeeNo =#{employeeNo},
-		</if>
 		<if test="resumeInfo1!=   null">
 			resumeInfo1 =#{resumeInfo1},
 		</if>

@@ -65,9 +65,6 @@
 	<update id="updateBp" parameterType="String">
 		UPDATE T011BpInfoSupplement
 		SET
-		<if test="bpEmployeeNo != null">
-			bpEmployeeNo = #{bpEmployeeNo},
-		</if>
 		<if test="bpUnitPrice != null">
 			bpUnitPrice = #{bpUnitPrice},
 		</if>
