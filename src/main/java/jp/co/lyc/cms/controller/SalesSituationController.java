@@ -149,10 +149,7 @@ public class SalesSituationController extends BaseController {
 			if (salesSituationList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(BPR)");
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
-				String name = salesSituationList.get(i).getEmployeeName() + "(BP)";
-				if(salesSituationList.get(i).getCustomerAbbreviation()!=null)
-					name = salesSituationList.get(i).getEmployeeName() + "(BP)" +salesSituationList.get(i).getCustomerAbbreviation();
-				salesSituationList.get(i).setEmployeeName(name);
+				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName());
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SP)");
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
