@@ -190,7 +190,10 @@ public class CostRegistrationController extends BaseController {
 	@ResponseBody
 	public boolean deleteCostRegistration(@RequestBody CostRegistrationModel emp) {
 		logger.info("CostRegistrationController.deleteCostRegistration:" + "削除開始");
-		emp.setEmployeeNo(getSession().getAttribute("employeeNo").toString());
+		if(emp.getEmployeeNo() == null ) {
+			emp.setEmployeeNo(getSession().getAttribute("employeeNo").toString());
+		}
+		
 		boolean flag=false;
 		if(emp.getOldCostFile()!=null) {
 			try {

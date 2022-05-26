@@ -90,6 +90,9 @@
 		T006.customerNo =
 		ifnull(#{customerNo},T006.customerNo)
 		and
+		T006.employeeNo =
+		ifnull(#{employeeNo},T006.employeeNo)
+		and
 		T018.approvalStatus = "1"
 		group by T006.employeeNo
 		order by
