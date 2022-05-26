@@ -10,6 +10,8 @@
 	<select id="selectDutyManagement" resultMap="DutyManagement"
 		parameterType="String">
 		SELECT
+		T018.sumWorkTime as workTimeInput,
+		T016.workTime as workTimeFile,
 		(@rowNo:=@rowNo + 1) AS rowNo,
 		t001.employeeNo,
 		concat(t001.employeeFristName,t001.employeeLastName) as employeeName,
@@ -31,7 +33,7 @@
 		T018.DeductionsAndOvertimePayOfUnitPrice =
 		"",if(T018.sumWorkTime>t006.payOffRange2,round(t006.unitPrice/t006.payOffRange2*(T018.sumWorkTime-t006.payOffRange2)),if(t006.payOffRange1>T018.sumWorkTime,round(t006.unitPrice/t006.payOffRange1*(T018.sumWorkTime-t006.payOffRange1)),0)),T018.DeductionsAndOvertimePayOfUnitPrice)deductionsAndOvertimePayOfUnitPrice,
 		<!-- FORMAT(if(T018.sumWorkTime>t006.payOffRange2,t006.unitPrice/t006.payOffRange2*(T018.sumWorkTime-t006.payOffRange2),if(t006.payOffRange1>T018.sumWorkTime,t006.unitPrice/t006.payOffRange1*(T018.sumWorkTime-t006.payOffRange1),0)),0)deductionsAndOvertimePayOfUnitPrice, -->
-		if(T016.employeeWorkTimeHaveData=1,'0',if(T018.attendanceRegisterFlag=1,'1','2'))checkSection,
+    <!-- if(T016.employeeWorkTimeHaveData=1,'0',if(T018.attendanceRegisterFlag=1,'1','2'))checkSection,-->
 		T018.updateTime,
 		if(T018.approvalStatus=1,"1","0")approvalStatus,
 		T018.approvalUser
@@ -81,15 +83,18 @@
 		left join
 		M013Station as m013 on
 		t006.stationCode=m013.stationCode
-		left join
+		LEFT JOIN
 		(SELECT
-		employeeNo,updateTime,yearAndMonth,1 as
-		employeeWorkTimeHaveData FROM
-		T016EmployeeWorkTime group by
-		employeeNo)T016 on
-		t001.employeeNo=T016.employeeNo and
-		T016.yearAndMonth=#{yearAndMonth}
-		left join
+		SUM(T016EmployeeWorkTime.workTime) AS workTime,
+		T016EmployeeWorkTime.employeeNo,
+		T016EmployeeWorkTime.yearAndMonth
+		FROM
+		T016EmployeeWorkTime
+		WHERE
+		T016EmployeeWorkTime.yearAndMonth =
+		#{yearAndMonth}) AS T016 ON t001.employeeNo = T016.employeeNo
+		left
+		join
 		T018WorkTotalTime as T018 on
 		t001.employeeNo=T018.employeeNo
 		and
@@ -100,18 +105,34 @@
 		(T018.attendanceYearAndMonth = #{yearAndMonth}
 		or
 		T018.attendanceYearAndMonth is null)
-		and left(t001.employeeNo,2) !=
-		"BP"
+	
+		<if test="employeeStatus == 1">
+			and left(t001.employeeNo,2) =
+			"BP"
+		</if>
+		<if test="employeeStatus == 0">
+			and left(t001.employeeNo,3) =
+			"LYC"
+		</if>
+		<if test="employeeStatus == 2">
+			and left(t001.employeeNo,2) =
+			"SP"
+		</if>
+
 		<if test="approvalStatus == 0">
 		</if>
 		<if test="approvalStatus == 1">
-			and T018.approvalStatus is null
+			and (T016.workTime is null
+			and T018.sumWorkTime is null)
 		</if>
 		<if test="approvalStatus == 2">
-			and T018.approvalStatus is not null
+			and (T018.sumWorkTime is not null OR T016.workTime is not
+			null)
 		</if>
 		<if test="approvalStatus == 3">
-			and T018.approvalStatus = "0"
+			AND ((T018.sumWorkTime is not null OR T016.workTime is not
+			null)
+			AND T018.approvalStatus = '0')
 		</if>
 		<if test="approvalStatus == 4">
 			and T018.approvalStatus = "1"
