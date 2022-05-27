@@ -233,7 +233,8 @@ public class SendInvoiceController extends BaseController {
 				model.put("customerName", returnList.get(i).getCustomerName());
 				Date date = new Date();
 				SimpleDateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
-				model.put("invoiceDate", dateFormat.format(date));
+				model.put("invoiceDate", dutyManagementModel.get("invoiceDate"));
+				//model.put("invoiceDate", dateFormat.format(date));
 				model.put("employeeNo", returnList.get(i).getEmployeeNo());
 				model.put("invoiceNo", dutyManagementModel.get("invoiceNo"));
 				Calendar ca = Calendar.getInstance();
