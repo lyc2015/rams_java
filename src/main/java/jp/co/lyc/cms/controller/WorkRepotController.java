@@ -183,7 +183,13 @@ public class WorkRepotController extends BaseController {
 		emp.setUpdateUser(getSession().getAttribute("employeeName").toString()); 
 		logger.info("DutyManagementController.updateworkRepot:" + "アップデート開始");
 		boolean result = false;	
-		result  = workRepotService.updateWorkRepot(emp);
+		if(emp.getEmployeeNo().startsWith("BP")) {
+			// 管理员为BP修改sumWorkTime
+			result  = workRepotService.updateBPWorkRepot(emp);
+		}else {
+			result  = workRepotService.updateWorkRepot(emp);
+		}
+		
 		logger.info("DutyManagementController.updateworkRepot:" + "アップデート終了");
 		return result;	
 	}

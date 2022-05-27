@@ -54,7 +54,25 @@ public class WorkRepotService {
 		}
 		return result;
 	}
+	
+	/**
+	 * アップデートBP
+	 * 
+	 * @param sendMap
+	 */
 
+	public boolean updateBPWorkRepot(WorkRepotModel workRepotModel) {
+		boolean result = true;
+		try {
+			workRepotMapper.updateBPWorkRepot(workRepotModel);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return result = false;
+		}
+		return result;
+	}
+	
 	/**
 	 * アップデート
 	 * 

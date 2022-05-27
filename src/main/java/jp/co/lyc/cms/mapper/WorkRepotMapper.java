@@ -24,7 +24,14 @@ public interface WorkRepotMapper {
 	 * @param sendMap
 	 */
 	public void updateWorkRepot(WorkRepotModel workRepotModel);
-
+	
+	/**
+	 * アップデートBP
+	 * 
+	 * @param sendMap
+	 */
+	public void updateBPWorkRepot(WorkRepotModel workRepotModel);
+	
 	/**
 	 * ファイルをクリアする
 	 * 
