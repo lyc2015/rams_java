@@ -21,6 +21,34 @@ public class DutyManagementModel {
 	String approvalUser;
 	String workingTimeReport;
 	String cost;
+	String workTimeInputSingle;
+	String workTimeInputTotal;
+	String bpBelongCustomerAbbreviation;
+
+	public String getBpBelongCustomerAbbreviation() {
+		return bpBelongCustomerAbbreviation;
+	}
+
+	public void setBpBelongCustomerAbbreviation(String bpBelongCustomerAbbreviation) {
+		this.bpBelongCustomerAbbreviation = bpBelongCustomerAbbreviation;
+	}
+
+	public String getWorkTimeInputSingle() {
+		return workTimeInputSingle;
+	}
+
+	public void setWorkTimeInputSingle(String workTimeInputSingle) {
+		this.workTimeInputSingle = workTimeInputSingle;
+	}
+
+	public String getWorkTimeInputTotal() {
+		return workTimeInputTotal;
+	}
+
+	public void setWorkTimeInputTotal(String workTimeInputTotal) {
+		this.workTimeInputTotal = workTimeInputTotal;
+	}
+
 	List<CostRegistrationModel> costRegistrationModel;
 
 	public String getApprovalUser() {

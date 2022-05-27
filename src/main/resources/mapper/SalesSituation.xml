@@ -163,7 +163,7 @@
 		null,T006EmployeeSiteInfo.unitPrice,T019SalesSentence.unitPrice) as
 		unitPrice,
 		T011.bpUnitPrice,
-        T011.customerAbbreviation,
+		T011.customerAbbreviation,
 		ifnull(T006EmployeeSiteInfo.customerNo, '')
 		AS customer,
 		T006EmployeeSiteInfo.customerNo as nowCustomer,
@@ -203,22 +203,25 @@
 		=
 		T001Employee.employeeNo
 		LEFT JOIN
-		(SELECT T011.*, temp.customerAbbreviation FROM T011BpInfoSupplement as T011
+		(SELECT T011.*,
+		temp.customerAbbreviation FROM T011BpInfoSupplement as T011
 		inner join
 		(SELECT bpEmployeeNo,max(unitPriceStartMonth) as unitPriceStartMonth,
-            t007.customerAbbreviation 
-        FROM
-			T011BpInfoSupplement t011,T007CustomerInfo t007
+		t007.customerAbbreviation
+		FROM
+		T011BpInfoSupplement t011,T007CustomerInfo t007
 		WHERE
-        	t011.bpBelongCustomerCode = t007.customerNo
-		group by 
-			bpEmployeeNo) as temp
+		t011.bpBelongCustomerCode = t007.customerNo
+		group by
+		bpEmployeeNo) as temp
 		on T011.bpEmployeeNo
 		= temp.bpEmployeeNo
-		and T011.unitPriceStartMonth =
+		and
+		T011.unitPriceStartMonth =
 		temp.unitPriceStartMonth)
 		AS T011
-		on T011.bpEmployeeNo =
+		on
+		T011.bpEmployeeNo =
 		T006EmployeeSiteInfo.employeeNo
 		LEFT JOIN
 		T003AddressInfo AS
@@ -266,8 +269,8 @@
 	<select id="getBpSalesSituationList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT T002EmployeeDetail.employeeNo,
-        T007CustomerInfo.customerAbbreviation,
-        T002EmployeeDetail.developLanguage1,
+		T007CustomerInfo.customerAbbreviation,
+		T002EmployeeDetail.developLanguage1,
 		T002EmployeeDetail.developLanguage2,
 		T002EmployeeDetail.developLanguage3,
 		T002EmployeeDetail.developLanguage4,
@@ -340,18 +343,18 @@
 		T002EmployeeDetail.employeeNo
 		=
 		T011BpInfoSupplement.bpEmployeeNo
-        
-        #开始 这段sql可以直接考到xml文件中的这个位置即可
-        LEFT
+
+		#开始
+		LEFT
 		JOIN
 		T007CustomerInfo
 		AS T007CustomerInfo
 		on
-        T007CustomerInfo.customerNo 
-        =
-        T011BpInfoSupplement.bpBelongCustomerCode
-        #结束
-        
+		T007CustomerInfo.customerNo
+		=
+		T011BpInfoSupplement.bpBelongCustomerCode
+		#结束
+
 		Where
 		T002EmployeeDetail.employeeNo
 		in
@@ -700,7 +703,8 @@
 			#{item}
 		</foreach>
 		union
-		SELECT T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
+		SELECT
+		T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
 		as
 		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
 		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.interviewDate2,T010.stationCode2,

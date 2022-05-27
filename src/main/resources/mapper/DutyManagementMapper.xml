@@ -5,13 +5,15 @@
 		type="jp.co.lyc.cms.model.DutyManagementModel" />
 	<resultMap id="CostRegistration"
 		type="jp.co.lyc.cms.model.CostRegistrationModel" />
-	<resultMap id="String"
-		type="java.lang.String" />
+	<resultMap id="String" type="java.lang.String" />
 	<select id="selectDutyManagement" resultMap="DutyManagement"
 		parameterType="String">
 		SELECT
-		T018.sumWorkTime as workTimeInput,
-		T016.workTime as workTimeFile,
+		t011.bpBelongCustomerAbbreviation,
+		T018.sumWorkTime as
+		workTimeInputTotal,
+		T016.workTime as
+		workTimeInputSingle,
 		(@rowNo:=@rowNo + 1) AS rowNo,
 		t001.employeeNo,
 		concat(t001.employeeFristName,t001.employeeLastName) as employeeName,
@@ -33,7 +35,9 @@
 		T018.DeductionsAndOvertimePayOfUnitPrice =
 		"",if(T018.sumWorkTime>t006.payOffRange2,round(t006.unitPrice/t006.payOffRange2*(T018.sumWorkTime-t006.payOffRange2)),if(t006.payOffRange1>T018.sumWorkTime,round(t006.unitPrice/t006.payOffRange1*(T018.sumWorkTime-t006.payOffRange1)),0)),T018.DeductionsAndOvertimePayOfUnitPrice)deductionsAndOvertimePayOfUnitPrice,
 		<!-- FORMAT(if(T018.sumWorkTime>t006.payOffRange2,t006.unitPrice/t006.payOffRange2*(T018.sumWorkTime-t006.payOffRange2),if(t006.payOffRange1>T018.sumWorkTime,t006.unitPrice/t006.payOffRange1*(T018.sumWorkTime-t006.payOffRange1),0)),0)deductionsAndOvertimePayOfUnitPrice, -->
-    <!-- if(T016.employeeWorkTimeHaveData=1,'0',if(T018.attendanceRegisterFlag=1,'1','2'))checkSection,-->
+		<!-- if(T016.workTime is not null,'0',if(T018.attendanceRegisterFlag=1,'1','2'))checkSection, -->
+		if(T016.workTime is null and T018.sumWorkTime is
+		null,'0',if(T016.workTime is not null,'2','1'))checkSection,
 		T018.updateTime,
 		if(T018.approvalStatus=1,"1","0")approvalStatus,
 		T018.approvalUser
@@ -83,16 +87,30 @@
 		left join
 		M013Station as m013 on
 		t006.stationCode=m013.stationCode
+		# BP所属customer
 		LEFT JOIN
 		(SELECT
-		SUM(T016EmployeeWorkTime.workTime) AS workTime,
+		DISTINCT T007CustomerInfo.customerAbbreviation AS
+		bpBelongCustomerAbbreviation,
+		T011BpInfoSupplement.bpEmployeeNo
+		FROM
+		T011BpInfoSupplement
+		INNER JOIN T007CustomerInfo ON
+		T011BpInfoSupplement.bpBelongCustomerCode =
+		T007CustomerInfo.customerNo) AS t011 ON t001.employeeNo =
+		t011.bpEmployeeNo
+		LEFT JOIN
+		(SELECT
+		SUM(T016EmployeeWorkTime.workTime) AS
+		workTime,
 		T016EmployeeWorkTime.employeeNo,
 		T016EmployeeWorkTime.yearAndMonth
 		FROM
 		T016EmployeeWorkTime
 		WHERE
 		T016EmployeeWorkTime.yearAndMonth =
-		#{yearAndMonth}) AS T016 ON t001.employeeNo = T016.employeeNo
+		#{yearAndMonth}) AS T016 ON
+		t001.employeeNo = T016.employeeNo
 		left
 		join
 		T018WorkTotalTime as T018 on
@@ -101,11 +119,12 @@
 		T018.attendanceYearAndMonth=#{yearAndMonth}
 		,(SELECT @rowNo:=0) AS
 		rowNo
+
 		WHERE
 		(T018.attendanceYearAndMonth = #{yearAndMonth}
 		or
 		T018.attendanceYearAndMonth is null)
-	
+
 		<if test="employeeStatus == 1">
 			and left(t001.employeeNo,2) =
 			"BP"
@@ -170,9 +189,11 @@
 
 	<select id="selectWorkTime" resultMap="DutyManagement"
 		parameterType="String">
-		SELECT employeeNo,yearAndMonth,sum(workTime) as workTime,updateTime,updateUser
+		SELECT employeeNo,yearAndMonth,sum(workTime) as
+		workTime,updateTime,updateUser
 		FROM T016EmployeeWorkTime
-		where yearAndMonth = #{yearAndMonth}
+		where
+		yearAndMonth = #{yearAndMonth}
 		group by
 		employeeNo
 	</select>
