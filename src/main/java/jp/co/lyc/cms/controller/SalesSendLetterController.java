@@ -150,6 +150,24 @@ public class SalesSendLetterController extends BaseController {
 		logger.info("getSalesPersons" + "検索結束");
 		return salesPersonsList;
 	}
+	
+	@RequestMapping(value = "/getSalesPersonsCC", method = RequestMethod.POST)
+	@ResponseBody
+	public List<SalesSendLetterModel> getSalesPersonsCC(@RequestBody SalesSendLetterModel model) {
+
+		logger.info("getSalesPersonsCC:" + "検索開始");
+		List<SalesSendLetterModel> salesPersonsList = new ArrayList<SalesSendLetterModel>();
+		try {
+			salesPersonsList = salesSendLetterService.getSalesPersonsCC(model.getCustomerNo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < salesPersonsList.size(); i++) {
+			salesPersonsList.get(i).setRowId(i + 1);
+		}
+		logger.info("getSalesPersonsCC" + "検索結束");
+		return salesPersonsList;
+	}
 
 	@RequestMapping(value = "/creatList", method = RequestMethod.POST)
 	@ResponseBody

@@ -10,6 +10,7 @@
 		parameterType="String">
 		SELECT
 		t011.bpBelongCustomerAbbreviation,
+		t011.bpBelongCustomerCode,
 		T018.sumWorkTime as
 		workTimeInputTotal,
 		T016.workTime as
@@ -40,10 +41,11 @@
 		null,'0',if(T016.workTime is not null,'2','1'))checkSection,
 		T018.updateTime,
 		if(T018.approvalStatus=1,"1","0")approvalStatus,
-		T018.approvalUser
+		T018.approvalUser,
+		t006.customerNo
 		FROM
 		T001Employee as t001
-		left join
+		left join 
 		(SELECT
 		employeeNo,max(reflectYearAndMonth),salary FROM T005WagesInfo where
 		reflectYearAndMonth&lt;=#{yearAndMonth} group by
@@ -92,7 +94,8 @@
 		(SELECT
 		DISTINCT T007CustomerInfo.customerAbbreviation AS
 		bpBelongCustomerAbbreviation,
-		T011BpInfoSupplement.bpEmployeeNo
+		T011BpInfoSupplement.bpEmployeeNo,
+		T011BpInfoSupplement.bpBelongCustomerCode
 		FROM
 		T011BpInfoSupplement
 		INNER JOIN T007CustomerInfo ON

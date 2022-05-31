@@ -33,6 +33,10 @@ public class SalesSendLetterService {
 		return salesSendLetterMapper.getSalesPersons(customerNo);
 	};
 	
+	public List<SalesSendLetterModel> getSalesPersonsCC(String customerNo){
+		return salesSendLetterMapper.getSalesPersonsCC(customerNo);
+	};
+	
 	public int creatList(SalesSendLetterModel model){
 		return salesSendLetterMapper.creatList(model);
 	};

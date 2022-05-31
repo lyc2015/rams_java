@@ -24,6 +24,24 @@ public class DutyManagementModel {
 	String workTimeInputSingle;
 	String workTimeInputTotal;
 	String bpBelongCustomerAbbreviation;
+	String bpBelongCustomerCode;
+	public String getBpBelongCustomerCode() {
+		return bpBelongCustomerCode;
+	}
+
+	public void setBpBelongCustomerCode(String bpBelongCustomerCode) {
+		this.bpBelongCustomerCode = bpBelongCustomerCode;
+	}
+
+	String customerNo;
+
+	public String getCustomerNo() {
+		return customerNo;
+	}
+
+	public void setCustomerNo(String customerNo) {
+		this.customerNo = customerNo;
+	}
 
 	public String getBpBelongCustomerAbbreviation() {
 		return bpBelongCustomerAbbreviation;

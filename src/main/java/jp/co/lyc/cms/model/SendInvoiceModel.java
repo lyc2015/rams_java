@@ -22,6 +22,24 @@ public class SendInvoiceModel {
 	String sendLetterDate;
 	String sendLetterStatus;
 	String workingTimeReport;
+	String bpBelongCustomerCode;
+	String bpBelongCustomerAbbreviation;
+
+	public String getBpBelongCustomerCode() {
+		return bpBelongCustomerCode;
+	}
+
+	public void setBpBelongCustomerCode(String bpBelongCustomerCode) {
+		this.bpBelongCustomerCode = bpBelongCustomerCode;
+	}
+
+	public String getBpBelongCustomerAbbreviation() {
+		return bpBelongCustomerAbbreviation;
+	}
+
+	public void setBpBelongCustomerAbbreviation(String bpBelongCustomerAbbreviation) {
+		this.bpBelongCustomerAbbreviation = bpBelongCustomerAbbreviation;
+	}
 
 	public String getWorkingTimeReport() {
 		return workingTimeReport;

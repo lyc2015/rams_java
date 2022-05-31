@@ -87,7 +87,23 @@
 		FROM
 		T009CustomerDepartmentInfo
 		WHERE
-		customerNo = #{customerNo};
+		customerNo = #{customerNo}
+		and customerDepartmentCode = '7'
+	</select>
+	
+	<!-- CC取る -->
+	<select id="getSalesPersonsCC" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSendLetterModel">
+		SELECT
+		customerDepartmentCode,
+		positionCode,
+		responsiblePerson,
+		customerDepartmentMail
+		FROM
+		T009CustomerDepartmentInfo
+		WHERE
+		customerNo = #{customerNo}
+		and customerDepartmentCode = '7'
 	</select>
 
 	<!-- リスト最大番号取得 -->
