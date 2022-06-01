@@ -9,6 +9,7 @@
 	<select id="selectDutyManagement" resultMap="DutyManagement"
 		parameterType="String">
 		SELECT
+		t002.employeeStatus,
 		t011.bpBelongCustomerAbbreviation,
 		t011.bpBelongCustomerCode,
 		T018.sumWorkTime as
@@ -17,8 +18,10 @@
 		workTimeInputSingle,
 		(@rowNo:=@rowNo + 1) AS rowNo,
 		t001.employeeNo,
-		concat(t001.employeeFristName,t001.employeeLastName) as employeeName,
-		if(t007.customerAbbreviation is null or t007.customerAbbreviation =
+		concat(t001.employeeFristName,t001.employeeLastName)
+		as employeeName,
+		if(t007.customerAbbreviation is null or
+		t007.customerAbbreviation =
 		"",t007.customerName,t007.customerAbbreviation) as customerName,
 		m013.stationName,
 		if(t006.payOffRange1 is null or t006.payOffRange1 =
@@ -45,7 +48,13 @@
 		t006.customerNo
 		FROM
 		T001Employee as t001
-		left join 
+		inner JOIN
+		(select
+		T002EmployeeDetail.employeeStatus,T002EmployeeDetail.employeeNo FROM
+		T002EmployeeDetail) as t002
+		on
+		t002.employeeNo = t001.employeeNo
+		left join
 		(SELECT
 		employeeNo,max(reflectYearAndMonth),salary FROM T005WagesInfo where
 		reflectYearAndMonth&lt;=#{yearAndMonth} group by
@@ -128,21 +137,17 @@
 		or
 		T018.attendanceYearAndMonth is null)
 
+		<!-- 社員区分 -->
 		<if test="employeeStatus == 1">
-			and left(t001.employeeNo,2) =
-			"BP"
+			and t002.employeeStatus=1
 		</if>
 		<if test="employeeStatus == 0">
-			and left(t001.employeeNo,3) =
-			"LYC"
+			and t002.employeeStatus=0
 		</if>
 		<if test="employeeStatus == 2">
-			and left(t001.employeeNo,2) =
-			"SP"
+			and t002.employeeStatus=2
 		</if>
-
-		<if test="approvalStatus == 0">
-		</if>
+		<!-- ステータス 1未登録 2登録済 3未承認 4承認済 -->
 		<if test="approvalStatus == 1">
 			and (T016.workTime is null
 			and T018.sumWorkTime is null)
@@ -159,7 +164,7 @@
 		<if test="approvalStatus == 4">
 			and T018.approvalStatus = "1"
 		</if>
-		order by t001.employeeNo,T018.attendanceYearAndMonth desc
+		order BY t002.employeeStatus,t001.employeeNo
 	</select>
 
 	<select id="selectCostRegistration" resultMap="CostRegistration"
