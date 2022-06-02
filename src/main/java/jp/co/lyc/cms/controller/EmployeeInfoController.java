@@ -532,10 +532,19 @@ public class EmployeeInfoController extends BaseController {
 				}
 			}
 			if (emp.getResumeName1().equals("") && emp.getResumeName2().equals("")) {
-				String deletefileKey = resumeInfo2Key.split("/file/")[1].substring(0,
-						resumeInfo2Key.split("/file/")[1].lastIndexOf("/") + 1);
-				s3Model.setFileKey(deletefileKey);
-				s3Controller.deleteFolder(s3Model);
+				if(!resumeInfo2Key.equals("")) {
+					String deletefileKey = resumeInfo2Key.split("/file/")[1].substring(0,
+							resumeInfo2Key.split("/file/")[1].lastIndexOf("/") + 1);
+					s3Model.setFileKey(deletefileKey);
+					s3Controller.deleteFolder(s3Model);
+				}
+				if(!resumeInfo1Key.equals("")) {
+					String deletefileKey = resumeInfo1Key.split("/file/")[1].substring(0,
+							resumeInfo2Key.split("/file/")[1].lastIndexOf("/") + 1);
+					s3Model.setFileKey(deletefileKey);
+					s3Controller.deleteFolder(s3Model);
+				}
+				
 			}
 			result = employeeInfoService.updateEmployee(sendMap);
 			if (!emp.getNewEmployeeNo().equals(emp.getEmployeeNo())) {
@@ -543,6 +552,8 @@ public class EmployeeInfoController extends BaseController {
 			}
 		} catch (Exception e) {
 			resultMap.put("result", false);
+			resultMap.put("errorsMessage", "修正異常");
+			logger.info("GetEmployeeInfoController.updateEmployee:" + "修正異常"+e);
 			return resultMap;
 		}
 		resultMap.put("result", result);

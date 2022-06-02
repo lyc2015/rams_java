@@ -140,7 +140,7 @@
 		T016EmployeeWorkTime
 		WHERE
 		T016EmployeeWorkTime.yearAndMonth =
-		#{yearAndMonth}) AS T016 ON
+		#{yearAndMonth} group by T016EmployeeWorkTime.employeeNo) AS T016 ON
 		t001.employeeNo = T016.employeeNo
 		left
 		join
