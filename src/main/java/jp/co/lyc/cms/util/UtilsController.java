@@ -1270,8 +1270,9 @@ public class UtilsController {
 			// 设置主题内容
 			message.setSubject(emailMod.getMailTitle());
 			// message.setContent(emailMod.getContext(), "text/html;charset=utf-8");
-			String[] addresssCC = emailMod.getSelectedMailCC();
+			
 			if (emailMod.getSelectedMailCC() != null) {
+				String[] addresssCC = emailMod.getSelectedMailCC();
 				int lenCC = addresssCC.length;
 				Address[] addsCC = new Address[lenCC];
 				for (int i = 0; i < lenCC; i++) {
