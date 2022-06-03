@@ -45,8 +45,8 @@ public class SendInvoiceService {
 		sendInvoiceMapper.insertInvoiceData(model);
 	}
 
-	public void updateInvoiceData(HashMap<String, String> model) {
-		sendInvoiceMapper.updateInvoiceData(model);
+	public Integer updateInvoiceData(HashMap<String, String> model) {
+		return sendInvoiceMapper.updateInvoiceData(model);
 	}
 
 	public void insertNewInvoiceData(HashMap<String, String> model) {

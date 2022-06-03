@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,33 +73,75 @@ public class SendInvoiceController extends BaseController {
 		List<SendInvoiceModel> sendInvoiceList = sendInvoiceService.selectSendInvoice(dutyManagementModel);
 		List<SendInvoiceWorkTimeModel> sendInvoiceWorkTimeList = new ArrayList<SendInvoiceWorkTimeModel>();
 		int rowNo = 0;
-		for (int i = 0; i < sendInvoiceList.size(); i++) {
-			SendInvoiceWorkTimeModel sendInvoiceWorkTimeModel = new SendInvoiceWorkTimeModel();
-			rowNo++;
-			sendInvoiceWorkTimeModel.setRowNo(rowNo);
-			sendInvoiceWorkTimeModel.setEmployeeNo(sendInvoiceList.get(i).getEmployeeNo());
-			sendInvoiceWorkTimeModel.setEmployeeName(sendInvoiceList.get(i).getEmployeeName());
-			sendInvoiceWorkTimeModel.setSystemName(sendInvoiceList.get(i).getSystemName());
-			sendInvoiceWorkTimeModel.setUnitPrice(sendInvoiceList.get(i).getUnitPrice());
-			sendInvoiceWorkTimeModel.setPayOffRange1(sendInvoiceList.get(i).getPayOffRange1());
-			sendInvoiceWorkTimeModel.setPayOffRange2(sendInvoiceList.get(i).getPayOffRange2());
-			sendInvoiceWorkTimeModel.setSumWorkTime(sendInvoiceList.get(i).getSumWorkTime());
-			sendInvoiceWorkTimeModel.setDeductionsAndOvertimePayOfUnitPrice(
-					sendInvoiceList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
-			sendInvoiceWorkTimeModel.setWorkingTimeReport(sendInvoiceList.get(i).getWorkingTimeReport());
+		if (dutyManagementModel.get("employeeNo") == null) {
+			for (int i = 0; i < sendInvoiceList.size(); i++) {
+				SendInvoiceWorkTimeModel sendInvoiceWorkTimeModel = new SendInvoiceWorkTimeModel();
+				rowNo++;
+				sendInvoiceWorkTimeModel.setRowNo(rowNo);
+				sendInvoiceWorkTimeModel.setEmployeeNo(sendInvoiceList.get(i).getEmployeeNo());
+				sendInvoiceWorkTimeModel.setEmployeeName(sendInvoiceList.get(i).getEmployeeName());
+				sendInvoiceWorkTimeModel.setSystemName(sendInvoiceList.get(i).getSystemName());
+				sendInvoiceWorkTimeModel.setUnitPrice(sendInvoiceList.get(i).getUnitPrice());
+				sendInvoiceWorkTimeModel.setPayOffRange1(sendInvoiceList.get(i).getPayOffRange1());
+				sendInvoiceWorkTimeModel.setPayOffRange2(sendInvoiceList.get(i).getPayOffRange2());
+				sendInvoiceWorkTimeModel.setSumWorkTime(sendInvoiceList.get(i).getSumWorkTime());
+				sendInvoiceWorkTimeModel.setDeductionsAndOvertimePayOfUnitPrice(
+						sendInvoiceList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
+				sendInvoiceWorkTimeModel.setWorkingTimeReport(sendInvoiceList.get(i).getWorkingTimeReport());
 
-			sendInvoiceWorkTimeList.add(sendInvoiceWorkTimeModel);
+				sendInvoiceWorkTimeList.add(sendInvoiceWorkTimeModel);
 
-			if (i != sendInvoiceList.size() - 1
-					&& !sendInvoiceList.get(i).getCustomerNo().equals(sendInvoiceList.get(i + 1).getCustomerNo())) {
-				sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
-				returnList.add(sendInvoiceList.get(i));
-				sendInvoiceWorkTimeList = new ArrayList<SendInvoiceWorkTimeModel>();
-				rowNo = 0;
-			} else if (i == sendInvoiceList.size() - 1) {
-				sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
-				returnList.add(sendInvoiceList.get(i));
+				if (i != sendInvoiceList.size() - 1
+						&& !sendInvoiceList.get(i).getCustomerNo().equals(sendInvoiceList.get(i + 1).getCustomerNo())) {
+					sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
+					returnList.add(sendInvoiceList.get(i));
+					sendInvoiceWorkTimeList = new ArrayList<SendInvoiceWorkTimeModel>();
+					rowNo = 0;
+				} else if (i == sendInvoiceList.size() - 1) {
+					sendInvoiceList.get(i).setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
+					returnList.add(sendInvoiceList.get(i));
+				}
 			}
+		} else {
+			// 根据employeeNo封装对应的要员列表数据
+			SendInvoiceModel sendInvoiceModelBySelectedEmployeeNo = new SendInvoiceModel();
+			List<SendInvoiceModel> sameCustomerNo = new ArrayList<SendInvoiceModel>();
+			for (int i = 0; i < sendInvoiceList.size(); i++) {
+				if (sendInvoiceList.get(i).getEmployeeNo().equals(dutyManagementModel.get("employeeNo"))) {
+					sendInvoiceModelBySelectedEmployeeNo = sendInvoiceList.get(i);
+					break;
+				}
+			}
+			if (sendInvoiceModelBySelectedEmployeeNo != null) {
+				for (int i = 0; i < sendInvoiceList.size(); i++) {
+					if (sendInvoiceList.get(i).getCustomerNo()
+							.equals(sendInvoiceModelBySelectedEmployeeNo.getCustomerNo())) {
+						sameCustomerNo.add(sendInvoiceList.get(i));
+					}
+				}
+				int rowNo2 = 0;
+				for (int i = 0; i < sameCustomerNo.size(); i++) {
+					SendInvoiceWorkTimeModel sendInvoiceWorkTimeModel = new SendInvoiceWorkTimeModel();
+					rowNo2++;
+					sendInvoiceWorkTimeModel.setRowNo(rowNo2);
+					sendInvoiceWorkTimeModel.setEmployeeNo(sameCustomerNo.get(i).getEmployeeNo());
+					sendInvoiceWorkTimeModel.setEmployeeName(sameCustomerNo.get(i).getEmployeeName());
+					sendInvoiceWorkTimeModel.setSystemName(sameCustomerNo.get(i).getSystemName());
+					sendInvoiceWorkTimeModel.setUnitPrice(sameCustomerNo.get(i).getUnitPrice());
+					sendInvoiceWorkTimeModel.setPayOffRange1(sameCustomerNo.get(i).getPayOffRange1());
+					sendInvoiceWorkTimeModel.setPayOffRange2(sameCustomerNo.get(i).getPayOffRange2());
+					sendInvoiceWorkTimeModel.setSumWorkTime(sameCustomerNo.get(i).getSumWorkTime());
+					sendInvoiceWorkTimeModel.setDeductionsAndOvertimePayOfUnitPrice(
+							sameCustomerNo.get(i).getDeductionsAndOvertimePayOfUnitPrice());
+					sendInvoiceWorkTimeModel.setWorkingTimeReport(sameCustomerNo.get(i).getWorkingTimeReport());
+
+					sendInvoiceWorkTimeList.add(sendInvoiceWorkTimeModel);
+
+				}
+				sendInvoiceModelBySelectedEmployeeNo.setSendInvoiceWorkTimeModel(sendInvoiceWorkTimeList);
+				returnList.add(sendInvoiceModelBySelectedEmployeeNo);
+			}
+
 		}
 
 		for (int i = 0; i < returnList.size(); i++) {
@@ -148,6 +191,11 @@ public class SendInvoiceController extends BaseController {
 				sendInvoiceWorkTimeModel.setDeductionsAndOvertimePayOfUnitPrice(
 						sendInvoiceList.get(i).getDeductionsAndOvertimePayOfUnitPrice());
 				sendInvoiceWorkTimeModel.setRequestUnitCode("0");
+				sendInvoiceWorkTimeModel.setWorkContents(sendInvoiceList.get(i).getSystemName() == null ? "技術支援"
+						: sendInvoiceList.get(i).getSystemName());
+				sendInvoiceWorkTimeModel.setOldWorkContents(sendInvoiceList.get(i).getSystemName() == null ? "技術支援"
+						: sendInvoiceList.get(i).getSystemName());
+				sendInvoiceWorkTimeModel.setUnitKey(sendInvoiceWorkTimeModel.getYearAndMonth()+'-'+sendInvoiceWorkTimeModel.getCustomerNo()+'-'+sendInvoiceWorkTimeModel.getEmployeeNo()+'-'+sendInvoiceWorkTimeModel.getWorkContents());
 				sendInvoiceWorkTimeModelList.add(sendInvoiceWorkTimeModel);
 			}
 
@@ -182,15 +230,21 @@ public class SendInvoiceController extends BaseController {
 						sendInvoiceWorkTimeModel.setCustomerName(sendInvoiceWorkTimeModelList.get(i).getCustomerName());
 						switch (costRegistrationList.get(j).getCostClassificationCode()) {
 						case "1":
-							sendInvoiceWorkTimeModel
-									.setSystemName(costRegistrationList.get(j).getCostClassificationName() + "("
-											+ costRegistrationList.get(j).getOriginCode() + "-"
-											+ costRegistrationList.get(j).getDestinationCode() + ")");
+							String systemName = costRegistrationList.get(j).getCostClassificationName() + "("
+									+ costRegistrationList.get(j).getOriginCode() + "-"
+									+ costRegistrationList.get(j).getDestinationCode() + ")";
+							sendInvoiceWorkTimeModel.setSystemName(systemName);
+							sendInvoiceWorkTimeModel.setWorkContents(systemName);
+							sendInvoiceWorkTimeModel.setOldWorkContents(systemName);
+
 							break;
 						default:
-							sendInvoiceWorkTimeModel
-									.setSystemName(costRegistrationList.get(j).getCostClassificationName() + "("
-											+ costRegistrationList.get(j).getDetailedNameOrLine() + ")");
+							String systemName2 = costRegistrationList.get(j).getCostClassificationName() + "("
+									+ costRegistrationList.get(j).getDetailedNameOrLine() + ")";
+							sendInvoiceWorkTimeModel.setSystemName(systemName2);
+							sendInvoiceWorkTimeModel.setSystemName(systemName2);
+							sendInvoiceWorkTimeModel.setWorkContents(systemName2);
+							sendInvoiceWorkTimeModel.setOldWorkContents(systemName2);
 							break;
 						}
 						sendInvoiceWorkTimeModel.setUnitPrice(costRegistrationList.get(j).getCost());
@@ -223,18 +277,18 @@ public class SendInvoiceController extends BaseController {
 						returnList.get(i).setShowNo("");
 					}
 				}
+				// insertInvoiceData
 				HashMap<String, String> model = new HashMap<String, String>();
 				model.put("customerNo", returnList.get(i).getCustomerNo());
 				model.put("yearAndMonth", dutyManagementModel.get("yearAndMonth"));
-				model.put("workContents",
-						returnList.get(i).getWorkContents() == null
-								? (returnList.get(i).getSystemName() == null ? "" : returnList.get(i).getSystemName())
-								: returnList.get(i).getWorkContents());
+				model.put("workContents", returnList.get(i).getWorkContents() == null
+						? (returnList.get(i).getSystemName() == null ? "技術支援" : returnList.get(i).getSystemName())
+						: returnList.get(i).getWorkContents());
 				model.put("customerName", returnList.get(i).getCustomerName());
 				Date date = new Date();
 				SimpleDateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
 				model.put("invoiceDate", dutyManagementModel.get("invoiceDate"));
-				//model.put("invoiceDate", dateFormat.format(date));
+				// model.put("invoiceDate", dateFormat.format(date));
 				model.put("employeeNo", returnList.get(i).getEmployeeNo());
 				model.put("invoiceNo", dutyManagementModel.get("invoiceNo"));
 				Calendar ca = Calendar.getInstance();
@@ -262,6 +316,7 @@ public class SendInvoiceController extends BaseController {
 			int showNo = 0;
 			for (int i = 0; i < selectSendInvoiceByCustomerNoList.size(); i++) {
 				selectSendInvoiceByCustomerNoList.get(i).setRowNo(i + 1);
+				selectSendInvoiceByCustomerNoList.get(i).setUnitKey(selectSendInvoiceByCustomerNoList.get(i).getYearAndMonth()+'-'+selectSendInvoiceByCustomerNoList.get(i).getCustomerNo()+'-'+selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo()+'-'+selectSendInvoiceByCustomerNoList.get(i).getWorkContents());
 				if (i < 1 || selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo() == null
 						|| selectSendInvoiceByCustomerNoList.get(i).getEmployeeNo().equals("")) {
 					showNo++;
@@ -288,21 +343,42 @@ public class SendInvoiceController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateInvoiceData", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean updateInvoiceData(@RequestBody HashMap<String, String> model) {
+	public Map<String, Object> updateInvoiceData(@RequestBody HashMap<String, String> model) {
 		logger.info("SendInvoiceController.updateInvoiceData:" + "アップデート開始");
 		model.put("updateUser", getSession().getAttribute("employeeName").toString());
-		boolean result = false;
-		try {
-			if (model.get("oldWorkContents") == null)
+		Map<String, Object> resulterr = new HashMap<>();
+
+		if (model.get("oldWorkContents") == null || model.get("oldWorkContents").equals("")) {
+			try {
 				sendInvoiceService.insertNewInvoiceData(model);
-			else
+				resulterr.put("code", 0);
+			} catch (Exception e) {
+				if (e instanceof DuplicateKeyException) {
+					resulterr.put("code", 1000);
+					resulterr.put("errorsMessage", "作業内容は重複した");
+				} else {
+					resulterr.put("code", 1000);
+					resulterr.put("errorsMessage", "送信エラー発生しました。");
+				}
+			}
+		} else {
+			try {
 				sendInvoiceService.updateInvoiceData(model);
-			result = true;
-		} catch (Exception e) {
-			result = false;
+				resulterr.put("code", 0);
+			} catch (Exception e) {
+				if (e instanceof DuplicateKeyException) {
+					resulterr.put("code", 1000);
+					resulterr.put("errorsMessage", "作業内容は重複した");
+				} else {
+					resulterr.put("code", 1000);
+					resulterr.put("errorsMessage", "送信エラー発生しました。");
+				}
+
+			}
 		}
+
 		logger.info("SendInvoiceController.updateInvoiceData:" + "アップデート終了");
-		return result;
+		return resulterr;
 	}
 
 	/**
@@ -589,7 +665,7 @@ public class SendInvoiceController extends BaseController {
 		emailModel.setMailTitle(dutyManagementModel.get("mailTitle"));
 		emailModel.setMailConfirmContont(dutyManagementModel.get("mailConfirmContont"));
 		emailModel.setMailFrom(dutyManagementModel.get("mailFrom"));
-		if(dutyManagementModel.get("selectedMailCC")!=null) {
+		if (dutyManagementModel.get("selectedMailCC") != null) {
 			emailModel.setSelectedMailCC(dutyManagementModel.get("selectedMailCC").split(","));
 		}
 		emailModel.setSelectedmail(dutyManagementModel.get("mail").replaceAll(";", ","));

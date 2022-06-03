@@ -25,8 +25,19 @@ public class SendInvoiceWorkTimeModel {
 	String workingTime;
 	String quantity;
 	String bankCode;
+	public String getUnitKey() {
+		return unitKey;
+	}
+
+	public void setUnitKey(String unitKey) {
+		this.unitKey = unitKey;
+	}
+
 	String remark;
 	String workingTimeReport;
+
+	String unitKey;
+	
 
 	public String getWorkingTimeReport() {
 		return workingTimeReport;

@@ -536,7 +536,7 @@ public class EmployeeInfoController extends BaseController {
 					String deletefileKey = resumeInfo2Key.split("/file/")[1].substring(0,
 							resumeInfo2Key.split("/file/")[1].lastIndexOf("/") + 1);
 					s3Model.setFileKey(deletefileKey);
-					s3Controller.deleteFolder(s3Model);
+					s3Controller.deleteFolder(s3Model); 
 				}
 				if(!resumeInfo1Key.equals("")) {
 					String deletefileKey = resumeInfo1Key.split("/file/")[1].substring(0,

@@ -28,7 +28,7 @@ public interface SendInvoiceMapper {
 
 	public void insertInvoiceData(HashMap<String, String> model);
 
-	public void updateInvoiceData(HashMap<String, String> model);
+	public Integer updateInvoiceData(HashMap<String, String> model);
 
 	public void insertNewInvoiceData(HashMap<String, String> model);
 

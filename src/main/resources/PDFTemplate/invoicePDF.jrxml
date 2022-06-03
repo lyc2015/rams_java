@@ -524,7 +524,7 @@ TEL:03-6908-5796 　 FAX: 03-6908-5741]]></text>
 									<textElement>
 										<font size="10"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{workContents} + (!$P{employeeNameFlag} == true ? "" : ($F{employeeName} == null ? "" : "(" + $F{employeeName} + ")")) + "\n"
+									<textFieldExpression><![CDATA[$F{workContents}+ "\n" + ($P{employeeNameFlag} == false ? "" : ($F{employeeName} == null ? "" : $F{employeeName}+ "\n" )) 
 + ($F{workPeriod} == null ? "" : $F{workPeriod}) + (!$P{workTimeFlag} == true ? "" : ($F{sumWorkTime} == null ? "" : "(" + $F{sumWorkTime} + "H)"))]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>

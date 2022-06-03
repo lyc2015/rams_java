@@ -90,9 +90,6 @@
 		T006.customerNo =
 		ifnull(#{customerNo},T006.customerNo)
 		and
-		T006.employeeNo =
-		ifnull(#{employeeNo},T006.employeeNo)
-		and
 		T018.approvalStatus = "1"
 		group by T006.employeeNo
 		order by
@@ -195,8 +192,6 @@
 		T024InvoiceData
 		SET
 		workContents = #{workContents},
-		employeeNo =
-		#{employeeNo},
 		workPeriod = #{workPeriod},
 		workingTime = #{workingTime},
 		requestUnitCode = #{requestUnitCode},
@@ -212,6 +207,8 @@
 		#{yearAndMonth}
 		and
 		workContents = #{oldWorkContents}
+		and
+		employeeNo = #{employeeNo}
 	</update>
 
 	<insert id="insertNewInvoiceData" parameterType="String">
