@@ -2,6 +2,7 @@ package jp.co.lyc.cms.controller;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -291,8 +292,16 @@ public class SendInvoiceController extends BaseController {
 				// model.put("invoiceDate", dateFormat.format(date));
 				model.put("employeeNo", returnList.get(i).getEmployeeNo());
 				model.put("invoiceNo", dutyManagementModel.get("invoiceNo"));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+				Date thisDate = new Date();
+				try {
+					thisDate = sdf.parse(dutyManagementModel.get("yearAndMonth"));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Calendar ca = Calendar.getInstance();
-				ca.setTime(new Date());
+				ca.setTime(thisDate);
 				ca.add(Calendar.MONTH, 1);
 				ca.set(Calendar.DAY_OF_MONTH, 0);
 				String lastDay = dateFormat.format(ca.getTime());
@@ -489,6 +498,8 @@ public class SendInvoiceController extends BaseController {
 			}
 			JRDataSource ds = new JRBeanCollectionDataSource(tableData);
 			parameters.put("dataTableResource", ds);
+			String systemNameFlag = dutyManagementModel.get("systemNameFlag");
+			parameters.put("systemNameFlag", systemNameFlag.equals("true") ? true : false);
 			String workTimeFlag = dutyManagementModel.get("workTimeFlag");
 			parameters.put("workTimeFlag", workTimeFlag.equals("true") ? true : false);
 			String employeeNameFlag = dutyManagementModel.get("employeeNameFlag");
@@ -593,7 +604,7 @@ public class SendInvoiceController extends BaseController {
 				break;
 			default:
 				deductionsAndOvertimePayOfUnitPrice1 = String
-						.valueOf(Integer.parseInt(dataList.get(i).getUnitPrice()) / Integer.parseInt(payOffRange1));
+						.valueOf((Integer.parseInt(dataList.get(i).getUnitPrice()) + Integer.parseInt(dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice()))  / Integer.parseInt(payOffRange1));
 				deductionsAndOvertimePayOfUnitPrice1 = deductionsAndOvertimePayOfUnitPrice1.substring(0,
 						deductionsAndOvertimePayOfUnitPrice1.length() - 1) + "0";
 				payOffRange1 += "H";
@@ -609,7 +620,7 @@ public class SendInvoiceController extends BaseController {
 				break;
 			default:
 				deductionsAndOvertimePayOfUnitPrice2 = String
-						.valueOf(Integer.parseInt(dataList.get(i).getUnitPrice()) / Integer.parseInt(payOffRange2));
+						.valueOf((Integer.parseInt(dataList.get(i).getUnitPrice()) + Integer.parseInt(dataList.get(i).getDeductionsAndOvertimePayOfUnitPrice())) / Integer.parseInt(payOffRange2));
 				deductionsAndOvertimePayOfUnitPrice2 = deductionsAndOvertimePayOfUnitPrice2.substring(0,
 						deductionsAndOvertimePayOfUnitPrice2.length() - 1) + "0";
 				payOffRange2 += "H";

@@ -66,6 +66,7 @@
 		<parameter name="remark" class="java.lang.String"/>
 		<parameter name="workTimeFlag" class="java.lang.Boolean"/>
 		<parameter name="employeeNameFlag" class="java.lang.Boolean"/>
+		<parameter name="systemNameFlag" class="java.lang.Boolean"/>
 		<parameter name="consumptionTaxAmount" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[]]>
@@ -96,6 +97,7 @@
 	<parameter name="invoiceNo" class="java.lang.String"/>
 	<parameter name="workTimeFlag" class="java.lang.Boolean"/>
 	<parameter name="employeeNameFlag" class="java.lang.Boolean"/>
+	<parameter name="systemNameFlag" class="java.lang.Boolean"/>
 	<parameter name="consumptionTaxAmount" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
@@ -252,6 +254,9 @@ TEL:03-6908-5796 　 FAX: 03-6908-5741]]></text>
 						</datasetParameter>
 						<datasetParameter name="employeeNameFlag">
 							<datasetParameterExpression><![CDATA[$P{employeeNameFlag}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="systemNameFlag">
+							<datasetParameterExpression><![CDATA[$P{systemNameFlag}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="consumptionTaxAmount">
 							<datasetParameterExpression><![CDATA[$P{consumptionTaxAmount}]]></datasetParameterExpression>
@@ -524,7 +529,15 @@ TEL:03-6908-5796 　 FAX: 03-6908-5741]]></text>
 									<textElement>
 										<font size="10"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{workContents}+ "\n" + ($P{employeeNameFlag} == false ? "" : ($F{employeeName} == null ? "" : $F{employeeName}+ "\n" )) 
+									<textFieldExpression><![CDATA[(($F{workContents} == null||$F{workContents} == "")
+                ? "技術支援"
+                : $P{systemNameFlag} ||
+                 $F{workContents} .contains("出張")  ||
+                 $F{workContents} .contains("食事") ||
+                 $F{workContents} .contains("宿泊")||
+                 $F{workContents} .contains("他の")
+                ? $F{workContents} 
+                : "技術支援")+ "\n" + ($P{employeeNameFlag} == false ? "" : ($F{employeeName} == null ? "" : $F{employeeName}+ "\n" )) 
 + ($F{workPeriod} == null ? "" : $F{workPeriod}) + (!$P{workTimeFlag} == true ? "" : ($F{sumWorkTime} == null ? "" : "(" + $F{sumWorkTime} + "H)"))]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
