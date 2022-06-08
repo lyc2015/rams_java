@@ -291,6 +291,7 @@
 			AND
 			T009.positionCode = #{beforePCode}
 		</if>
+		order by T009.createTime
 	</select>
 	<!-- 部門名前連想 -->
 	<select id="selectDepartmentMaster"
