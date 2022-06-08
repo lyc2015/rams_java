@@ -36,9 +36,41 @@
 		hour),'%Y%m') AND
 		employeeNo = #{employeeNo})
 	</insert>
+	<insert id="insertWorkRepotByYearAndMonth" parameterType="String">
+		INSERT INTO
+		T018WorkTotalTime(
+		employeeNo,
+		attendanceYearAndMonth,
+		attendanceRegisterFlag,
+		approvalStatus,
+		sentReportStatus,
+		updateTime,
+		createTime,
+		updateUser)
+		SELECT
+		#{employeeNo},
+		#{attendanceYearAndMonth},
+		0,
+		0,
+		0,
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),,
+		""
+		FROM DUAL
+		WHERE NOT EXISTS
+		(SELECT
+		employeeNo,
+		attendanceYearAndMonth
+		FROM
+		T018WorkTotalTime
+		WHERE
+		attendanceYearAndMonth=#{attendanceYearAndMonth} AND
+		employeeNo = #{employeeNo})
+	</insert>
 	<select id="selectWorkRepot" resultMap="WorkRepot"
 		parameterType="String">
 		SELECT
+		employeeNo,
 		attendanceYearAndMonth,
 		CONVERT (workingTimeReport
 		USING utf8)workingTimeReport,
