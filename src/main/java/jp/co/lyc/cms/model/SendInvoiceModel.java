@@ -24,6 +24,34 @@ public class SendInvoiceModel {
 	String workingTimeReport;
 	String bpBelongCustomerCode;
 	String bpBelongCustomerAbbreviation;
+	int systemNameFlag;
+	int workTimeFlag;
+	int employeeNameFlag;
+	
+
+	public int getSystemNameFlag() {
+		return systemNameFlag;
+	}
+
+	public void setSystemNameFlag(int systemNameFlag) {
+		this.systemNameFlag = systemNameFlag;
+	}
+
+	public int getWorkTimeFlag() {
+		return workTimeFlag;
+	}
+
+	public void setWorkTimeFlag(int workTimeFlag) {
+		this.workTimeFlag = workTimeFlag;
+	}
+
+	public int getEmployeeNameFlag() {
+		return employeeNameFlag;
+	}
+
+	public void setEmployeeNameFlag(int employeeNameFlag) {
+		this.employeeNameFlag = employeeNameFlag;
+	}
 
 	public String getBpBelongCustomerCode() {
 		return bpBelongCustomerCode;

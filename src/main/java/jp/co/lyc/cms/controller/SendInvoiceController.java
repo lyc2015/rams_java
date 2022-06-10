@@ -264,6 +264,9 @@ public class SendInvoiceController extends BaseController {
 
 			int showNo = 0;
 			for (int i = 0; i < returnList.size(); i++) {
+				returnList.get(i).setSystemNameFlag(0);
+				returnList.get(i).setWorkTimeFlag(0);
+				returnList.get(i).setEmployeeNameFlag(0);
 				returnList.get(i).setRowNo(i + 1);
 				if (i < 1 || returnList.get(i).getEmployeeNo() == null
 						|| returnList.get(i).getEmployeeNo().equals("")) {
@@ -313,6 +316,9 @@ public class SendInvoiceController extends BaseController {
 				model.put("workingTime", returnList.get(i).getWorkingTime());
 				model.put("requestUnitCode", returnList.get(i).getRequestUnitCode());
 				model.put("unitPrice", returnList.get(i).getUnitPrice());
+				model.put("systemNameFlag","0");
+				model.put("workTimeFlag","0");
+				model.put("employeeNameFlag","0");
 				model.put("updateUser", getSession().getAttribute("employeeName").toString());
 				sendInvoiceService.insertInvoiceData(model);
 			}
@@ -498,11 +504,11 @@ public class SendInvoiceController extends BaseController {
 			JRDataSource ds = new JRBeanCollectionDataSource(tableData);
 			parameters.put("dataTableResource", ds);
 			String systemNameFlag = dutyManagementModel.get("systemNameFlag");
-			parameters.put("systemNameFlag", systemNameFlag.equals("true") ? true : false);
+			parameters.put("systemNameFlag", systemNameFlag.equals("1") ? true : false);
 			String workTimeFlag = dutyManagementModel.get("workTimeFlag");
-			parameters.put("workTimeFlag", workTimeFlag.equals("true") ? true : false);
+			parameters.put("workTimeFlag", workTimeFlag.equals("1") ? true : false);
 			String employeeNameFlag = dutyManagementModel.get("employeeNameFlag");
-			parameters.put("employeeNameFlag", employeeNameFlag.equals("true") ? true : false);
+			parameters.put("employeeNameFlag", employeeNameFlag.equals("1") ? true : false);
 			parameters.put("customerName", dataList.get(0).getCustomerName());
 			parameters.put("invoiceDate",
 					dataList.get(0).getInvoiceDate() == null || dataList.get(0).getInvoiceDate().equals("") ? ""

@@ -41,7 +41,8 @@
 		T018.sumWorkTime =
 		"",temp.workTime,T018.sumWorkTime) as
 		sumWorkTime,T018.DeductionsAndOvertimePayOfUnitPrice,T018.workingTimeReport,
-		T024.sendLetterDate,T024.sendLetterStatus
+		T024.sendLetterDate,T024.sendLetterStatus,
+		T024.systemNameFlag,T024.workTimeFlag,T024.employeeNameFlag
 		FROM
 		T006EmployeeSiteInfo as
 		T006
@@ -179,11 +180,11 @@
 	<insert id="insertInvoiceData" parameterType="String">
 		INSERT INTO
 		T024InvoiceData
-		(customerNo,yearAndMonth,workContents,invoiceNo,customerName,invoiceDate,deadLine,employeeNo,workPeriod,workingTime,requestUnitCode,quantity,unitPrice,bankCode,remark,sendLetterDate,sendLetterStatus,updateTime,createTime,updateUser)
+		(customerNo,yearAndMonth,workContents,invoiceNo,customerName,invoiceDate,deadLine,employeeNo,workPeriod,workingTime,requestUnitCode,quantity,unitPrice,bankCode,remark,sendLetterDate,sendLetterStatus,updateTime,createTime,updateUser,systemNameFlag,workTimeFlag,employeeNameFlag)
 		VALUES (
 		#{customerNo},#{yearAndMonth},#{workContents},#{invoiceNo},#{customerName},#{invoiceDate},"",
 		#{employeeNo},#{workPeriod},#{workingTime},#{requestUnitCode},"1",#{unitPrice},
-		"0","","","0",now(),now(),#{updateUser}
+		"0","","","0",now(),now(),#{updateUser},#{systemNameFlag},#{workTimeFlag},#{employeeNameFlag}
 		)
 	</insert>
 
@@ -258,6 +259,9 @@
 		remark =
 		#{remark},
 		updateTime = now(),
+		employeeNameFlag = #{employeeNameFlag},
+		systemNameFlag = #{systemNameFlag},
+		workTimeFlag = #{workTimeFlag},
 		updateUser = #{updateUser}
 		WHERE
 		customerNo = #{customerNo}
