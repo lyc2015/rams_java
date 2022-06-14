@@ -26,9 +26,9 @@ public class ProjectInfoValidation implements Validator {
 				if (UtilsCheckMethod.isNullOrEmpty(p.getProjectName())) {
 					errors.rejectValue("projectName", "", StatusCodeToMsgMap.getErrMsgbyCodeReplace("MSG001", "案件名"));
 				}
-				if (UtilsCheckMethod.isNullOrEmpty(p.getProjectType())) {
-					errors.rejectValue("projectType", "", StatusCodeToMsgMap.getErrMsgbyCodeReplace("MSG001", "案件種別"));
-				}
+//				if (UtilsCheckMethod.isNullOrEmpty(p.getProjectType())) {
+//					errors.rejectValue("projectType", "", StatusCodeToMsgMap.getErrMsgbyCodeReplace("MSG001", "案件種別"));
+//				}
 				if (UtilsCheckMethod.isNullOrEmpty(p.getAdmissionPeriod())) {
 					errors.rejectValue("admissionPeriod", "",
 							StatusCodeToMsgMap.getErrMsgbyCodeReplace("MSG001", "入場時期"));
