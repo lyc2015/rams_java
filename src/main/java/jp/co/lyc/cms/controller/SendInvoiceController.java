@@ -147,7 +147,7 @@ public class SendInvoiceController extends BaseController {
 
 		for (int i = 0; i < returnList.size(); i++) {
 			returnList.get(i).setRowNo(i + 1);
-			File file = new File("C:\\file\\certificate\\" + "【LYC】" +"【"+ dutyManagementModel.get("customerName") +"】"+"様へ請求書" + dutyManagementModel.get("yearAndMonth")+ ".pdf");
+			File file = new File("C:\\file\\certificate\\" +getPDFUrl(returnList.get(i).getCustomerName(),dutyManagementModel.get("yearAndMonth")));
 			if (file.exists()) {
 				returnList.get(i).setHavePDF("true");
 			} else {
@@ -488,9 +488,8 @@ public class SendInvoiceController extends BaseController {
 
 		File nowFile = new File(".").getAbsoluteFile();
 		File inputFile = new File(nowFile.getParentFile(), "src/main/resources/PDFTemplate/invoicePDF.jrxml");
-		File outputFile = new File(UtilsController.DOWNLOAD_PATH_BASE + "certificate/",
-//				【LYC】【お客様名】様へ請求書202205 
-				"【LYC】" +"【"+ dutyManagementModel.get("customerName") +"】"+"様へ請求書" + dutyManagementModel.get("yearAndMonth")+ ".pdf");
+		File outputFile = new File(UtilsController.DOWNLOAD_PATH_BASE + "certificate/"+
+				this.getPDFUrl(dutyManagementModel.get("customerName"),dutyManagementModel.get("yearAndMonth")));
 		outputFile.getParentFile().mkdirs();
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
@@ -688,8 +687,8 @@ public class SendInvoiceController extends BaseController {
 		emailModel.setUserName(getSession().getAttribute("employeeName").toString());
 		emailModel.setPassword("Lyc2020-0908-");
 		emailModel.setContextType("text/html;charset=utf-8");
-		String file = "【LYC】" +"【"+ dutyManagementModel.get("customerName") +"】"+"様へ請求書" + dutyManagementModel.get("yearAndMonth")+ ".pdf";
-		String path = "c:/file/certificate/" + file;
+		String file = this.getPDFUrl(dutyManagementModel.get("customerName"),dutyManagementModel.get("yearAndMonth"));
+		String path = "c:/file/certificate/" + file+";;";
 
 		String report = dutyManagementModel.get("reportFile");
 		String[] reports = report.split(";;");
@@ -708,5 +707,10 @@ public class SendInvoiceController extends BaseController {
 		// データ更新
 		sendInvoiceService.updateSendLetter(dutyManagementModel);
 		return requst;
+	}
+	
+	
+	public String getPDFUrl(String customerName,String yearAndMonth) {
+		return "【LYC】" +"【"+ customerName +"】"+"様へ請求書" + yearAndMonth+ ".pdf";
 	}
 }
