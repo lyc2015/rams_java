@@ -93,6 +93,8 @@ public class ProjectInfoService {
 		sendMap.put("keyWordOfLanagurue1", projectInfoModel.getKeyWordOfLanagurue1());
 		sendMap.put("keyWordOfLanagurue2", projectInfoModel.getKeyWordOfLanagurue2());
 		sendMap.put("keyWordOfLanagurue3", projectInfoModel.getKeyWordOfLanagurue3());
+		sendMap.put("keyWordOfFrameWork1", projectInfoModel.getKeyWordOfFrameWork1());
+		sendMap.put("keyWordOfFrameWork2", projectInfoModel.getKeyWordOfFrameWork2());
 		sendMap.put("projectInfoDetail", projectInfoModel.getProjectInfoDetail());
 		sendMap.put("japaneaseConversationLevel", projectInfoModel.getJapaneaseConversationLevel());
 		sendMap.put("unitPriceRangeLowest", projectInfoModel.getUnitPriceRangeLowest());

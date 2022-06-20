@@ -26,6 +26,10 @@ public class ProjectInfoModel {
 	String keyWordOfLanagurueName2;
 	String keyWordOfLanagurue3;
 	String keyWordOfLanagurueName3;
+	String keyWordOfFrameWork1;
+	String keyWordOfFrameWorkName1;
+	String keyWordOfFrameWork2;
+	String keyWordOfFrameWorkName2;
 	String projectInfoDetail;
 	String japaneaseConversationLevel;
 	String japaneaseConversationName;
@@ -40,6 +44,38 @@ public class ProjectInfoModel {
 	String payOffRangeHighest;
 	String workStartPeriod;
 	String requiredItem1;
+	public String getKeyWordOfFrameWork1() {
+		return keyWordOfFrameWork1;
+	}
+
+	public void setKeyWordOfFrameWork1(String keyWordOfFrameWork1) {
+		this.keyWordOfFrameWork1 = keyWordOfFrameWork1;
+	}
+
+	public String getKeyWordOfFrameWorkName1() {
+		return keyWordOfFrameWorkName1;
+	}
+
+	public void setKeyWordOfFrameWorkName1(String keyWordOfFrameWorkName1) {
+		this.keyWordOfFrameWorkName1 = keyWordOfFrameWorkName1;
+	}
+
+	public String getKeyWordOfFrameWork2() {
+		return keyWordOfFrameWork2;
+	}
+
+	public void setKeyWordOfFrameWork2(String keyWordOfFrameWork2) {
+		this.keyWordOfFrameWork2 = keyWordOfFrameWork2;
+	}
+
+	public String getKeyWordOfFrameWorkName2() {
+		return keyWordOfFrameWorkName2;
+	}
+
+	public void setKeyWordOfFrameWorkName2(String keyWordOfFrameWorkName2) {
+		this.keyWordOfFrameWorkName2 = keyWordOfFrameWorkName2;
+	}
+
 	String requiredItem2;
 	String noOfInterviewCode;
 	String noOfInterviewName;

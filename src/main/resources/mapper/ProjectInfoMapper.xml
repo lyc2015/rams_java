@@ -53,6 +53,8 @@
 		keyWordOfLanagurue1,
 		keyWordOfLanagurue2,
 		keyWordOfLanagurue3,
+		keyWordOfFrameWork1,
+		keyWordOfFrameWork2,
 		projectInfoDetail,
 		japaneaseConversationLevel,
 		unitPriceRangeLowest,
@@ -90,6 +92,8 @@
 		#{keyWordOfLanagurue1},
 		#{keyWordOfLanagurue2},
 		#{keyWordOfLanagurue3},
+		#{keyWordOfFrameWork1},
+		#{keyWordOfFrameWork2},
 		#{projectInfoDetail},
 		#{japaneaseConversationLevel},
 		#{unitPriceRangeLowest},
@@ -155,6 +159,12 @@
 		</if>	
 		<if test="keyWordOfLanagurue3 != null">
 			keyWordOfLanagurue3 = #{keyWordOfLanagurue3},
+		</if>	
+		<if test="keyWordOfFrameWork1 != null">
+			keyWordOfFrameWork1 = #{keyWordOfFrameWork1},
+		</if>	
+		<if test="keyWordOfFrameWork2 != null">
+			keyWordOfFrameWork2 = #{keyWordOfFrameWork2},
 		</if>	
 		<if test="projectInfoDetail != null">
 			projectInfoDetail = #{projectInfoDetail},
@@ -232,6 +242,8 @@
 		T022.keyWordOfLanagurue1,
 		T022.keyWordOfLanagurue2,
 		T022.keyWordOfLanagurue3,
+		T022.keyWordOfFrameWork1,
+		T022.keyWordOfFrameWork2,
 		T022.projectInfoDetail,
 		T022.japaneaseConversationLevel,
 		T022.unitPriceRangeLowest,
