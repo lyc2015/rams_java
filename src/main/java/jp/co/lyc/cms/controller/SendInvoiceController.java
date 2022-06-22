@@ -671,42 +671,49 @@ public class SendInvoiceController extends BaseController {
 	 */
 	@RequestMapping(value = "/sendLetter", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, String> sendLetter(@RequestBody HashMap<String, String> dutyManagementModel) {
-		logger.info("SendInvoiceController.sendLetter:" + "送信開始");
-		HashMap<String, String> requst = new HashMap<String, String>();
+	public Map<String, Object> sendLetter(@RequestBody HashMap<String, String> dutyManagementModel) {
+		Map<String, Object> resultMap = new HashMap<>();// 戻す
+		try {
+			logger.info("SendInvoiceController.sendLetter:" + "送信開始");
+			EmailModel emailModel = new EmailModel();
+			// 受信人のメール
+			emailModel.setMailTitle(dutyManagementModel.get("mailTitle"));
+			emailModel.setMailConfirmContont(dutyManagementModel.get("mailConfirmContont"));
+			emailModel.setMailFrom(dutyManagementModel.get("mailFrom"));
+			if (dutyManagementModel.get("selectedMailCC") != null) {
+				emailModel.setSelectedMailCC(dutyManagementModel.get("selectedMailCC").split(","));
+			}
+			emailModel.setSelectedmail(dutyManagementModel.get("mail").replaceAll(";", ","));
+			emailModel.setUserName(getSession().getAttribute("employeeName").toString());
+			emailModel.setPassword("Lyc2020-0908-");
+			emailModel.setContextType("text/html;charset=utf-8");
+			String file = this.getPDFUrl(dutyManagementModel.get("customerName"),dutyManagementModel.get("yearAndMonth"));
+			String path = "c:/file/certificate/" + file+";;";
 
-		EmailModel emailModel = new EmailModel();
-		// 受信人のメール
-		emailModel.setMailTitle(dutyManagementModel.get("mailTitle"));
-		emailModel.setMailConfirmContont(dutyManagementModel.get("mailConfirmContont"));
-		emailModel.setMailFrom(dutyManagementModel.get("mailFrom"));
-		if (dutyManagementModel.get("selectedMailCC") != null) {
-			emailModel.setSelectedMailCC(dutyManagementModel.get("selectedMailCC").split(","));
+			String report = dutyManagementModel.get("reportFile");
+			String[] reports = report.split(";;");
+			for (int i = 0; i < reports.length; i++) {
+				file += reports[i].split("/")[reports[i].split("/").length - 1] + ";;";
+				path += reports[i].replaceAll("\\\\", "/") + ";;";
+			}
+
+			String[] names = file.split(";;");
+			String[] paths = path.split(";;");
+			emailModel.setNames(names);
+			emailModel.setPaths(paths);
+			// 送信
+			boolean result = utils.sendMailWithFile(emailModel);
+			if(result) {
+				// データ更新
+				sendInvoiceService.updateSendLetter(dutyManagementModel);
+			}		
+			resultMap.put("result", result);
+			
+		}catch(Exception e) {
+			resultMap.put("result", false);
+			e.printStackTrace();
 		}
-		emailModel.setSelectedmail(dutyManagementModel.get("mail").replaceAll(";", ","));
-		emailModel.setUserName(getSession().getAttribute("employeeName").toString());
-		emailModel.setPassword("Lyc2020-0908-");
-		emailModel.setContextType("text/html;charset=utf-8");
-		String file = this.getPDFUrl(dutyManagementModel.get("customerName"),dutyManagementModel.get("yearAndMonth"));
-		String path = "c:/file/certificate/" + file+";;";
-
-		String report = dutyManagementModel.get("reportFile");
-		String[] reports = report.split(";;");
-		for (int i = 0; i < reports.length; i++) {
-			file += reports[i].split("/")[reports[i].split("/").length - 1] + ";;";
-			path += reports[i].replaceAll("\\\\", "/") + ";;";
-		}
-
-		String[] names = file.split(";;");
-		String[] paths = path.split(";;");
-		emailModel.setNames(names);
-		emailModel.setPaths(paths);
-		// 送信
-		utils.sendMailWithFile(emailModel);
-
-		// データ更新
-		sendInvoiceService.updateSendLetter(dutyManagementModel);
-		return requst;
+		return resultMap;
 	}
 	
 	

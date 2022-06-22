@@ -269,7 +269,8 @@ public class EmployeeInfoController extends BaseController {
 				s3Model.setFilePath(filePath);
 				s3Controller.uploadFile(s3Model);
 			}
-			employeeInfoService.insertEmployee((HashMap<String, Object>) sendMap);
+			result = employeeInfoService.insertEmployee((HashMap<String, Object>) sendMap);
+			
 		} catch (Exception e) {
 			resultMap.put("result", false);
 			return resultMap;

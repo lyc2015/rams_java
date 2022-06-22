@@ -1331,9 +1331,10 @@ public class UtilsController {
 	 * @param emailMod
 	 * @param path
 	 */
-	public void sendMailWithFile(EmailModel emailMod) {
+	public boolean sendMailWithFile(EmailModel emailMod) {
 
 		Session session = null;
+		boolean result = true;
 		try {
 			// 创建一个资源文件
 			Properties properties = new Properties();
@@ -1450,17 +1451,21 @@ public class UtilsController {
 		} catch (GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result = false;
 		} catch (NoSuchProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result = false;
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result = false;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result = false;
 		}
-
+		return result;
 	}
 	
 	/**
