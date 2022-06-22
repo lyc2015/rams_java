@@ -1397,6 +1397,7 @@
 	<select id="getPersonalSalesInfo" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT
+		t001.employeeNo,
 		CONCAT(t001.employeeFristName,
 		upper(concat(SUBSTRING(SUBSTRING_INDEX(SUBSTRING_INDEX(t002.alphabetName,
 		' ', 2), ' ', -1),1,1),
@@ -1522,6 +1523,7 @@
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 
 		SELECT
+		t001.employeeNo,
 		CONCAT(t001.employeeFristName,
 		upper(concat(SUBSTRING(SUBSTRING_INDEX(SUBSTRING_INDEX(t002.alphabetName,
 		' ', 2), ' ', -1),1,1),

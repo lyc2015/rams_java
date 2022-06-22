@@ -36,6 +36,8 @@
 		keyWordOfLanagurueName2,
 		T022.keyWordOfLanagurue3,
 		M011c.developLanguageName AS keyWordOfLanagurueName3,
+		T022.keyWordOfFrameWork1, 
+		M043.frameWorkName AS keyWordOfFrameWorkName1,
 		T022.projectInfoDetail,
 		T022.japaneaseConversationLevel,
 		if(T022.japaneaseConversationLevel is null || T022.japaneaseConversationLevel = "","",M025.japaneaseConversationLevelName) as japaneaseConversationName,
@@ -112,6 +114,11 @@
 		M011c.developLanguageCode
 		AND
 		T022.keyWordOfLanagurue3 != ""
+		LEFT JOIN M043FrameWork AS M043
+		ON T022.keyWordOfFrameWork1 =
+		M043.frameWorkCode
+		AND
+		T022.keyWordOfFrameWork1 != ""
 		LEFT JOIN M013Station AS M013 ON
 		T022.siteLocation = M013.stationCode
 		AND T022.siteLocation != ""
