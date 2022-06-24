@@ -158,6 +158,14 @@
 			AND #{keyWordOfLanagurue3} in
 			(T022.keyWordOfLanagurue1,T022.keyWordOfLanagurue2,T022.keyWordOfLanagurue3)
 		</if>
+		<if test="keyWordOfFrameWork1 != null">
+			AND #{keyWordOfFrameWork1} in
+			(T022.keyWordOfFrameWork1,T022.keyWordOfFrameWork2)
+		</if>
+		<if test="keyWordOfFrameWork2 != null">
+			AND #{keyWordOfFrameWork2} in
+			(T022.keyWordOfFrameWork1,T022.keyWordOfFrameWork2)
+		</if>
 		<if test="projectType != null">
 			AND T022.projectType = #{projectType}
 		</if>

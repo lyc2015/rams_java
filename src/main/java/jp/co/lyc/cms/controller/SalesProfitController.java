@@ -471,20 +471,25 @@ public class SalesProfitController extends BaseController {
 				if (Integer.parseInt(startTime) > Integer.parseInt(admissionStartDate)) {
 					workDateStart = startTime;
 				}
+				
+				if (admissionEndDate.equals("") || Integer.parseInt(endTime) < Integer.parseInt(admissionEndDate)) {
+					workDateEnd = endTime;
+				}
 
-				if (workDateEnd.equals(""))
-					siteList.get(i)
-							.setWorkDate(siteList.get(i).getAdmissionStartDate().substring(0, 4) + "/"
-									+ siteList.get(i).getAdmissionStartDate().substring(4, 6) + "/"
-									+ siteList.get(i).getAdmissionStartDate().substring(6, 8) + " ~ ");
-				else
-					siteList.get(i)
-							.setWorkDate(siteList.get(i).getAdmissionStartDate().substring(0, 4) + "/"
-									+ siteList.get(i).getAdmissionStartDate().substring(4, 6) + "/"
-									+ siteList.get(i).getAdmissionStartDate().substring(6, 8) + " ~ "
-									+ siteList.get(i).getAdmissionEndDate().substring(0, 4) + "/"
-									+ siteList.get(i).getAdmissionEndDate().substring(4, 6) + "/"
-									+ siteList.get(i).getAdmissionEndDate().substring(6, 8));
+				
+				String myWorkDateStart = siteList.get(i).getAdmissionStartDate().substring(0, 4) + "/"
+						+ siteList.get(i).getAdmissionStartDate().substring(4, 6) + "/"
+						+ siteList.get(i).getAdmissionStartDate().substring(6, 8) ;
+				String myWorkDateStartEnd = "";
+				if(siteList.get(i).getAdmissionEndDate() != null) {
+					myWorkDateStartEnd = siteList.get(i).getAdmissionEndDate().substring(0, 4) + "/"
+							+ siteList.get(i).getAdmissionEndDate().substring(4, 6) + "/"
+							+ siteList.get(i).getAdmissionEndDate().substring(6, 8);
+				}
+				
+				siteList.get(i).setWorkDate(myWorkDateStart + '~' + myWorkDateStartEnd);
+		
+					
 
 				if (workDateEnd.equals(""))
 					workDateEnd = endTime;

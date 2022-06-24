@@ -155,7 +155,7 @@
 		T006EmployeeSiteInfo.admissionStartDate  <![CDATA[ < ]]>
 		#{endDate}
 		and (T006EmployeeSiteInfo.admissionEndDate  <![CDATA[ > ]]>
-		#{endDate} or T006EmployeeSiteInfo.admissionEndDate is null)
+		#{startDate} or T006EmployeeSiteInfo.admissionEndDate is null)
 		and
 		employeeStatus =
 		ifnull(#{intoCompanyCode},employeeStatus)

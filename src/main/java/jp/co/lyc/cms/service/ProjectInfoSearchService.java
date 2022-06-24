@@ -118,6 +118,9 @@ public class ProjectInfoSearchService {
 		if (!UtilsCheckMethod.isNullOrEmpty(projectInfoModel.getKeyWordOfLanagurue3())) {
 			sendMap.put("keyWordOfLanagurue3", projectInfoModel.getKeyWordOfLanagurue3());
 		}
+		if (!UtilsCheckMethod.isNullOrEmpty(projectInfoModel.getKeyWordOfFrameWork1())) {
+			sendMap.put("keyWordOfFrameWork1", projectInfoModel.getKeyWordOfFrameWork1());
+		}
 		if (!UtilsCheckMethod.isNullOrEmpty(projectInfoModel.getProjectType())) {
 			sendMap.put("projectType", projectInfoModel.getProjectType());
 		}
