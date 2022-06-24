@@ -53,7 +53,63 @@ public class SalesInfoModel {
 	String bpGrossProfit; // BP粗利
 	String workState; // 現場状態
 	boolean firstAdmission; // 初めての現場
-	String introducer; // 紹介者
+	String introducer; // 紹介者	
+	String introducerEmployeeName; // 紹介者name
+	String salesStaff; // 营业入力
+	String bpSiteRoleName; // BP営業粗利
+	String occupationCode; // 職種 
+	String salesEmployeeName; // 営業name
+	String salesOccupationCode; // 営業職種
+	
+	
+	
+	public String getIntroducerEmployeeName() {
+		return introducerEmployeeName;
+	}
+
+	public void setIntroducerEmployeeName(String introducerEmployeeName) {
+		this.introducerEmployeeName = introducerEmployeeName;
+	}
+
+	public String getSalesEmployeeName() {
+		return salesEmployeeName;
+	}
+
+	public void setSalesEmployeeName(String salesEmployeeName) {
+		this.salesEmployeeName = salesEmployeeName;
+	}
+
+	public String getSalesOccupationCode() {
+		return salesOccupationCode;
+	}
+
+	public void setSalesOccupationCode(String salesOccupationCode) {
+		this.salesOccupationCode = salesOccupationCode;
+	}
+
+	public String getOccupationCode() {
+		return occupationCode;
+	}
+
+	public void setOccupationCode(String occupationCode) {
+		this.occupationCode = occupationCode;
+	}
+
+	public String getBpSiteRoleName() {
+		return bpSiteRoleName;
+	}
+
+	public void setBpSiteRoleName(String bpSiteRoleName) {
+		this.bpSiteRoleName = bpSiteRoleName;
+	}
+
+	public String getSalesStaff() {
+		return salesStaff;
+	}
+
+	public void setSalesStaff(String salesStaff) {
+		this.salesStaff = salesStaff;
+	}
 
 	public String getBpSiteRoleNameAll() {
 		return bpSiteRoleNameAll;

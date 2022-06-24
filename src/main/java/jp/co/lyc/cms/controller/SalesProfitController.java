@@ -457,8 +457,9 @@ public class SalesProfitController extends BaseController {
 				siteList.get(i).setEmployeeName(employeeName);
 
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
-				//String startTime = dateFormat.format(salesProfitModel.getStartDate()).toString();
-				//String endTime = dateFormat.format(salesProfitModel.getEndDate()).toString();
+				// String startTime =
+				// dateFormat.format(salesProfitModel.getStartDate()).toString();
+				// String endTime = dateFormat.format(salesProfitModel.getEndDate()).toString();
 				String startTime = salesProfitModel.getStartTime().toString();
 				String endTime = salesProfitModel.getEndTime().toString();
 				String admissionStartDate = siteList.get(i).getAdmissionStartDate().substring(0, 6);
@@ -568,32 +569,54 @@ public class SalesProfitController extends BaseController {
 				}
 				siteList.get(i).setSalary(Integer.toString(salary));
 				siteList.get(i).setRowNo(Integer.toString(i + 1));
-				String employeeStatus = "";
+
+				// bpSalary
 				int bpSalary = 0;
-				if (!(siteList.get(i).getEmployeeStatus() == null)) {
-					if (!siteList.get(i).getEmployeeStatus().equals("1")) {
-						employeeStatus = "社員";
-						siteRoleNameAll += Integer.parseInt(siteList.get(i).getProfit()) - salary;
-						siteList.get(i).setSiteRoleName(
-								Integer.toString(Integer.parseInt(siteList.get(i).getProfit()) - salary));
-						if (siteList.get(i).getEmployeeNo().contains("SP")) {
-							BPsiteRoleNameAll += (Integer.parseInt(siteList.get(i).getProfit()) - salary) * 0.5;
-						}
-					} else if (siteList.get(i).getEmployeeStatus().equals("1")) {
-						employeeStatus = "協力";
-						if (siteList.get(i).getBpUnitPrice() != null) {
-							if (!siteList.get(i).getBpUnitPrice().equals(""))
-								bpSalary = Integer.parseInt(siteList.get(i).getBpUnitPrice()) * months * 10000;
-							siteList.get(i).setSalary(Integer.toString(bpSalary));
-							siteRoleNameAll += Integer.parseInt(siteList.get(i).getProfit()) - bpSalary;
-							BPsiteRoleNameAll += (Integer.parseInt(siteList.get(i).getProfit()) - bpSalary) * 0.3;
-						}
-						siteList.get(i).setSiteRoleName(
-								Integer.toString(Integer.parseInt(siteList.get(i).getProfit()) - bpSalary));
-					} else
-						employeeStatus = "";
+				if (siteList.get(i).getEmployeeStatus() != null && siteList.get(i).getEmployeeStatus().equals("1")) {
+					if (siteList.get(i).getBpUnitPrice() != null) {
+						if (!siteList.get(i).getBpUnitPrice().equals(""))
+							bpSalary = Integer.parseInt(siteList.get(i).getBpUnitPrice()) * months * 10000;
+						siteList.get(i).setSalary(Integer.toString(bpSalary));
+					}
 				}
-				siteList.get(i).setEmployeeStatus(employeeStatus);
+
+				// siteRoleName 粗利
+				int siteRoleName = Integer.parseInt(siteList.get(i).getProfit())
+						- Integer.parseInt(siteList.get(i).getSalary());
+				siteList.get(i).setSiteRoleName(Integer.toString(siteRoleName));
+
+				String eiGyooccupationCode = siteList.get(i).getSalesOccupationCode(); // 营业職種
+				String employeeStatus = siteList.get(i).getEmployeeStatus(); // 社員区分
+				String salesStaff = siteList.get(i).getSalesStaff(); // 营业者
+				String introducer = siteList.get(i).getIntroducer(); // 介绍者
+
+        // siteRoleNameAll 粗利合计
+				siteRoleNameAll +=siteRoleName;
+				// BPSiteRoleName BP粗利
+				double BPSiteRoleName = 0;
+
+				if (salesStaff != null && eiGyooccupationCode != null) {
+					if (salesStaff.equals(introducer) ) {
+						BPSiteRoleName = 10000;
+					} else {
+						if (eiGyooccupationCode.equals("5") ) {
+							double rate = 0;
+							if (employeeStatus.equals("1"))
+								rate = 0.3;
+							else if (employeeStatus.equals("2"))
+								rate = 0.5;
+							BPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
+						}
+					}
+
+				}
+				siteList.get(i).setBpSiteRoleName(Double.toString(BPSiteRoleName));
+
+				// BPsiteRoleNameAll BP粗利合计
+				BPsiteRoleNameAll += BPSiteRoleName;
+
+				siteList.get(i).setEmployeeStatusName(siteList.get(i).getEmployeeStatus().equals("1") ? "協力" : "社員");
+
 				if (!(siteList.get(i).getBpBelongCustomerCode() == null
 						|| siteList.get(i).getBpBelongCustomerCode().equals(""))) {
 					for (int z = 0; z < customerName.size(); z++) {
