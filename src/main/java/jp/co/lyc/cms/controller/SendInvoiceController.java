@@ -30,8 +30,8 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;
 import jp.co.lyc.cms.model.EmailModel;
-import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.ModelClass;
+import jp.co.lyc.cms.model.ResultModel;
 import jp.co.lyc.cms.model.SendInvoiceModel;
 import jp.co.lyc.cms.model.SendInvoiceWorkTimeModel;
 import jp.co.lyc.cms.service.SendInvoiceService;
@@ -671,8 +671,8 @@ public class SendInvoiceController extends BaseController {
 	 */
 	@RequestMapping(value = "/sendLetter", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> sendLetter(@RequestBody HashMap<String, String> dutyManagementModel) {
-		Map<String, Object> resultMap = new HashMap<>();// 戻す
+	public ResultModel sendLetter(@RequestBody HashMap<String, String> dutyManagementModel) {
+		ResultModel resultModel = new ResultModel();// 戻す
 		try {
 			logger.info("SendInvoiceController.sendLetter:" + "送信開始");
 			EmailModel emailModel = new EmailModel();
@@ -702,18 +702,17 @@ public class SendInvoiceController extends BaseController {
 			emailModel.setNames(names);
 			emailModel.setPaths(paths);
 			// 送信
-			boolean result = utils.sendMailWithFile(emailModel);
-			if(result) {
+			ResultModel  sendMailResult= utils.sendMailWithFile(emailModel);
+			if(sendMailResult.getResult()) {
 				// データ更新
 				sendInvoiceService.updateSendLetter(dutyManagementModel);
-			}		
-			resultMap.put("result", result);
-			
+			}
+			resultModel = sendMailResult;
 		}catch(Exception e) {
-			resultMap.put("result", false);
+			resultModel.setUnKnowErr();
 			e.printStackTrace();
 		}
-		return resultMap;
+		return resultModel; 
 	}
 	
 	

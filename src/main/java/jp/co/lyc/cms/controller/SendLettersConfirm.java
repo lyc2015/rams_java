@@ -32,6 +32,7 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.AllEmployName;
 import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.EmployeeModel;
+import jp.co.lyc.cms.model.ResultModel;
 import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.SendLettersConfirmModel;
 import jp.co.lyc.cms.service.CustomerInfoService;
@@ -184,17 +185,14 @@ public class SendLettersConfirm extends BaseController {
 
 	@RequestMapping(value = "/sendMailWithFile", method = RequestMethod.POST)
 	@ResponseBody 
-	public Map<String, Object> sendMailWithFile(@RequestParam(value = "emailModel") String JSONEmailModel,@RequestParam(value = "myfiles") MultipartFile[] files) {
-		String errorsMessage = "";
-		Map<String, Object> resulterr = new HashMap<>();
+	public ResultModel sendMailWithFile(@RequestParam(value = "emailModel") String JSONEmailModel,@RequestParam(value = "myfiles") MultipartFile[] files) {
+		ResultModel resulterr = new ResultModel();
 		EmailModel emailModel = JSON.parseObject(JSONEmailModel, new TypeReference<EmailModel>() {
 		});
 
 		
 		if (emailModel.getMailFrom() == null || emailModel.getMailFrom().equals("")) {
-			errorsMessage = "登録者メールアドレス入力されてない、確認してください。";
-
-			resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+			resulterr.setErrMsg("登録者メールアドレス入力されてない、確認してください。");
 			return resulterr;
 		}
 
@@ -211,30 +209,24 @@ public class SendLettersConfirm extends BaseController {
 		if (emailModel.getPaths() != null) {
 			for (int i = 0; i < emailModel.getPaths().length; i++) {
 				if (emailModel.getPaths()[i].equals(" ")) {
-					errorsMessage = "添付ファイルが存在していない。";
-
-					resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+					resulterr.setErrMsg("添付ファイルが存在していない。");
 					return resulterr;
 				}
 			}
 		}
-		try {
-			// checkEmail(emailModel.getSelectedmail());
-			if ((emailModel.getPaths() == null || emailModel.getPaths().length == 0)&&(files == null || files.length == 0))
-				utils.EmailSend(emailModel);
-			else  {
-				utils.sendMailWithFile(emailModel);
-			}
-				
-		} catch (Exception e) {
-			errorsMessage = "送信エラー発生しました。";
-
-			resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+		// checkEmail(emailModel.getSelectedmail());
+		if ((emailModel.getPaths() == null || emailModel.getPaths().length == 0)&&(files == null || files.length == 0))
+			resulterr = utils.EmailSend(emailModel);
+		else  {
+			resulterr = utils.sendMailWithFile(emailModel);
+		}
+		if(resulterr.getResult() == false) {
 			return resulterr;
 		}
 
 		customerInfoService.updateCustomerNo(emailModel.getSelectedCustomer());
 		logger.info("sendMailWithFile" + "送信結束");
+    resulterr.setSuccess();
 		return resulterr;
 	}
 

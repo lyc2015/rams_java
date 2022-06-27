@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.ModelClass;
+import jp.co.lyc.cms.model.ResultModel;
 import jp.co.lyc.cms.model.SalesSendLetterModel;
 import jp.co.lyc.cms.model.SalesSendLettersListName;
 import jp.co.lyc.cms.model.SendRepotModel;
@@ -469,15 +470,12 @@ public class SendRepotController extends BaseController {
 
 	@RequestMapping(value = "/sendLetter", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> sendLetter(@RequestBody ArrayList<EmailModel> emailModel) {
+	public ResultModel sendLetter(@RequestBody ArrayList<EmailModel> emailModel) {
 		logger.info("sendLetter:" + "送信開始");
-		String errorsMessage = "";
-		Map<String, Object> resulterr = new HashMap<>();
+		ResultModel resulterr = new ResultModel();
 		for (int i = 0; i < emailModel.size(); i++) {
 			if (emailModel.get(i).getMailFrom() == null || emailModel.get(i).getMailFrom().equals("")) {
-				errorsMessage = "登録者メールアドレス入力されてない、確認してください。";
-
-				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+				resulterr.setErrMsg("登録者メールアドレス入力されてない、確認してください。");
 				return resulterr;
 			}
 
@@ -506,17 +504,14 @@ public class SendRepotController extends BaseController {
 			}
 			emailModel.get(i).setNames(names);
 			emailModel.get(i).setPaths(paths);
-			try {
-				// 送信
-				utils.sendMailWithFile(emailModel.get(i));
-			} catch (Exception e) {
-				errorsMessage = "送信エラー発生しました。";
-
-				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
+			// 送信
+			resulterr = utils.sendMailWithFile(emailModel.get(i));
+			if(resulterr.getResult() == false) {
 				return resulterr;
 			}
 		}
 		logger.info("sendLetter" + "送信結束");
+    resulterr.setSuccess();
 		return resulterr;
 
 	}

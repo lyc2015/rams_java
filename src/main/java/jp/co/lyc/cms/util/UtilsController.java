@@ -61,6 +61,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.EmployeeModel;
 import jp.co.lyc.cms.model.ModelClass;
+import jp.co.lyc.cms.model.ResultModel;
 import jp.co.lyc.cms.service.UtilsService;
 import net.sf.json.JSONObject;
 
@@ -1231,8 +1232,8 @@ public class UtilsController {
 	 * 
 	 * @param emailMod
 	 */
-	public void EmailSend(EmailModel emailMod) {
-
+	public ResultModel EmailSend(EmailModel emailMod) {
+		ResultModel resulterr = new ResultModel();
 		Session session = null;
 		try {
 			// 创建一个资源文件
@@ -1313,16 +1314,21 @@ public class UtilsController {
 			// 发送邮件
 			transport.sendMessage(message, message.getAllRecipients());
 			// transport.close();
+			resulterr.setSuccess();
 		} catch (GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resulterr.setErrMsg(e.getMessage());
 		} catch (NoSuchProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resulterr.setErrMsg(e.getMessage());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resulterr.setErrMsg(e.getMessage());
 		}
+		return resulterr;
 	}
 
 	/**
@@ -1331,10 +1337,9 @@ public class UtilsController {
 	 * @param emailMod
 	 * @param path
 	 */
-	public boolean sendMailWithFile(EmailModel emailMod) {
-
+	public ResultModel sendMailWithFile(EmailModel emailMod) {
+		ResultModel resultModel = new ResultModel();// 戻す
 		Session session = null;
-		boolean result = true;
 		try {
 			// 创建一个资源文件
 			Properties properties = new Properties();
@@ -1435,6 +1440,10 @@ public class UtilsController {
 				if (!addresss[i].equals(""))
 					len++;
 			}
+			if(len==0) {
+				resultModel.setErrMsg("Invalid Addresses");
+				return resultModel;
+			}
 			Address[] adds = new Address[len];
 			len = 0;
 			for (int i = 0; i < addresss.length; i++) {
@@ -1448,24 +1457,25 @@ public class UtilsController {
 			// 发送邮件
 			transport.sendMessage(message, message.getAllRecipients());
 			// transport.close();
+			resultModel.setSuccess();
 		} catch (GeneralSecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = false;
+			resultModel.setErrMsg(e.getMessage());
 		} catch (NoSuchProviderException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = false;
+			resultModel.setErrMsg(e.getMessage());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = false;
+			resultModel.setErrMsg(e.getMessage());
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = false;
+			resultModel.setErrMsg(e.getMessage());
 		}
-		return result;
+		return resultModel;
 	}
 	
 	/**

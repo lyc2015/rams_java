@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.EmployeeInformationModel;
+import jp.co.lyc.cms.model.ResultModel;
 import jp.co.lyc.cms.service.SalaryDetailSendService;
 import jp.co.lyc.cms.util.UtilsController;
 
@@ -103,15 +104,12 @@ public class SalaryDetailSendController extends BaseController {
 
 	@RequestMapping(value = "/sendMailWithFile", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> sendMailWithFile(@RequestBody ArrayList<EmailModel> emailModel) {
-		String errorsMessage = "";
-		Map<String, Object> resulterr = new HashMap<>();
+	public ResultModel sendMailWithFile(@RequestBody ArrayList<EmailModel> emailModel) {
+		ResultModel resultModel = new ResultModel();
 		for (int i = 0; i < emailModel.size(); i++) {
 			if (emailModel.get(i).getMailFrom() == null || emailModel.get(i).getMailFrom().equals("")) {
-				errorsMessage = "登録者メールアドレス入力されてない、確認してください。";
-
-				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
-				return resulterr;
+				resultModel.setErrMsg("登録者メールアドレス入力されてない、確認してください。");
+				return resultModel;
 			}
 
 			logger.info("sendMailWithFile:" + "送信開始");
@@ -124,14 +122,10 @@ public class SalaryDetailSendController extends BaseController {
 			String[] paths = { "c:/file/salaryDetailSend/" + emailModel.get(i).getResumePath() };
 			emailModel.get(i).setNames(names);
 			emailModel.get(i).setPaths(paths);
-			try {
-				// 送信
-				utils.sendMailWithFile(emailModel.get(i));
-			} catch (Exception e) {
-				errorsMessage = "送信エラー発生しました。";
-
-				resulterr.put("errorsMessage", errorsMessage);// エラーメッセージ
-				return resulterr;
+			// 送信
+			ResultModel  sendMailResult = utils.sendMailWithFile(emailModel.get(i));
+			if(sendMailResult.getResult() == false) {
+				return sendMailResult;
 			}
 		}
 
@@ -140,7 +134,8 @@ public class SalaryDetailSendController extends BaseController {
 		deleteFile(file);
 
 		logger.info("sendMailWithFile" + "送信結束");
-		return resulterr;
+		resultModel.setSuccess();
+		return resultModel;
 	}
 
 	private void deleteFile(File file) {
