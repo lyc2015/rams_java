@@ -415,7 +415,10 @@ public class SalesSituationController extends BaseController {
 					|| salesSituationListTemp.get(i).getAdmissionEndDate().equals("")) {
 				if (salesSituationListTemp.get(i).getSalesProgressCode() == null
 						|| salesSituationListTemp.get(i).getSalesProgressCode().equals("")) {
-					salesSituationListTemp.get(i).setSalesProgressCode("2");
+					if(!salesSituationListTemp.get(i).getEmployeeStatus().equals("1")) {
+						salesSituationListTemp.get(i).setSalesProgressCode("2");
+					}
+					
 				}
 			}
 		}

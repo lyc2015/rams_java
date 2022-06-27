@@ -184,6 +184,7 @@
 		T002EmployeeDetail.developLanguage3,
 		T002EmployeeDetail.developLanguage4,
 		T002EmployeeDetail.developLanguage5,
+		T002EmployeeDetail.employeeStatus,
 		M012SiteRole.siteRoleName AS
 		siteRoleCode
 		FROM
@@ -270,6 +271,7 @@
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT T002EmployeeDetail.employeeNo,
 		T007CustomerInfo.customerAbbreviation,
+		T002EmployeeDetail.employeeStatus,
 		T002EmployeeDetail.developLanguage1,
 		T002EmployeeDetail.developLanguage2,
 		T002EmployeeDetail.developLanguage3,
