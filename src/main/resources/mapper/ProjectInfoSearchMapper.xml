@@ -11,7 +11,7 @@
 		CONCAT( ( @rowNo := @rowNo + 1 ) ) AS rowNo,
 		T022.projectNo,
 		T022.projectName,
-		T022.endFlag,
+		if(T022.endFlag is null,"1",T022.endFlag) endFlag,
 		T022.salesStaff,
 		T022.nationalityCode,
 		M003.nationalityName,
@@ -202,6 +202,7 @@
 			AND T022.successRate = #{successRate}
 		</if>
 		ORDER BY
+		field(if(T022.endFlag is null,"1",T022.endFlag),"1","0"),
 		T022.projectNo desc
 	</select>
 	<delete id="delete" parameterType="String">
