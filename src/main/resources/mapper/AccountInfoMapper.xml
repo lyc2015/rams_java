@@ -69,8 +69,8 @@
 		#{accountNo},
 		#{accountName},
 		#{accountTypeStatus},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 	<!-- 口座情報アップデート -->
@@ -96,8 +96,8 @@
 		#{accountNo},
 		#{accountName},
 		#{accountTypeStatus},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 		on DUPLICATE key
 		UPDATE
@@ -114,7 +114,7 @@
 			accountName = #{accountName},
 		</if>
 		accountTypeStatus = #{accountTypeStatus},
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 	</update>
 
@@ -150,8 +150,8 @@
 		#{accountNo},
 		#{accountName},
 		#{accountTypeStatus},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</update>
 

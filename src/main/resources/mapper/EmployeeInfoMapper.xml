@@ -458,8 +458,8 @@
 		#{employeeLastName},
 		MD5(#{password}),
 		#{authorityCode},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser}
 		)
 	</insert>
@@ -578,8 +578,8 @@
 		#{socialInsuranceDate},
 		#{departmentCode},
 		#{contractDeadline},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser},
 		#{picInfo},
 		#{yearsOfExperience},
@@ -663,7 +663,7 @@
 		<if test="employeeFristName!= null">
 			authorityCode =#{authorityCode},
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser =
 		#{updateUser}
 		WHERE
@@ -848,7 +848,7 @@
 		<if test="contractDeadline!= null">
 			contractDeadline=#{contractDeadline},
 		</if>
-		updateTime=NOW(),
+		updateTime=date_add(now(), interval 9 hour),
 		updateUser=
 		#{updateUser}
 		WHERE
@@ -864,7 +864,7 @@
 		firstHalfAddress=#{firstHalfAddress},
 		lastHalfAddress=#{lastHalfAddress},
 		stationCode=#{stationCode},
-		updateTime=NOW(),
+		updateTime=date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 		WHERE
 		employeeNo=#{employeeNo}
@@ -1028,8 +1028,8 @@
 		#{firstHalfAddress},
 		#{lastHalfAddress},
 		#{stationCode},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser}
 		)
 	</insert>
@@ -1084,8 +1084,8 @@
 		#{resumeName1},
 		#{resumeInfo2},
 		#{resumeName2},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser}
 		)
 	</insert>
@@ -1112,7 +1112,7 @@
 		<if test="resumeName2 ==  null || resumeName2 ==  ''">
 			resumeInfo2 = null,
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser =
 		#{updateUser}
 		WHERE
@@ -1126,7 +1126,7 @@
 		INSERT INTO T011BpInfoSupplement
 		(bpEmployeeNo,unitPriceStartMonth,bpUnitPrice,bpBelongCustomerCode,bpSalesProgressCode,bpOtherCompanyAdmissionEndDate,bpRemark,createTime,updateTime,updateUser)
 		VALUES
-		(#{bpEmployeeNo},#{unitPriceStartMonth},#{bpUnitPrice},#{bpBelongCustomerCode},#{bpSalesProgressCode},#{bpOtherCompanyAdmissionEndDate},#{bpRemark},now(),now(),#{updateUser})
+		(#{bpEmployeeNo},#{unitPriceStartMonth},#{bpUnitPrice},#{bpBelongCustomerCode},#{bpSalesProgressCode},#{bpOtherCompanyAdmissionEndDate},#{bpRemark},date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 
 		ON DUPLICATE KEY
 
@@ -1141,8 +1141,8 @@
 		#{bpOtherCompanyAdmissionEndDate},
 		bpRemark = #{bpRemark},
 		createTime =
-		now(),
-		updateTime = now(),
+		date_add(now(), interval 9 hour),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser};
 	</update>
 
@@ -1158,8 +1158,8 @@
 		bpOtherCompanyAdmissionEndDate =
 		#{bpOtherCompanyAdmissionEndDate},
 		createTime =
-		now(),
-		updateTime = now(),
+		date_add(now(), interval 9 hour),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		bpEmployeeNo = #{bpEmployeeNo}

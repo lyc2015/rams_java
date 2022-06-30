@@ -99,8 +99,8 @@
 		#{totalExpenses},
 		#{introductionAllowance},
 		#{remark},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser}
 		)
 	</insert>
@@ -133,7 +133,7 @@
 		<if test="remark != null">
 			remark = #{remark},
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		employeeNo =

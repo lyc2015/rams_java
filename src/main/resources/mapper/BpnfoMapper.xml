@@ -57,8 +57,8 @@
 		#{bpSalesProgressCode},
 		#{bpOtherCompanyAdmissionEndDate},
 		#{bpRemark},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour)),
 		#{updateUser})
 	</insert>
 	<!-- 諸p費用情報アップデート -->
@@ -81,7 +81,7 @@
 		<if test="bpRemark != null">
 			bpRemark = #{bpRemark},
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		bpEmployeeNo =

@@ -409,8 +409,8 @@
 		#{positionCodeList},
 		#{mainChargeMailList},
 		#{subChargeMailList},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 
@@ -419,7 +419,7 @@
 		update
 		T021CustomerSendMailStorageList
 		set
-		StorageListName=#{storageListName},updateTime=now(),updateUser=#{updateUser}
+		StorageListName=#{storageListName},updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser}
 		where
 		StorageListName=#{oldStorageListName} and
 		transmissionClassificationCode=0
@@ -437,7 +437,7 @@
 		update
 		T018WorkTotalTime
 		set
-		StorageListName="",updateTime=now(),updateUser=#{updateUser}
+		StorageListName="",updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser}
 		where
 		StorageListName=#{storageListName};
 	</update>
@@ -558,7 +558,7 @@
 		noChargeList = "",
 		candidateInChargeList =
 		"",
-		updateTime=now(),updateUser=#{updateUser}
+		updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser}
 		where
 		StorageListName=#{storageListName} and
 		transmissionClassificationCode =

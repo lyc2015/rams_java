@@ -4,10 +4,14 @@
 	<!-- データの存在チェック -->
 	<select id="checkHave" parameterType="map"
 		resultType="java.lang.String">
-		SELECT * FROM M002BankBranch WHERE bankCode = #{bankCode} and bankBranchCode=#{bankBranchCode}
+		SELECT * FROM M002BankBranch WHERE bankCode = #{bankCode}
+		and bankBranchCode=#{bankBranchCode}
 	</select>
 	<!-- データのインサート -->
 	<insert id="insertMaster" parameterType="map">
-		INSERT INTO M002BankBranch (bankBranchCode,bankCode,bankBranchName,updateTime,createTime,updateUser) VALUE(#{bankBranchCode},#{bankCode},#{bankBranchName},NOW(),NOW(),#{updateUser})
+		INSERT INTO
+		M002BankBranch
+		(bankBranchCode,bankCode,bankBranchName,updateTime,createTime,updateUser)
+		VALUE(#{bankBranchCode},#{bankCode},#{bankBranchName},date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 	</insert>
 </mapper>

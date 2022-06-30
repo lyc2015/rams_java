@@ -458,7 +458,7 @@
 		UPDATE T001Employee
 		SET
 		`password` = MD5(#{password}),
-		updateTime = NOW()
+		updateTime = date_add(now(), interval 9 hour)
 		WHERE
 		employeeNo =
 		#{employeeNo}

@@ -184,7 +184,7 @@
 		VALUES (
 		#{customerNo},#{yearAndMonth},#{workContents},#{invoiceNo},#{customerName},#{invoiceDate},"",
 		#{employeeNo},#{workPeriod},#{workingTime},#{requestUnitCode},"1",#{unitPrice},
-		"0","","","0",now(),now(),#{updateUser},#{systemNameFlag},#{workTimeFlag},#{employeeNameFlag}
+		"0","","","0",date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser},#{systemNameFlag},#{workTimeFlag},#{employeeNameFlag}
 		)
 	</insert>
 
@@ -199,7 +199,7 @@
 		quantity = #{quantity},
 		unitPrice
 		= #{unitPrice},
-		updateTime = now(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		customerNo = #{customerNo}
@@ -219,7 +219,7 @@
 		VALUES (
 		#{customerNo},#{yearAndMonth},#{workContents},#{invoiceNo},"","","",
 		#{employeeNo},#{workPeriod},#{workingTime},#{requestUnitCode},#{quantity},#{unitPrice},
-		"0","","","0",now(),now(),#{updateUser}
+		"0","","","0",date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser}
 		)
 	</insert>
 
@@ -258,7 +258,7 @@
 		bankCode = #{bankCode},
 		remark =
 		#{remark},
-		updateTime = now(),
+		updateTime = date_add(now(), interval 9 hour),
 		employeeNameFlag = #{employeeNameFlag},
 		systemNameFlag = #{systemNameFlag},
 		workTimeFlag = #{workTimeFlag},

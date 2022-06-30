@@ -16,6 +16,6 @@
 	<!-- データのインサート -->
 	<insert id="insertMaster" parameterType="map">
 		INSERT INTO T008TopCustomerInfo (topCustomerNo,topCustomerName,topCustomerAbbreviation,url,updateTime,createTime,updateUser)
-		VALUE(#{max},#{topCustomerName},#{topCustomerAbbreviation},#{url},NOW(),NOW(),#{updateUser})
+		VALUE(#{max},#{topCustomerName},#{topCustomerAbbreviation},#{url},date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 	</insert>
 </mapper>

@@ -30,7 +30,7 @@
 	<insert id="updateMaster" parameterType="map">
 		UPDATE ${master} SET
 		${columnName} = #{data},
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE ${columnCode} = #{code}
 	</insert>
@@ -41,7 +41,7 @@
 		M002BankBranch SET
 		bankBranchCode = #{newBankBranchCode},
 		bankBranchName = #{newBankBranchName},
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser =
 		#{updateUser}
 		WHERE bankCode = #{bankCode}
@@ -57,7 +57,7 @@
 		topCustomerName = #{topCustomerName},
 		topCustomerAbbreviation = #{topCustomerAbbreviation},
 		url = #{url},
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser =
 		#{updateUser}
 		WHERE topCustomerNo =

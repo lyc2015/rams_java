@@ -34,8 +34,8 @@
 		#{breakTimeNightEnd},
 		#{breakTimeNightbreakTimeHour},
 		#{breakTimeSumHour},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{employeeNo}
 		)
 	</insert>
@@ -86,8 +86,8 @@
 		, #{systemName}
 		, #{workContent}
 		, #{remark}
-		, now()
-		, now()
+		, date_add(now(), interval 9 hour)
+		, date_add(now(), interval 9 hour)
 		, #{updateUser}
 		)
 	</insert>
@@ -174,8 +174,8 @@
 		#{breakTimeNightEnd},
 		#{breakTimeNightbreakTimeHour},
 		#{breakTimeSumHour},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{employeeNo}
 		)
 	</update>
@@ -199,7 +199,7 @@
 		#{remark},
 		breakTime = #{breakTime},
 		systemName = #{systemName},
-		updateTime = now(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		employeeNo =

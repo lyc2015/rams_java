@@ -1313,8 +1313,8 @@
 		#{remark1},
 		#{remark2},
 		#{salesStaff},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 		ON DUPLICATE KEY UPDATE
 		interviewDate1=#{interviewDate1},
@@ -1331,8 +1331,8 @@
 		remark1=#{remark1},
 		remark2=#{remark2},
 		salesStaff=#{salesStaff},
-		updateTime= NOW(),
-		createTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
+		createTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 
 	</insert>
@@ -1353,15 +1353,15 @@
 		#{admissionStartDate},
 		#{customerNo},
 		#{unitPrice},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 		ON DUPLICATE KEY UPDATE
 		admissionStartDate=#{admissionStartDate},
 		customerNo=#{customerNo},
 		unitPrice=#{unitPrice},
 		admissionEndDate=null,
-		updateTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 
 	</insert>
@@ -1383,16 +1383,16 @@
 		#{salesProgressCode},
 		#{salesStaff},
 		#{customerContractStatus},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 		ON
 		DUPLICATE KEY UPDATE
 		salesProgressCode=#{salesProgressCode},
 		salesStaff=#{salesStaff},
 		customerContractStatus=#{customerContractStatus},
-		updateTime= NOW(),
-		createTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
+		createTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 
 	</insert>
@@ -1612,7 +1612,7 @@
 		T003AddressInfo
 		SET
 		stationCode = #{stationCode},
-		updateTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 		WHERE
 		employeeNo = #{employeeNo}
@@ -1656,8 +1656,8 @@
 		#{unitPrice},
 		#{employeeStatus},
 		#{remark},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 		ON DUPLICATE KEY
 		UPDATE
@@ -1677,7 +1677,7 @@
 		theMonthOfStartWork=#{beginMonth},
 		employeeStatusCode=#{employeeStatus},
 		remark=#{remark},
-		updateTime=NOW(),
+		updateTime=date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 
 	</insert>
@@ -1712,7 +1712,7 @@
 		#{customer},
 		salesStaff = #{salesStaff},
 		updateTime=
-		NOW(),
+		date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 		WHERE
 		employeeNo = #{employeeNo}
@@ -1790,7 +1790,7 @@
 		INSERT INTO T011BpInfoSupplement
 		(bpEmployeeNo,unitPriceStartMonth,bpUnitPrice,bpSalesProgressCode,bpOtherCompanyAdmissionEndDate,bpBelongCustomerCode,createTime,updateTime,updateUser)
 		VALUES
-		(#{employeeNo},#{admissionEndDate},#{price},#{salesProgressCode},#{admissionEndDate},#{customer},NOW(),NOW(),#{updateUser})
+		(#{employeeNo},#{admissionEndDate},#{price},#{salesProgressCode},#{admissionEndDate},#{customer},date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 		ON DUPLICATE KEY
 		UPDATE
 		bpUnitPrice =
@@ -1801,7 +1801,7 @@
 			bpOtherCompanyAdmissionEndDate = #{admissionEndDate},
 		</if>
 		bpBelongCustomerCode = #{customer},
-		updateTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 	</update>
 
@@ -1818,8 +1818,8 @@
 		(
 		#{employeeNo},
 		#{salesYearAndMonth},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 
@@ -1861,8 +1861,8 @@
 		#{customer},
 		#{price},
 		"0",
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 
@@ -1900,7 +1900,7 @@
 		(#{employeeNo},#{salesYearAndMonth},
 		#{interviewClassificationCode1},#{interviewDate1},#{stationCode1},#{interviewCustomer1},#{interviewInfo1},#{interviewUrl1},
 		#{interviewClassificationCode2},#{interviewDate2},#{stationCode2},#{interviewCustomer2},#{interviewInfo2},#{interviewUrl2},
-		now(),now(),#{updateUser})
+		date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 		ON DUPLICATE KEY
 		UPDATE
 		interviewClassificationCode1 = #{interviewClassificationCode1},
@@ -1918,7 +1918,7 @@
 		interviewInfo2 =
 		#{interviewInfo2},
 		interviewUrl2 = #{interviewUrl2},
-		updateTime= NOW(),
+		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 	</update>
 </mapper>

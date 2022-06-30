@@ -16,7 +16,7 @@
 		T014SalesPointInfo(id,employeeStatus,intoCompanyCode,customerContractStatus,levelCode,
 		bpGrossProfit,specialPointConditionCode,salesPoint,specialsalesPoint,remark,updateTime,createTime,updateUser)
 		values(#{no},#{employee},#{newMember},#{customerContract},#{level},#{bpGrossProfit},
-		#{specialPoint},#{point},#{specialPointNo},#{remark},now(),now(),#{updateUser})
+		#{specialPoint},#{point},#{specialPointNo},#{remark},date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 	</insert>
 
 	<update id="salesPointUpdate" parameterType="map">
@@ -25,7 +25,7 @@
 		set
 		employeeStatus=#{employee},intoCompanyCode=#{newMember},customerContractStatus=#{customerContract},
 		levelCode=#{level},bpGrossProfit=#{bpGrossProfit},specialPointConditionCode=#{specialPoint},
-		salesPoint=#{point},specialsalesPoint=#{specialPointNo},remark=#{remark},updateTime=now(),updateUser=#{updateUser}
+		salesPoint=#{point},specialsalesPoint=#{specialPointNo},remark=#{remark},updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser}
 		where id=#{no}
 	</update>
 

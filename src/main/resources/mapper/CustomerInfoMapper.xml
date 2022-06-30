@@ -141,8 +141,8 @@
 		#{salesStaff},
 		#{proposeClassificationCode},
 		#{remark},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 	<!-- お客様情報アップデート -->
@@ -224,7 +224,7 @@
 		<if test="remark != null">
 			remark = #{remark},
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		customerNo =
@@ -342,8 +342,8 @@
 		#{developLanguageCode1},
 		#{developLanguageCode2},
 		#{stationCode},
-		NOW(),
-		NOW(),
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
 		#{updateUser})
 	</insert>
 	<!-- 部門情報アップデート -->
@@ -377,7 +377,7 @@
 		<if test="stationCode != null">
 			stationCode = #{stationCode},
 		</if>
-		updateTime = NOW(),
+		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE
 		customerNo =
