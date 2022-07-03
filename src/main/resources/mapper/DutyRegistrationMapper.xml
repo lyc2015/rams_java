@@ -111,6 +111,10 @@
 		and yearAndMonth =
 		#{breakTimeYearMonth}
 	</select>
+	<select id="getApprovalStatus" resultMap="String"
+	parameterType="String">
+		SELECT approvalStatus FROM T018WorkTotalTime  where employeeNo = #{employeeNo} and attendanceYearAndMonth =#{breakTimeYearMonth};
+	</select>
 	<select id="selectDuty" resultMap="EmployeeWorkTime"
 		parameterType="String">
 		SELECT
