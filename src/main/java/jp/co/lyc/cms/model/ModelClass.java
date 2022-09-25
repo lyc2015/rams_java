@@ -13,6 +13,24 @@ public class ModelClass implements Serializable {
 	String columnName;
 	String typeName;
 	String mail;
+	String employeeFristName;
+	String employeeLastName;
+
+	public String getEmployeeFristName() {
+		return employeeFristName;
+	}
+
+	public void setEmployeeFristName(String employeeFristName) {
+		this.employeeFristName = employeeFristName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
+	}
 
 	public String getMail() {
 		return mail;

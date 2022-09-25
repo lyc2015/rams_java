@@ -42,7 +42,9 @@
 		SELECT employeeNo code
 		,CONCAT(employeeFristName,employeeLastName,'(',employeeNo,')') name,
 		CONCAT( employeeFristName,
-		employeeLastName ) TEXT
+		employeeLastName ) TEXT,
+		employeeFristName,
+		employeeLastName
 		FROM T001Employee
 		order by
 		left(employeeNo,2)="BP",left(employeeNo,2)="SC",left(employeeNo,2)="SP",employeeNo
