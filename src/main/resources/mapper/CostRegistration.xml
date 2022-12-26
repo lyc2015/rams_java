@@ -35,6 +35,18 @@
 		ORDER BY
 		happendDate
 	</select>
+	
+	<select id="selectApprovalStatus" resultMap="CostRegistration"
+		parameterType="String">
+		SELECT
+		approvalStatus
+		FROM
+		T018WorkTotalTime
+		WHERE
+		employeeNo = #{employeeNo} AND
+		attendanceYearAndMonth = #{yearMonth}
+	</select>
+	
 	<select id="selectCheckCostRegistration"
 		resultMap="CostRegistration" parameterType="map">
 		SELECT

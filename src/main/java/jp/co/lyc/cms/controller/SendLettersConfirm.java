@@ -1,5 +1,6 @@
 package jp.co.lyc.cms.controller;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
@@ -33,6 +34,7 @@ import jp.co.lyc.cms.model.AllEmployName;
 import jp.co.lyc.cms.model.EmailModel;
 import jp.co.lyc.cms.model.EmployeeModel;
 import jp.co.lyc.cms.model.ResultModel;
+import jp.co.lyc.cms.model.S3Model;
 import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.SendLettersConfirmModel;
 import jp.co.lyc.cms.service.CustomerInfoService;
@@ -55,6 +57,9 @@ public class SendLettersConfirm extends BaseController {
 
 	@Autowired
 	CustomerInfoService customerInfoService;
+	
+	@Autowired
+	S3Controller s3Controller;
 
 	/**
 	 * データを取得
@@ -271,5 +276,54 @@ public class SendLettersConfirm extends BaseController {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	/**
+	 * 履歴書アップロード
+	 * 
+	 * @param
+	 * @return boolean
+---	 */
+	@RequestMapping(value = "/uploadTempFile", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadTempFile(@RequestParam(value = "dataShareFile", required = false) MultipartFile dataShareFile) throws Exception {
+		String getFilename;
+		try {
+			getFilename=upload(dataShareFile);
+		} catch (Exception e) {
+			return null;
+		}
+		try {
+			S3Model s3Model = new S3Model();
+			String filePath = getFilename.replaceAll("\\\\", "/");
+			String fileKey = filePath.split("file/")[1];
+			s3Model.setFileKey(fileKey);
+			s3Model.setFilePath(filePath);
+			s3Controller.uploadFile(s3Model);
+		} catch (Exception e) {
+			return null;
+		}
+		return null;
+	}
+	
+	public final static String UPLOAD_PATH_PREFIX = "C:"+File.separator+"file"+File.separator;
+	public String upload(MultipartFile workRepotFile) {
+		if (workRepotFile== null) {
+			return "";
+		}
+		String realPath = new String(UPLOAD_PATH_PREFIX + "履歴書/Tmp_File");
+		File file = new File(realPath);
+		if (!file.isDirectory()) {
+			file.mkdirs();
+		}
+		String fileName =workRepotFile.getOriginalFilename();
+		try {
+			File newFile = new File(file.getAbsolutePath() + File.separator + fileName);
+			workRepotFile.transferTo(newFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+		return realPath + "/" + fileName;
 	}
 }
