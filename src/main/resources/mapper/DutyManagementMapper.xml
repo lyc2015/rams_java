@@ -186,6 +186,9 @@
 		<if test="approvalStatus == 4">
 			and T018.approvalStatus = "1"
 		</if>
+		<if test="employeeNo!=null">
+			AND t002.employeeNo=#{employeeNo}
+		</if>
 		order BY CASE WHEN t002.employeeStatus=0
 		THEN 0
 		WHEN t002.employeeStatus=2

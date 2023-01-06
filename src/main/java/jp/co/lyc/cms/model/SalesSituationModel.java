@@ -74,6 +74,7 @@ public class SalesSituationModel implements Serializable {
 	String employeeStatus;
 	String birthday;
 	String yearsOfExperience;
+	String comeToJapanYearAndMonth;
 	String projectPhase;
 	String projectPhaseName;
 	String japaneseLevelCode;
@@ -110,6 +111,13 @@ public class SalesSituationModel implements Serializable {
 	String bpOtherCompanyAdmissionEndDate;
 	String customerAbbreviation;
 
+	public String getComeToJapanYearAndMonth() {
+		return comeToJapanYearAndMonth;
+	}
+
+	public void setComeToJapanYearAndMonth(String comeToJapanYearAndMonth) {
+		this.comeToJapanYearAndMonth = comeToJapanYearAndMonth;
+	}
 
 	public String getCustomerAbbreviation() {
 		return customerAbbreviation;

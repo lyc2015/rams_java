@@ -100,7 +100,11 @@ public class WorkRepotController extends BaseController {
 		List<WorkRepotModel> checkMod = workRepotService.selectWorkRepot(workRepotModel);
 		if(checkMod.size() == 1){
 			WorkRepotModel tempModel = new WorkRepotModel();
-			tempModel.setAttendanceYearAndMonth(String.valueOf(Integer.parseInt(checkMod.get(0).getAttendanceYearAndMonth()) - 1));
+			String attendanceYearAndMonth = "";
+			if(String.valueOf(Integer.parseInt(checkMod.get(0).getAttendanceYearAndMonth()) - 1).substring(4,6).equals("00")) {
+				attendanceYearAndMonth = String.valueOf(Integer.parseInt(checkMod.get(0).getAttendanceYearAndMonth().substring(0,4)) - 1) + "12";
+			}
+			tempModel.setAttendanceYearAndMonth(attendanceYearAndMonth);
 			checkMod.add(tempModel);
 		}
 		for(int i = 0;i < checkMod.size();i++) {
