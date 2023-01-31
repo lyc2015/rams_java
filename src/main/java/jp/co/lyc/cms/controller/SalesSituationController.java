@@ -358,10 +358,17 @@ public class SalesSituationController extends BaseController {
 
 					if (salesSituationListTemp.get(i).getEmployeeNo()
 							.equals(T011BpInfoSupplementList.get(j).getBpEmployeeNo())) {
-
-						salesSituationListTemp.remove(i);
-						i--;
-						break;
+						if(T011BpInfoSupplementList.get(j).getBpSalesProgressCode().equals("4")) {
+							if(salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
+								salesSituationListTemp.remove(i);
+								i--;
+								break;
+							}
+						}else{
+							salesSituationListTemp.remove(i);
+							i--;
+							break;
+						}
 					}
 				}
 			}
