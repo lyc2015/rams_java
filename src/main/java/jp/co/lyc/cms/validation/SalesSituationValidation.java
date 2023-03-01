@@ -23,11 +23,7 @@ public class SalesSituationValidation implements Validator {
 			StackTraceElement stackTraceElement = elements[i];
 			String methodName = stackTraceElement.getMethodName();
 			if (methodName.equals("updateSalesSituation")) {
-				if (!UtilsCheckMethod.isNullOrEmpty(p.getHopeLowestPrice()) && !UtilsCheckMethod.isNullOrEmpty(p.getHopeHighestPrice())) {
-					if (Integer.parseInt(p.getHopeHighestPrice()) < Integer.parseInt(p.getHopeLowestPrice())) {
-						errors.rejectValue("hopeLowestPrice", "", StatusCodeToMsgMap.getErrMsgbyCode("MSG008"));
-					}
-				}
+				
 			} 
 		}
 

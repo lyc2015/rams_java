@@ -683,8 +683,7 @@
 		as
 		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
 		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.interviewDate2,T010.stationCode2,
-		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.hopeLowestPrice,
-		T010.hopeHighestPrice,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
 		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
 		T010SalesSituation as T010
 		inner join
@@ -710,8 +709,7 @@
 		as
 		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
 		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.interviewDate2,T010.stationCode2,
-		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.hopeLowestPrice,
-		T010.hopeHighestPrice,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
 		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
 		T001Employee as T001
 		left join T010SalesSituation as T010
@@ -838,8 +836,6 @@
 		T010.interviewDate2,
 		T010.stationCode2,
 		T010.interviewCustomer2,
-		T010.hopeLowestPrice,
-		T010.hopeHighestPrice,
 		T010.customerContractStatus,
 		T010.remark1,
 		T010.remark2,
@@ -958,8 +954,6 @@
 		T010.interviewDate2,
 		T010.stationCode2,
 		T010.interviewCustomer2,
-		T010.hopeLowestPrice,
-		T010.hopeHighestPrice,
 		T010.customerContractStatus,
 		T010.remark1,
 		T010.remark2,
@@ -1075,8 +1069,6 @@
 		T010.interviewDate2,
 		T010.stationCode2,
 		T010.interviewCustomer2,
-		T010.hopeLowestPrice,
-		T010.hopeHighestPrice,
 		T010.customerContractStatus,
 		T010.remark1,
 		T010.remark2,
@@ -1199,8 +1191,6 @@
 		T010.interviewDate2,
 		T010.stationCode2,
 		T010.interviewCustomer2,
-		T010.hopeLowestPrice,
-		T010.hopeHighestPrice,
 		T010.customerContractStatus,
 		T010.remark1,
 		T010.remark2,
@@ -1284,8 +1274,6 @@
 		interviewDate2,
 		stationCode2,
 		interviewCustomer2,
-		hopeLowestPrice,
-		hopeHighestPrice,
 		hopeRemark,
 		salesPriorityStatus,
 		salesProgressCode,
@@ -1306,8 +1294,6 @@
 		#{interviewDate2},
 		#{stationCode2},
 		#{interviewCustomer2},
-		#{hopeLowestPrice},
-		#{hopeHighestPrice},
 		#{hopeRemark},
 		#{salesPriorityStatus},
 		#{salesProgressCode},
@@ -1325,8 +1311,6 @@
 		interviewDate2=#{interviewDate2},
 		stationCode2=#{stationCode2},
 		interviewCustomer2=#{interviewCustomer2},
-		hopeLowestPrice=#{hopeLowestPrice},
-		hopeHighestPrice=#{hopeHighestPrice},
 		hopeRemark=#{hopeRemark},
 		salesPriorityStatus=#{salesPriorityStatus},
 		salesProgressCode=#{salesProgressCode},

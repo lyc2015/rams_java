@@ -241,10 +241,6 @@ public class SalesSituationController extends BaseController {
 						salesSituationList.get(i).setStationCode2(T010SalesSituationList.get(j).getStationCode2());
 						salesSituationList.get(i)
 								.setInterviewCustomer2(T010SalesSituationList.get(j).getInterviewCustomer2());
-						salesSituationList.get(i)
-								.setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
-						salesSituationList.get(i)
-								.setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
 						salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 						salesSituationList.get(i)
 								.setCustomerContractStatus(T010SalesSituationList.get(j).getCustomerContractStatus());
@@ -276,10 +272,6 @@ public class SalesSituationController extends BaseController {
 							salesSituationList.get(i).setStationCode2(T010SalesSituationList.get(j).getStationCode2());
 							salesSituationList.get(i)
 									.setInterviewCustomer2(T010SalesSituationList.get(j).getInterviewCustomer2());
-							salesSituationList.get(i)
-									.setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
-							salesSituationList.get(i)
-									.setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
 							salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 							salesSituationList.get(i).setCustomerContractStatus(
 									T010SalesSituationList.get(j).getCustomerContractStatus());
@@ -542,8 +534,6 @@ public class SalesSituationController extends BaseController {
 					salesSituationList.get(i).setStationCode2(T010SalesSituationList.get(j).getStationCode2());
 					salesSituationList.get(i)
 							.setInterviewCustomer2(T010SalesSituationList.get(j).getInterviewCustomer2());
-					salesSituationList.get(i).setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
-					salesSituationList.get(i).setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
 					salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 					salesSituationList.get(i)
 							.setCustomerContractStatus(T010SalesSituationList.get(j).getCustomerContractStatus());
