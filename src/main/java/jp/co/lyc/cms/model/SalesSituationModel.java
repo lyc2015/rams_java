@@ -33,6 +33,7 @@ public class SalesSituationModel implements Serializable {
 	String interviewCustomer2;
 	String hopeLowestPrice;
 	String hopeHighestPrice;
+	String hopeRemark;
 	String salesProgressCode;
 	String remark;
 	String remark1;
@@ -823,6 +824,14 @@ public class SalesSituationModel implements Serializable {
 
 	public void setScheduledEndDate(String scheduledEndDate) {
 		this.scheduledEndDate = scheduledEndDate;
+	}
+
+	public String getHopeRemark() {
+		return hopeRemark;
+	}
+
+	public void setHopeRemark(String hopeRemark) {
+		this.hopeRemark = hopeRemark;
 	}
 
 }

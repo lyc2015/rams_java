@@ -245,6 +245,7 @@ public class SalesSituationController extends BaseController {
 								.setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
 						salesSituationList.get(i)
 								.setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
+						salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 						salesSituationList.get(i)
 								.setCustomerContractStatus(T010SalesSituationList.get(j).getCustomerContractStatus());
 						salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
@@ -279,6 +280,7 @@ public class SalesSituationController extends BaseController {
 									.setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
 							salesSituationList.get(i)
 									.setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
+							salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 							salesSituationList.get(i).setCustomerContractStatus(
 									T010SalesSituationList.get(j).getCustomerContractStatus());
 							salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
@@ -542,6 +544,7 @@ public class SalesSituationController extends BaseController {
 							.setInterviewCustomer2(T010SalesSituationList.get(j).getInterviewCustomer2());
 					salesSituationList.get(i).setHopeLowestPrice(T010SalesSituationList.get(j).getHopeLowestPrice());
 					salesSituationList.get(i).setHopeHighestPrice(T010SalesSituationList.get(j).getHopeHighestPrice());
+					salesSituationList.get(i).setHopeRemark(T010SalesSituationList.get(j).getHopeRemark());
 					salesSituationList.get(i)
 							.setCustomerContractStatus(T010SalesSituationList.get(j).getCustomerContractStatus());
 					salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
