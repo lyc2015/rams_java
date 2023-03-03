@@ -54,7 +54,7 @@
 		0,
 		0,
 		date_add(now(), interval 9 hour),
-		date_add(now(), interval 9 hour),,
+		date_add(now(), interval 9 hour),
 		""
 		FROM DUAL
 		WHERE NOT EXISTS

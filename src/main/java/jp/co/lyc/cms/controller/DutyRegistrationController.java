@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,9 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.BreakTimeModel;
 import jp.co.lyc.cms.model.DutyRegistrationModel;
 import jp.co.lyc.cms.model.EmployeeWorkTimeModel;
+import jp.co.lyc.cms.model.WorkRepotModel;
 import jp.co.lyc.cms.service.DutyRegistrationService;
+import jp.co.lyc.cms.service.WorkRepotService;
 import jp.co.lyc.cms.util.UtilsController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -53,6 +56,8 @@ public class DutyRegistrationController extends BaseController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	DutyRegistrationService dutyRegistrationService;
+	@Autowired
+	WorkRepotService workRepotService;
 
 	/**
 	 * 登録ボタン
@@ -232,8 +237,29 @@ public class DutyRegistrationController extends BaseController {
 	public boolean selectWorkRepot(@RequestBody String requestJson) {
 		logger.info("DutyRegistrationController.dutySelect:" + "検索開始");
 		JSONObject jsonObject = JSON.parseObject(requestJson);
-		jsonObject.put("employeeNo", super.getSession().getAttribute("employeeNo"));
-		jsonObject.put("breakTimeYearMonth", jsonObject.getOrDefault("yearMonth", ""));
+		
+		String yearMonth = String.valueOf(jsonObject.getOrDefault("yearMonth", ""));
+		String employeeNo = String.valueOf(super.getSession().getAttribute("employeeNo"));
+		
+		jsonObject.put("employeeNo", employeeNo);
+		jsonObject.put("breakTimeYearMonth", yearMonth);
+
+		if(!TextUtils.isEmpty(employeeNo)) {
+			WorkRepotModel workRepotModel = new WorkRepotModel();
+			workRepotModel.setEmployeeNo(employeeNo);
+			
+			if (!TextUtils.isEmpty(yearMonth)) {
+				workRepotModel.setAttendanceYearAndMonth(yearMonth);
+				logger.info("DutyRegistrationController.insertWorkRepotByYearAndMonth:" + "検索開始 yearMonth=" + yearMonth);
+				workRepotService.insertWorkRepotByYearAndMonth(workRepotModel);
+				logger.info("DutyRegistrationController.insertWorkRepotByYearAndMonth:" + "検索終了");
+			} else {
+				logger.info("DutyRegistrationController.selectCheckWorkRepot:" + "検索開始");
+				workRepotService.selectCheckWorkRepot(workRepotModel);
+				logger.info("DutyRegistrationController.selectCheckWorkRepot:" + "検索終了");
+			}
+		}
+		
 		boolean result = false;
 		String sumWorkTime = dutyRegistrationService.selectWorkRepot(jsonObject.getInnerMap());
 		if (!(sumWorkTime == null || sumWorkTime == ""))
