@@ -82,6 +82,7 @@ public class SalesSituationModel implements Serializable {
 	String englishLevelCode;
 	String age;
 	String japaneaseConversationLevel;
+	String japaneaseLevelDesc;
 	String englishConversationLevel;
 	String developLanguage1;
 	String developLanguage2;
@@ -428,6 +429,14 @@ public class SalesSituationModel implements Serializable {
 
 	public void setJapaneaseConversationLevel(String japaneaseConversationLevel) {
 		this.japaneaseConversationLevel = japaneaseConversationLevel;
+	}
+
+	public String getJapaneaseLevelDesc() {
+		return japaneaseLevelDesc;
+	}
+
+	public void setJapaneaseLevelDesc(String japaneaseLevelDesc) {
+		this.japaneaseLevelDesc = japaneaseLevelDesc;
 	}
 
 	public String getEnglishConversationLevel() {

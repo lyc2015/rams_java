@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.FileChannel;
@@ -28,6 +29,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.math.IntRange;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.http.util.TextUtils;
 import org.castor.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,11 +51,13 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.MasterModel;
+import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.S3Model;
 import jp.co.lyc.cms.model.SalesContent;
 import jp.co.lyc.cms.service.SalesSituationService;
 import jp.co.lyc.cms.service.UtilsService;
 import jp.co.lyc.cms.util.StatusCodeToMsgMap;
+import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
 import software.amazon.ion.impl.PrivateScalarConversions.ValueVariant;
 
@@ -71,6 +75,9 @@ public class SalesSituationController extends BaseController {
 
 	@Autowired
 	UtilsService utilsService;
+
+	@Autowired
+	UtilsController utilsController;
 
 	// 12月
 	public static final String DECEMBER = "12";
@@ -144,7 +151,57 @@ public class SalesSituationController extends BaseController {
 			}
 		}
 
+		ArrayList<ModelClass> dropDownGetJapaneseLevelList = new ArrayList<ModelClass>();
+		ArrayList<ModelClass> dropDownGetJapaneaseConversationLevelList = new ArrayList<ModelClass>();
+		
+		// 日本語等级，例： N1，N2，N3
+		try {
+			Method methodGetJapaneseLevel = utilsController.getClass().getMethod("getJapaneseLevel");
+			dropDownGetJapaneseLevelList = (ArrayList<ModelClass>)methodGetJapaneseLevel.invoke(utilsController);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 日本語会话等级，例： N1流暢，N1弱い
+		try {
+			Method methodGetJapaneaseConversationLevel = utilsController.getClass().getMethod("getJapaneaseConversationLevel");
+			dropDownGetJapaneaseConversationLevelList = (ArrayList<ModelClass>)methodGetJapaneaseConversationLevel.invoke(utilsController);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		for (int i = 0; i < salesSituationList.size(); i++) {
+			// 日本語
+			String japaneaseLevelDes = "";
+			if (!TextUtils.isEmpty(salesSituationList.get(i).getJapaneaseConversationLevel())) {
+				// 从营业文章中查询
+				try {
+					if (null != salesSituationList.get(i).getJapaneaseConversationLevel()) {
+						String japaneaseConversationLevelName = dropDownGetJapaneaseConversationLevelList.get(Integer.parseInt(salesSituationList.get(i).getJapaneaseConversationLevel())).getName();
+						japaneaseLevelDes = japaneaseConversationLevelName;
+						if (japaneaseLevelDes.endsWith("業務確認")) {
+							japaneaseLevelDes = japaneaseLevelDes.substring(0, japaneaseLevelDes.length() - 5);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(TextUtils.isEmpty(japaneaseLevelDes)) {
+				// 从个人情报中查询
+				try {
+					if (null != salesSituationList.get(i).getJapaneseLevelCode()) {
+						String japaneseLevelCodeName = dropDownGetJapaneseLevelList.get(Integer.parseInt(salesSituationList.get(i).getJapaneseLevelCode())).getName();
+						japaneaseLevelDes = japaneseLevelCodeName;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			salesSituationList.get(i).setJapaneaseLevelDesc(japaneaseLevelDes);
+
 			// 社員名
 			if (salesSituationList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(BPR)");

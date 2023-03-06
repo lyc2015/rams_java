@@ -172,6 +172,7 @@
 		employeeName,
 		M013Station.stationName AS nearestStation,
 		T019SalesSentence.yearsOfExperience,
+		T019SalesSentence.japaneaseConversationLevel,
 		T015ResumeManagement.resumeInfo1,
 		T015ResumeManagement.resumeInfo2,
 		T015ResumeManagement.resumeName1,
@@ -186,7 +187,8 @@
 		T002EmployeeDetail.developLanguage5,
 		T002EmployeeDetail.employeeStatus,
 		M012SiteRole.siteRoleName AS
-		siteRoleCode
+		siteRoleCode,
+		T002EmployeeDetail.japaneseLevelCode
 		FROM
 		T006EmployeeSiteInfo AS T006EmployeeSiteInfo
 		inner join
