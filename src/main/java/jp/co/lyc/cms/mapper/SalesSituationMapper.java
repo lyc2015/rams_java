@@ -86,4 +86,14 @@ public interface SalesSituationMapper {
 	public List<SalesSituationModel> getInterviewLists(List<String> employeeNoList);
 
 	public int updateInterviewLists(SalesSituationModel model);
+
+	public List<SalesSituationModel> getEmployeeHoliday(String date);
+	
+	public List<SalesSituationModel> getEmployeeRetire(String date);
+	
+	public List<SalesSituationModel> getEmployeeRetireSiteInfo(List<String> employeeNoList);
+	
+	public List<String> getBpEmployeeConfirmNoList();
+	
+	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date);
 }

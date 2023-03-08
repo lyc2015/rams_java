@@ -54,6 +54,7 @@ import jp.co.lyc.cms.model.MasterModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.S3Model;
 import jp.co.lyc.cms.model.SalesContent;
+import jp.co.lyc.cms.service.EmployeeInfoService;
 import jp.co.lyc.cms.service.SalesSituationService;
 import jp.co.lyc.cms.service.UtilsService;
 import jp.co.lyc.cms.util.StatusCodeToMsgMap;
@@ -79,11 +80,150 @@ public class SalesSituationController extends BaseController {
 	@Autowired
 	UtilsController utilsController;
 
+	@Autowired
+	EmployeeInfoService employeeInfoService;
+	
 	// 12月
 	public static final String DECEMBER = "12";
 	// 1月
 	public static final String JANUARY = "01";
 
+
+	public Date minusMonth(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, -1);
+		Date returnDate = calendar.getTime();
+		return returnDate;
+	}
+	
+	/**
+	 * Finish データを取得
+	 *
+	 */
+
+	@RequestMapping(value = "/getSalesSituationFinish", method = RequestMethod.POST)
+	@ResponseBody
+	public List<SalesSituationModel> getSalesSituationFinish(@RequestBody SalesSituationModel model)
+			throws ParseException {
+		List<SalesSituationModel> resultList = new ArrayList<SalesSituationModel>();
+		// 社员
+		{
+			// 休假
+			// T006EmployeeSiteInfo.workstate=3, 更新时间=T006EmployeeSiteInfo.updateTime
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+			String dateHoliday = "";
+			try {
+				Date date = sdf.parse(model.getSalesYearAndMonth());
+				date = minusMonth(date);
+				dateHoliday = new SimpleDateFormat("yyyy-MM").format(date);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			List<SalesSituationModel> temp = salesSituationService.getEmployeeHoliday(dateHoliday);
+			if (null != temp && temp.size() > 0) {
+				resultList.addAll(temp);
+			}
+		}
+		
+		{
+			// 离职
+			// T002EmployeeDetail.employeeFormCode=4, 更新时间=retirementYearAndMonth
+			// 先获取离职的employee list
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+			String dateRetire = "";
+			try {
+				Date date = sdf.parse(model.getSalesYearAndMonth());
+				date = minusMonth(date);
+				dateRetire = new SimpleDateFormat("yyyyMM").format(date);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			List<SalesSituationModel> temp = salesSituationService.getEmployeeRetire(dateRetire);
+			List<String> employeeNoList = new ArrayList<String>();
+			
+			if (null != temp && temp.size() > 0) {
+				// 如果resultList 已经存在同个员工,休假的状态的话,离职状态优先,对休假进行覆盖
+				if (null != resultList && resultList.size() > 0) {
+					for (int i = 0; i < resultList.size(); i++) {
+						SalesSituationModel employeeHoliday = resultList.get(i);
+						for (int j = 0; j < temp.size(); j++) {
+							SalesSituationModel employeeRetire = temp.get(j);
+							if (null != employeeHoliday.getEmployeeNo() && null != employeeRetire.getEmployeeNo() && employeeRetire.getEmployeeNo().equals(employeeHoliday.getEmployeeNo())) {
+								// employeeHoliday.setFinishReason("離職");
+								resultList.remove(i);
+							}
+						}
+					}
+				}
+
+				for (int i = 0; i < temp.size(); i++) {
+					SalesSituationModel employeeRetire = temp.get(i);
+					employeeNoList.add(temp.get(i).getEmployeeNo());
+					resultList.add(employeeRetire);
+				}
+			}
+			// 在获取unitPrice和addmissionStartDate
+			if (null != employeeNoList && employeeNoList.size() > 0) {
+				List<SalesSituationModel> tempWithPriceAndDate = salesSituationService.getEmployeeRetireSiteInfo(employeeNoList);
+				if (null != tempWithPriceAndDate && tempWithPriceAndDate.size() > 0) {
+					for (int i = 0; i < resultList.size(); i++) {
+						SalesSituationModel employeeRetire = resultList.get(i);
+						for (int j = 0; j < tempWithPriceAndDate.size(); j++) {
+							SalesSituationModel employeeWithPriceAndDate = tempWithPriceAndDate.get(j);
+							if (null != employeeWithPriceAndDate.getEmployeeNo() && null != employeeRetire.getEmployeeNo() && employeeRetire.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
+								resultList.get(i).setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
+								resultList.get(i).setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
+							}
+						}
+					}
+				}
+			}
+		}
+		// 协力
+		{
+			// 终了且所属确定 T011BpInfoSupplement.bpSalesProgressCode=4 && T006EmployeeSiteInfo.workstate=1, 更新时间=bpOtherCompanyAdmissionEndDate
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+			String dateBpConfirm = "";
+			try {
+				Date date = sdf.parse(model.getSalesYearAndMonth());
+				date = minusMonth(date);
+				dateBpConfirm = new SimpleDateFormat("yyyyMM").format(date);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			List<String> employeeNoList = salesSituationService.getBpEmployeeConfirmNoList();
+			if (null != employeeNoList && employeeNoList.size() > 0) {
+				List<SalesSituationModel> temp = salesSituationService.getBpEmployeeConfirm(employeeNoList, dateBpConfirm);
+				if (null != temp && temp.size() > 0) {
+					resultList.addAll(temp);
+				}
+			}
+		}
+		
+		// 处理名字和番号
+		if (null != resultList && resultList.size() > 0) {
+			for (int i = 0; i < resultList.size(); i++) {
+				resultList.get(i).setRowNo(i + 1);
+				resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeFristName() + resultList.get(i).getEmployeeLastName());
+
+				if (resultList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(BPR)");
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName());
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(SP)");
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(SC)");
+				}
+			}
+		}
+
+		return resultList;
+	}
+
+	
 	/**
 	 * データを取得 ffff
 	 * 

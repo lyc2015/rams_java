@@ -42,6 +42,7 @@ public class SiteModel {
 	String dailyCalculationStatus;// 日割計算区分
 	String workState;// 現場状態
 	String typteOfContractCode; // 契約形態
+	String holidayStartDate;// 休假开始日付
 
 	public String getDevelopLanguageCode2() {
 		return developLanguageCode2;
@@ -333,6 +334,14 @@ public class SiteModel {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getHolidayStartDate() {
+		return holidayStartDate;
+	}
+
+	public void setHolidayStartDate(String holidayStartDate) {
+		this.holidayStartDate = holidayStartDate;
 	}
 
 }

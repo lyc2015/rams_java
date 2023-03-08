@@ -140,6 +140,59 @@
 		;
 	</select>
 
+	<select id="getEmployeeHoliday" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "休假" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.updateTime from T006EmployeeSiteInfo t6 
+		inner join T002EmployeeDetail t2 on t6.employeeNo = t2.employeeNo
+		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
+		where t6.workState = 3 and t2.employeeFormCode != 4
+		and (
+			t6.holidayStartDate is not null and t6.holidayStartDate like concat(#{date},'%')
+			or 
+			t6.holidayStartDate is null and t6.updateTime like concat(#{date},'%')
+		);
+	</select>
+	
+	<select id="getEmployeeRetire" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "離職" as finishReason from T002EmployeeDetail t2 
+		inner join T001Employee t1 on t2.employeeNo = t1.employeeNo
+		where t2.employeeFormCode = 4
+		and t2.retirementYearAndMonth like concat(#{date},'%');
+	</select>
+	
+	<select id="getEmployeeRetireSiteInfo" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select t6.employeeNo, max(t6.unitPrice) as unitPrice, max(t6.admissionStartDate) as admissionStartDate from T006EmployeeSiteInfo t6 
+		where unitPrice is not null and t6.employeeNo in 
+		<foreach item="item" collection="list" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+		 
+		 group by t6.employeeNo;
+	</select>
+
+	<select id="getBpEmployeeConfirmNoList" parameterType="String"
+		resultType="String">
+		select distinct t11.bpEmployeeNo as employeeNo from T011BpInfoSupplement t11 where t11.bpSalesProgressCode = 4;
+	</select>
+	
+	<select id="getBpEmployeeConfirm" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select t6.employeeNo, t1.employeeFristName, t1.employeeLastName, "所屬から確定" as finishReason, t6.unitPrice, t6.admissionStartDate from T006EmployeeSiteInfo t6 
+		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
+		where  t6.workState = 1
+		and t6.admissionEndDate like concat(#{date},'%')
+		and t6.employeeNo in 
+		<foreach item="item" collection="employeeNoList" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+		
+		group by t6.employeeNo;
+	</select>
+	
 	<select id="getSiteRoleCode"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT T002.employeeNo,M012.siteRoleName as siteRoleCode

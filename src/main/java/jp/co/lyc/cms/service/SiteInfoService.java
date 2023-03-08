@@ -1,5 +1,7 @@
 package jp.co.lyc.cms.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,7 @@ public class SiteInfoService {
 				sendMap.replace("levelCode", "");
 				sendMap.replace("workState", "0");
 				sendMap.replace("admissionStartDate", admissionEndDate);
+				sendMap.replace("holidayStartDate", "");
 				sendMap.replace("admissionEndDate", null);
 				siteInfoMapper.siteInsert(sendMap);
 				lastOne.setLevelCode(levelCode);
@@ -68,6 +71,21 @@ public class SiteInfoService {
 				siteInfoMapper.siteUpdate(sendMapForUp);
 
 			} else {
+				if (sendMap.get("workState").equals("3")) {
+					List<SiteModel> lastData = siteInfoMapper.getSiteInfo((String) sendMap.get("employeeNo"));
+					SiteModel lastOne = lastData.get(lastData.size() - 1);
+					if (!"3".equals(lastOne.getWorkState())) {
+						// old workState is not holiday status, update holidayStartDate
+						try {
+							Date date = new Date();
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+							String curDate = sdf.format(date);
+							sendMap.put("holidayStartDate", curDate);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
 				siteInfoMapper.siteUpdate(sendMap);
 				if(sendMap.get("workState").equals("1")) {
 					siteInfoMapper.salesSentenceUpdate(sendMap);
@@ -96,6 +114,9 @@ public class SiteInfoService {
 		}
 		if (siteModel.getAdmissionStartDate() != null && siteModel.getAdmissionStartDate().length() != 0) {
 			sendMap.put("admissionStartDate", siteModel.getAdmissionStartDate());
+		}
+		if (siteModel.getHolidayStartDate() != null && siteModel.getHolidayStartDate().length() != 0) {
+			sendMap.put("holidayStartDate", siteModel.getHolidayStartDate());
 		}
 		if (siteModel.getStationCode() != null && siteModel.getStationCode().length() != 0) {
 			sendMap.put("location", siteModel.getStationCode());

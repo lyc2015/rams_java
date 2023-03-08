@@ -178,4 +178,26 @@ public class SalesSituationService {
 		String reStr = sdf.format(dt1);
 		return reStr;
 	}
+
+
+	public List<SalesSituationModel> getEmployeeHoliday(String date) {
+		return salesSituationMapper.getEmployeeHoliday(date);
+	}
+
+	public List<SalesSituationModel> getEmployeeRetire(String date) {
+		return salesSituationMapper.getEmployeeRetire(date);
+	}
+
+	public List<SalesSituationModel> getEmployeeRetireSiteInfo(List<String> employeeNoList) {
+		return salesSituationMapper.getEmployeeRetireSiteInfo(employeeNoList);
+	}
+
+	public List<String> getBpEmployeeConfirmNoList() {
+		return salesSituationMapper.getBpEmployeeConfirmNoList();
+	}
+	
+	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date) {
+		return salesSituationMapper.getBpEmployeeConfirm(employeeNoList, date);
+	}
+	
 }

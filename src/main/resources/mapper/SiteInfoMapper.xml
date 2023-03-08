@@ -23,7 +23,7 @@
 		siteRoleCode=#{siteRoleCode},payOffRange1=#{payOffRange1},payOffRange2=#{payOffRange2},
 		relatedEmployees=#{relatedEmployees},levelCode=#{levelCode},typeOfIndustryCode=#{typeOfIndustryCode},
 		nonSitePeriod=#{nonSitePeriod},nonSiteMonths=#{nonSiteMonths},dailyCalculationStatus=#{dailyCalculationStatus},
-		workState=#{workState},scheduledEndDate=#{scheduledEndDate},typteOfContractCode=#{typteOfContractCode},remark=#{remark},updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser}
+		workState=#{workState},scheduledEndDate=#{scheduledEndDate},typteOfContractCode=#{typteOfContractCode},remark=#{remark},updateTime=date_add(now(), interval 9 hour),updateUser=#{updateUser},holidayStartDate=#{holidayStartDate}
 		where employeeNo=#{employeeNo} AND admissionStartDate=#{workDate}
 	</update>
 

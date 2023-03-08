@@ -22,6 +22,9 @@ public class SalesSituationModel implements Serializable {
 	String salesDateUpdate;
 
 	String employeeNo;
+	String employeeFristName;
+	String employeeLastName;
+	
 	String salesYearAndMonth;
 	String intoCompanyYearAndMonth;
 	String interviewDate1;
@@ -112,6 +115,7 @@ public class SalesSituationModel implements Serializable {
 	String bpUnitPrice;
 	String bpOtherCompanyAdmissionEndDate;
 	String customerAbbreviation;
+	String finishReason;
 
 	public String getComeToJapanYearAndMonth() {
 		return comeToJapanYearAndMonth;
@@ -841,6 +845,30 @@ public class SalesSituationModel implements Serializable {
 
 	public void setHopeRemark(String hopeRemark) {
 		this.hopeRemark = hopeRemark;
+	}
+
+	public String getFinishReason() {
+		return finishReason;
+	}
+
+	public void setFinishReason(String finishReason) {
+		this.finishReason = finishReason;
+	}
+
+	public String getEmployeeFristName() {
+		return employeeFristName;
+	}
+
+	public void setEmployeeFristName(String employeeFristName) {
+		this.employeeFristName = employeeFristName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
 	}
 
 }
