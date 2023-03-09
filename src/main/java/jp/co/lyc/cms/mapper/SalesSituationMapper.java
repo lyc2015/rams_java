@@ -93,7 +93,7 @@ public interface SalesSituationMapper {
 	
 	public List<SalesSituationModel> getEmployeeRetireSiteInfo(List<String> employeeNoList);
 	
-	public List<String> getBpEmployeeConfirmNoList();
+	public List<SalesSituationModel> getBpEmployeeConfirmNoList();
 	
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date);
 }

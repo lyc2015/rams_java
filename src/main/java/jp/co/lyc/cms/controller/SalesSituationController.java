@@ -193,10 +193,23 @@ public class SalesSituationController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			List<String> employeeNoList = salesSituationService.getBpEmployeeConfirmNoList();
-			if (null != employeeNoList && employeeNoList.size() > 0) {
+			List<SalesSituationModel> employeeList = salesSituationService.getBpEmployeeConfirmNoList();
+			if (null != employeeList && employeeList.size() > 0) {
+				List<String> employeeNoList = new ArrayList<String>();
+				for (int i = 0; i < employeeList.size(); i++) {
+					employeeNoList.add(employeeList.get(i).getEmployeeNo());
+				}
 				List<SalesSituationModel> temp = salesSituationService.getBpEmployeeConfirm(employeeNoList, dateBpConfirm);
 				if (null != temp && temp.size() > 0) {
+					for (int i = 0; i < temp.size(); i++) {
+						SalesSituationModel newEmployee = temp.get(i);
+						for (int j = 0; j < employeeList.size(); j++) {
+							SalesSituationModel oldEmployee = employeeList.get(j);
+							if (null != oldEmployee.getEmployeeNo() && null != newEmployee.getEmployeeNo() && oldEmployee.getEmployeeNo().equals(newEmployee.getEmployeeNo())) {
+								newEmployee.setCustomerAbbreviation(oldEmployee.getCustomerAbbreviation());
+							}
+						}
+					}
 					resultList.addAll(temp);
 				}
 			}

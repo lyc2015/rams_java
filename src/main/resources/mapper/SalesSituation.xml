@@ -174,8 +174,10 @@
 	</select>
 
 	<select id="getBpEmployeeConfirmNoList" parameterType="String"
-		resultType="String">
-		select distinct t11.bpEmployeeNo as employeeNo from T011BpInfoSupplement t11 where t11.bpSalesProgressCode = 4;
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select distinct t11.bpEmployeeNo as employeeNo, t7.customerAbbreviation as customerAbbreviation from T011BpInfoSupplement t11 
+		left join T007CustomerInfo t7 on t7.customerNo = t11.bpBelongCustomerCode
+		where t11.bpSalesProgressCode = 4;
 	</select>
 	
 	<select id="getBpEmployeeConfirm" parameterType="String"

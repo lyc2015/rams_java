@@ -192,7 +192,7 @@ public class SalesSituationService {
 		return salesSituationMapper.getEmployeeRetireSiteInfo(employeeNoList);
 	}
 
-	public List<String> getBpEmployeeConfirmNoList() {
+	public List<SalesSituationModel> getBpEmployeeConfirmNoList() {
 		return salesSituationMapper.getBpEmployeeConfirmNoList();
 	}
 	
