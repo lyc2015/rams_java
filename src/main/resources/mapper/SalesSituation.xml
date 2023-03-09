@@ -145,6 +145,7 @@
 		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "休假" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.updateTime from T006EmployeeSiteInfo t6 
 		inner join T002EmployeeDetail t2 on t6.employeeNo = t2.employeeNo
 		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
+		<!-- workState = 3:项目休假状态, employeeFormCode!=4: 社员非离职状态 -->
 		where t6.workState = 3 and t2.employeeFormCode != 4
 		and (
 			t6.holidayStartDate is not null and t6.holidayStartDate like concat(#{date},'%')
@@ -157,26 +158,37 @@
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "離職" as finishReason from T002EmployeeDetail t2 
 		inner join T001Employee t1 on t2.employeeNo = t1.employeeNo
+		<!-- employeeFormCode=4: 社员离职状态 -->
 		where t2.employeeFormCode = 4
 		and t2.retirementYearAndMonth like concat(#{date},'%');
 	</select>
 	
 	<select id="getEmployeeRetireSiteInfo" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select t6.employeeNo, max(t6.unitPrice) as unitPrice, max(t6.admissionStartDate) as admissionStartDate from T006EmployeeSiteInfo t6 
-		where unitPrice is not null and t6.employeeNo in 
+		select employeeNo, unitPrice, admissionStartDate from T006EmployeeSiteInfo where admissionStartDate in 
+		(
+			select substring_index(group_concat(t6.admissionStartDate order by t6.admissionStartDate DESC), ',', 1) 
+			from T006EmployeeSiteInfo t6 
+			where t6.employeeNo in
+			<foreach item="item" collection="list" open="(" close=")"
+			separator=",">
+				#{item}
+			</foreach>
+			 group by t6.employeeNo
+		) 
+		and employeeNo in
 		<foreach item="item" collection="list" open="(" close=")"
 			separator=",">
 			#{item}
 		</foreach>
-		 
-		 group by t6.employeeNo;
+		
 	</select>
 
 	<select id="getBpEmployeeConfirmNoList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		select distinct t11.bpEmployeeNo as employeeNo, t7.customerAbbreviation as customerAbbreviation from T011BpInfoSupplement t11 
 		left join T007CustomerInfo t7 on t7.customerNo = t11.bpBelongCustomerCode
+		<!-- bpSalesProgressCode=4: 协力社员, 所属确定状态 -->
 		where t11.bpSalesProgressCode = 4;
 	</select>
 	
@@ -184,7 +196,8 @@
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		select t6.employeeNo, t1.employeeFristName, t1.employeeLastName, "所屬から確定" as finishReason, t6.unitPrice, t6.admissionStartDate from T006EmployeeSiteInfo t6 
 		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
-		where  t6.workState = 1
+		<!-- workState=1: 现场项目终了状态 -->
+		where t6.workState = 1
 		and t6.admissionEndDate like concat(#{date},'%')
 		and t6.employeeNo in 
 		<foreach item="item" collection="employeeNoList" open="(" close=")"

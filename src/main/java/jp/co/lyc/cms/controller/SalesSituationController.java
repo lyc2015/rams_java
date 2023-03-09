@@ -89,6 +89,11 @@ public class SalesSituationController extends BaseController {
 	public static final String JANUARY = "01";
 
 
+	/**
+	 * month minus
+	 * @param 202304
+	 * @return 202303
+	 */
 	public Date minusMonth(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
