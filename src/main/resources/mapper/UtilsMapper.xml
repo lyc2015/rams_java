@@ -402,6 +402,7 @@
 		WHERE
 		left(right(employeeNo,3),1) != "G"
 		and left(employeeNo,2) != "SP"
+		and left(employeeNo,2) != "SC"
 		and
 		left(employeeNo,2) != "BP";
 	</select>
