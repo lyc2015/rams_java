@@ -151,7 +151,6 @@ public class SalesSituationController extends BaseController {
 						for (int j = 0; j < temp.size(); j++) {
 							SalesSituationModel employeeRetire = temp.get(j);
 							if (null != employeeHoliday.getEmployeeNo() && null != employeeRetire.getEmployeeNo() && employeeRetire.getEmployeeNo().equals(employeeHoliday.getEmployeeNo())) {
-								// employeeHoliday.setFinishReason("離職");
 								resultList.remove(i);
 							}
 						}
@@ -160,7 +159,7 @@ public class SalesSituationController extends BaseController {
 
 				for (int i = 0; i < temp.size(); i++) {
 					SalesSituationModel employeeRetire = temp.get(i);
-					employeeNoList.add(temp.get(i).getEmployeeNo());
+					employeeNoList.add(employeeRetire.getEmployeeNo());
 					resultList.add(employeeRetire);
 				}
 			}
@@ -169,12 +168,12 @@ public class SalesSituationController extends BaseController {
 				List<SalesSituationModel> tempWithPriceAndDate = salesSituationService.getEmployeeRetireSiteInfo(employeeNoList);
 				if (null != tempWithPriceAndDate && tempWithPriceAndDate.size() > 0) {
 					for (int i = 0; i < resultList.size(); i++) {
-						SalesSituationModel employeeRetire = resultList.get(i);
+						SalesSituationModel employeeHolidayAndRetire = resultList.get(i);
 						for (int j = 0; j < tempWithPriceAndDate.size(); j++) {
 							SalesSituationModel employeeWithPriceAndDate = tempWithPriceAndDate.get(j);
-							if (null != employeeWithPriceAndDate.getEmployeeNo() && null != employeeRetire.getEmployeeNo() && employeeRetire.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
-								resultList.get(i).setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
-								resultList.get(i).setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
+							if (null != employeeWithPriceAndDate.getEmployeeNo() && null != employeeHolidayAndRetire.getEmployeeNo() && employeeHolidayAndRetire.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
+								employeeHolidayAndRetire.setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
+								employeeHolidayAndRetire.setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
 							}
 						}
 					}
