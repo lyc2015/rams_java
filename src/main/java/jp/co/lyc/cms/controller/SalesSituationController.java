@@ -128,7 +128,18 @@ public class SalesSituationController extends BaseController {
 			
 			List<SalesSituationModel> temp = salesSituationService.getEmployeeHoliday(dateHoliday);
 			if (null != temp && temp.size() > 0) {
-				resultList.addAll(temp);
+				for (int i = 0; i < temp.size(); i++) {
+					SalesSituationModel employeeHoliday = temp.get(i);
+					List<SalesSituationModel> salesSituationRecent = salesSituationService.getEmployeeHolidayRecentSite(employeeHoliday.getEmployeeNo());
+					if (null != salesSituationRecent && salesSituationRecent.size() > 0) {
+						if (salesSituationRecent.size() >= 2) {
+							// 显示休假前的一条现场记录
+							resultList.add(salesSituationRecent.get(1));
+						} else if (salesSituationRecent.size() == 1) {
+							resultList.add(salesSituationRecent.get(0));
+						}
+					}
+				}
 			}
 		}
 		
@@ -179,6 +190,7 @@ public class SalesSituationController extends BaseController {
 							if (null != employeeWithPriceAndDate.getEmployeeNo() && null != employeeHolidayAndRetire.getEmployeeNo() && employeeHolidayAndRetire.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
 								employeeHolidayAndRetire.setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
 								employeeHolidayAndRetire.setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
+								employeeHolidayAndRetire.setAdmissionPeriodDate(employeeWithPriceAndDate.getAdmissionPeriodDate());
 							}
 						}
 					}
@@ -339,6 +351,9 @@ public class SalesSituationController extends BaseController {
 						japaneaseLevelDes = japaneaseConversationLevelName;
 						if (japaneaseLevelDes.endsWith("業務確認")) {
 							japaneaseLevelDes = japaneaseLevelDes.substring(0, japaneaseLevelDes.length() - 5);
+						}
+						if ("読み書き".equals(japaneaseLevelDes) || "書き読み".equals(japaneaseLevelDes)) {
+							japaneaseLevelDes = "読書";
 						}
 					}
 				} catch (Exception e) {

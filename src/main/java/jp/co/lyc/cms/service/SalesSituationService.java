@@ -184,6 +184,10 @@ public class SalesSituationService {
 		return salesSituationMapper.getEmployeeHoliday(date);
 	}
 
+	public List<SalesSituationModel> getEmployeeHolidayRecentSite(String employeeNo) {
+		return salesSituationMapper.getEmployeeHolidayRecentSite(employeeNo);
+	}
+	
 	public List<SalesSituationModel> getEmployeeRetire(String date) {
 		return salesSituationMapper.getEmployeeRetire(date);
 	}

@@ -142,7 +142,7 @@
 
 	<select id="getEmployeeHoliday" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "休假" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.updateTime from T006EmployeeSiteInfo t6 
+		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "休假" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.updateTime, t6.customerNo as customer from T006EmployeeSiteInfo t6 
 		inner join T002EmployeeDetail t2 on t6.employeeNo = t2.employeeNo
 		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
 		<!-- workState = 3:项目休假状态, employeeFormCode!=4: 社员非离职状态 -->
@@ -152,6 +152,16 @@
 			or 
 			t6.holidayStartDate is null and t6.updateTime like concat(#{date},'%')
 		);
+	</select>
+	
+	<select id="getEmployeeHolidayRecentSite" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "休假" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.updateTime, t6.customerNo as customer, TIMESTAMPDIFF(MONTH, t6.admissionStartDate,t6.admissionEndDate) as admissionPeriodDate 
+		from T006EmployeeSiteInfo t6 
+		inner join T002EmployeeDetail t2 on t6.employeeNo = t2.employeeNo
+		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
+		where t6.employeeNo=#{employeeNo}
+		order by t6.admissionStartDate DESC limit 2;
 	</select>
 	
 	<select id="getEmployeeRetire" parameterType="String"
@@ -165,7 +175,7 @@
 	
 	<select id="getEmployeeRetireSiteInfo" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select employeeNo, unitPrice, admissionStartDate from T006EmployeeSiteInfo where admissionStartDate in 
+		select employeeNo, unitPrice, admissionStartDate, customerNo as customer, TIMESTAMPDIFF(MONTH, admissionStartDate, admissionEndDate) as admissionPeriodDate from T006EmployeeSiteInfo where admissionStartDate in 
 		(
 			select substring_index(group_concat(t6.admissionStartDate order by t6.admissionStartDate DESC), ',', 1) 
 			from T006EmployeeSiteInfo t6 
@@ -194,7 +204,7 @@
 	
 	<select id="getBpEmployeeConfirm" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select t6.employeeNo, t1.employeeFristName, t1.employeeLastName, "所屬から確定" as finishReason, t6.unitPrice, t6.admissionStartDate from T006EmployeeSiteInfo t6 
+		select t6.employeeNo, t1.employeeFristName, t1.employeeLastName, "所屬から確定" as finishReason, t6.unitPrice, t6.admissionStartDate, t6.customerNo as customer, TIMESTAMPDIFF(MONTH, t6.admissionStartDate,t6.admissionEndDate) as admissionPeriodDate from T006EmployeeSiteInfo t6 
 		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
 		<!-- workState=1: 现场项目终了状态 -->
 		where t6.workState = 1

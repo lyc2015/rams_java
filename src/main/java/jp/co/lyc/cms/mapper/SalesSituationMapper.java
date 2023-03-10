@@ -89,6 +89,8 @@ public interface SalesSituationMapper {
 
 	public List<SalesSituationModel> getEmployeeHoliday(String date);
 	
+	public List<SalesSituationModel> getEmployeeHolidayRecentSite(String employeeNo);
+	
 	public List<SalesSituationModel> getEmployeeRetire(String date);
 	
 	public List<SalesSituationModel> getEmployeeRetireSiteInfo(List<String> employeeNoList);

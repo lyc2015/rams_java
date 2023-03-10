@@ -59,6 +59,7 @@ public class SalesSituationModel implements Serializable {
 	String salesPriorityStatus;
 	String customer;
 	String admissionStartDate;
+	String admissionPeriodDate;
 	String customerNo;
 	String admissionEndDate;
 	String scheduledEndDate;
@@ -869,6 +870,14 @@ public class SalesSituationModel implements Serializable {
 
 	public void setEmployeeLastName(String employeeLastName) {
 		this.employeeLastName = employeeLastName;
+	}
+
+	public String getAdmissionPeriodDate() {
+		return admissionPeriodDate;
+	}
+
+	public void setAdmissionPeriodDate(String admissionPeriodDate) {
+		this.admissionPeriodDate = admissionPeriodDate;
 	}
 
 }
