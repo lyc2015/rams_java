@@ -13,7 +13,10 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -121,7 +124,7 @@ public class SalesSituationController extends BaseController {
 			try {
 				Date date = sdf.parse(model.getSalesYearAndMonth());
 				date = minusMonth(date);
-				dateHoliday = new SimpleDateFormat("yyyy-MM").format(date);
+				dateHoliday = new SimpleDateFormat("yyyyMM").format(date);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -191,6 +194,10 @@ public class SalesSituationController extends BaseController {
 								employeeHolidayAndRetire.setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
 								employeeHolidayAndRetire.setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
 								employeeHolidayAndRetire.setAdmissionPeriodDate(employeeWithPriceAndDate.getAdmissionPeriodDate());
+								employeeHolidayAndRetire.setCustomer(employeeWithPriceAndDate.getCustomer());
+								if (TextUtils.isEmpty(employeeWithPriceAndDate.getAdmissionPeriodDate()) && "0".equals(employeeWithPriceAndDate.getWorkState())) {
+									employeeHolidayAndRetire.setAdmissionPeriodDate(getDifMonthByRetire(employeeWithPriceAndDate.getAdmissionStartDate(), employeeHolidayAndRetire.getRetirementYearAndMonth()));
+								}
 							}
 						}
 					}
@@ -253,6 +260,25 @@ public class SalesSituationController extends BaseController {
 	}
 
 	
+	private String getDifMonthByRetire(String admissionStartDate, String retirementYearAndMonth) {
+		if (!TextUtils.isEmpty(admissionStartDate) && !TextUtils.isEmpty(retirementYearAndMonth)) {
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+				LocalDate startDate = LocalDate.parse(admissionStartDate, formatter);
+				LocalDate retireDate = LocalDate.parse(retirementYearAndMonth, formatter);
+				
+				Period p = Period.between(startDate, retireDate);
+				int months = p.getYears() * 12 + p.getMonths();
+				if (months > 0) {
+					return String.valueOf(months);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return "";
+	}
+
 	/**
 	 * データを取得 ffff
 	 * 

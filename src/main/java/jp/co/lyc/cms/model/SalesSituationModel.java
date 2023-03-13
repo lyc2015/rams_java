@@ -117,7 +117,10 @@ public class SalesSituationModel implements Serializable {
 	String bpOtherCompanyAdmissionEndDate;
 	String customerAbbreviation;
 	String finishReason;
+	String workState;
+	String retirementYearAndMonth;
 
+	
 	public String getComeToJapanYearAndMonth() {
 		return comeToJapanYearAndMonth;
 	}
@@ -878,6 +881,22 @@ public class SalesSituationModel implements Serializable {
 
 	public void setAdmissionPeriodDate(String admissionPeriodDate) {
 		this.admissionPeriodDate = admissionPeriodDate;
+	}
+
+	public String getWorkState() {
+		return workState;
+	}
+
+	public void setWorkState(String workState) {
+		this.workState = workState;
+	}
+
+	public String getRetirementYearAndMonth() {
+		return retirementYearAndMonth;
+	}
+
+	public void setRetirementYearAndMonth(String retirementYearAndMonth) {
+		this.retirementYearAndMonth = retirementYearAndMonth;
 	}
 
 }

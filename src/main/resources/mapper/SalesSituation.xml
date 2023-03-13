@@ -147,11 +147,7 @@
 		inner join T001Employee t1 on t6.employeeNo = t1.employeeNo
 		<!-- workState = 3:项目休假状态, employeeFormCode!=4: 社员非离职状态 -->
 		where t6.workState = 3 and t2.employeeFormCode != 4
-		and (
-			t6.holidayStartDate is not null and t6.holidayStartDate like concat(#{date},'%')
-			or 
-			t6.holidayStartDate is null and t6.updateTime like concat(#{date},'%')
-		);
+		and t6.admissionStartDate like concat(#{date},'%');
 	</select>
 	
 	<select id="getEmployeeHolidayRecentSite" parameterType="String"
@@ -166,7 +162,7 @@
 	
 	<select id="getEmployeeRetire" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "離職" as finishReason from T002EmployeeDetail t2 
+		select t2.employeeNo, t1.employeeFristName, t1.employeeLastName, "離職" as finishReason, t2.retirementYearAndMonth from T002EmployeeDetail t2 
 		inner join T001Employee t1 on t2.employeeNo = t1.employeeNo
 		<!-- employeeFormCode=4: 社员离职状态 -->
 		where t2.employeeFormCode = 4
@@ -175,7 +171,7 @@
 	
 	<select id="getEmployeeRetireSiteInfo" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		select employeeNo, unitPrice, admissionStartDate, customerNo as customer, TIMESTAMPDIFF(MONTH, admissionStartDate, admissionEndDate) as admissionPeriodDate from T006EmployeeSiteInfo where admissionStartDate in 
+		select employeeNo, unitPrice, admissionStartDate, customerNo as customer, TIMESTAMPDIFF(MONTH, admissionStartDate, admissionEndDate) as admissionPeriodDate, workState from T006EmployeeSiteInfo where admissionStartDate in 
 		(
 			select substring_index(group_concat(t6.admissionStartDate order by t6.admissionStartDate DESC), ',', 1) 
 			from T006EmployeeSiteInfo t6 
