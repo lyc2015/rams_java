@@ -611,6 +611,11 @@ public class SalesProfitController extends BaseController {
 							else if (employeeStatus.equals("2"))
 								rate = 0.5;
 							BPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
+						} else if (eiGyooccupationCode.equals("1")) {
+							// 职种是“营业”时， 运营的社员区分为BP，employeeStatus.equals("1")，则营业者粗利=10000
+							if (employeeStatus.equals("1")) {
+								BPSiteRoleName = 10000;
+							}
 						}
 					}
 
