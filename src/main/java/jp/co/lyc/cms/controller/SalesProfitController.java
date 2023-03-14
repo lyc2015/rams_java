@@ -593,29 +593,25 @@ public class SalesProfitController extends BaseController {
 				String eiGyooccupationCode = siteList.get(i).getSalesOccupationCode(); // 营业職種
 				String employeeStatus = siteList.get(i).getEmployeeStatus(); // 社員区分
 				String salesStaff = siteList.get(i).getSalesStaff(); // 营业者
-				String introducer = siteList.get(i).getIntroducer(); // 介绍者
 
-        // siteRoleNameAll 粗利合计
+				// siteRoleNameAll 粗利合计
 				siteRoleNameAll +=siteRoleName;
 				// BPSiteRoleName BP粗利
 				double BPSiteRoleName = 0;
 
 				if (salesStaff != null && eiGyooccupationCode != null) {
-					if (salesStaff.equals(introducer) ) {
-						BPSiteRoleName = 10000;
-					} else {
-						if (eiGyooccupationCode.equals("5") ) {
-							double rate = 0;
-							if (employeeStatus.equals("1"))
-								rate = 0.3;
-							else if (employeeStatus.equals("2"))
-								rate = 0.5;
-							BPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
-						} else if (eiGyooccupationCode.equals("1")) {
-							// 职种是“营业”时， 运营的社员区分为BP，employeeStatus.equals("1")，则营业者粗利=10000
-							if (employeeStatus.equals("1")) {
-								BPSiteRoleName = 10000;
-							}
+					if (eiGyooccupationCode.equals("5") ) {
+						double rate = 0;
+						if (employeeStatus.equals("1")) {
+							rate = 0.3;
+						} else if (employeeStatus.equals("2")) {
+							rate = 0.5;
+						}
+						BPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
+					} else if (eiGyooccupationCode.equals("1")) {
+						// 职种是“营业”时， 运营的社员区分为BP，employeeStatus.equals("1")，则营业者粗利=10000
+						if (employeeStatus.equals("1")) {
+							BPSiteRoleName = 10000;
 						}
 					}
 
