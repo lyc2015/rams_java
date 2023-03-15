@@ -1794,6 +1794,45 @@ public class UtilsController {
 	}
 
 	/**
+	 * 加算回数ステータス取得
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getAdditionCountOfNumber", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ModelClass> getAdditionCountOfNumber() {
+		Properties properties = getProperties();
+		String additionCountOfNumber = properties.getProperty("additionCountOfNumber");
+		List<ModelClass> list = getStatus(additionCountOfNumber);
+		return list;
+	}
+
+	/**
+	 * 加算金额取得
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/getAdditionMoney", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ModelClass> getAdditionMoney() {
+		List<ModelClass> list = utilsService.getAdditionMoney();
+		return list;
+	}
+
+	/**
+	 * 加算金额原因取得
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/getAdditionMoneyReason", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ModelClass> getAdditionMoneyReason() {
+		List<ModelClass> list = utilsService.getAdditionMoneyReason();
+		return list;
+	}
+	/**
 	 * お客様略称取得
 	 * 
 	 * @return

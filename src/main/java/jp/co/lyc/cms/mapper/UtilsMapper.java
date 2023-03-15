@@ -389,6 +389,20 @@ public interface UtilsMapper {
 	public List<ModelClass> getCustomerAbbreviation();
 
 	/**
+	 * 加算金额取得
+	 * 
+	 * @return
+	 */
+	public List<ModelClass> getAdditionMoney();
+
+	/**
+	 * 加算金额原因取得
+	 * 
+	 * @return
+	 */
+	public List<ModelClass> getAdditionMoneyReason();
+	
+	/**
 	 * 面談回数取得
 	 * 
 	 * @return
