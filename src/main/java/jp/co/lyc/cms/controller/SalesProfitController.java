@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.lyc.cms.common.BaseController;
-import jp.co.lyc.cms.model.EmployeeAdditionModel;
+import jp.co.lyc.cms.model.MoneySetModel;
 import jp.co.lyc.cms.model.SalesEmployeeModel;
 import jp.co.lyc.cms.model.SalesInfoModel;
 import jp.co.lyc.cms.model.SalesPointModel;
@@ -41,23 +41,6 @@ public class SalesProfitController extends BaseController {
 
 	String errorsMessage = "";
 
-	@RequestMapping(value = "/getEmployeeAdditionList", method = RequestMethod.POST)
-	@ResponseBody
-	public List<EmployeeAdditionModel> getEmployeeAdditionList(@RequestBody SalesProfitModel salesProfitModel) throws ParseException {
-		List<EmployeeAdditionModel> resultList = new ArrayList<EmployeeAdditionModel>();
-		for(int i=0; i < 5; i++) {
-			EmployeeAdditionModel e = new EmployeeAdditionModel();
-			e.setRowNo(i + "");
-			e.setAdditionMoneyCode("0");
-			e.setEmployeeNo("LYC001");
-			e.setEmployeeName("ls" + i);
-			e.setYearAndMonth("202304");
-			e.setAdditionMoneyResonCode("0");
-			e.setAdditionNumberOfTimesStatus("0");
-			resultList.add(e);
-		}
-		return resultList; 
-	}
 	
 	@RequestMapping(value = "/getPointInfoNew", method = RequestMethod.POST)
 	@ResponseBody

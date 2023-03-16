@@ -2,17 +2,18 @@ package jp.co.lyc.cms.model;
 
 import java.io.Serializable;
 
-public class EmployeeAdditionModel implements Serializable {
+public class MoneySetModel implements Serializable {
 
 	private static final long serialVersionUID = -2028159323401651353L;
 
-	public String rowNo;//番号
+	public String id;
 	public String employeeNo;//社員番号
 	public String employeeName;
 	public String yearAndMonth;
 	public String additionMoneyCode;
 	public String additionNumberOfTimesStatus;
 	public String additionMoneyResonCode;
+	public String updateUser;
 	public String getEmployeeNo() {
 		return employeeNo;
 	}
@@ -49,11 +50,17 @@ public class EmployeeAdditionModel implements Serializable {
 	public void setAdditionMoneyResonCode(String additionMoneyResonCode) {
 		this.additionMoneyResonCode = additionMoneyResonCode;
 	}
-	public String getRowNo() {
-		return rowNo;
+	public String getId() {
+		return id;
 	}
-	public void setRowNo(String rowNo) {
-		this.rowNo = rowNo;
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getUpdateUser() {
+		return updateUser;
+	}
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 	
 }
