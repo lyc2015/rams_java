@@ -9,7 +9,7 @@ public class MoneySetModel implements Serializable {
 	public String id;
 	public String employeeNo;//社員番号
 	public String employeeName;
-	public String yearAndMonth;
+	public String startYearAndMonth;
 	public String additionMoneyCode;
 	public String additionNumberOfTimesStatus;
 	public String additionMoneyResonCode;
@@ -25,12 +25,6 @@ public class MoneySetModel implements Serializable {
 	}
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
-	}
-	public String getYearAndMonth() {
-		return yearAndMonth;
-	}
-	public void setYearAndMonth(String yearAndMonth) {
-		this.yearAndMonth = yearAndMonth;
 	}
 	public String getAdditionMoneyCode() {
 		return additionMoneyCode;
@@ -61,6 +55,12 @@ public class MoneySetModel implements Serializable {
 	}
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
+	}
+	public String getStartYearAndMonth() {
+		return startYearAndMonth;
+	}
+	public void setStartYearAndMonth(String startYearAndMonth) {
+		this.startYearAndMonth = startYearAndMonth;
 	}
 	
 }

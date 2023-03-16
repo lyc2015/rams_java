@@ -38,6 +38,7 @@ public class SalesMoneySetController extends BaseController {
 	@ResponseBody
 	public Map<String, Object> insertMoneySet(@RequestBody MoneySetModel model) throws ParseException {
 		Map<String, Object> result = new HashMap<>();
+		model.setUpdateUser(getSession().getAttribute("employeeName").toString());
 		int reultCount = salesMoneySetService.insertMoneySet(model);
 		result.put("insertIndex", reultCount);
 		return result;
@@ -47,6 +48,7 @@ public class SalesMoneySetController extends BaseController {
 	@ResponseBody
 	public Map<String, Object> updateMoneySet(@RequestBody MoneySetModel model) throws ParseException {
 		Map<String, Object> result = new HashMap<>();
+		model.setUpdateUser(getSession().getAttribute("employeeName").toString());
 		int reultCount = salesMoneySetService.updateMoneySet(model);
 		result.put("updateIndex", reultCount);
 		return result;
