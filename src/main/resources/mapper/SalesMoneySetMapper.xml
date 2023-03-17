@@ -4,7 +4,23 @@
 
 	<select id="getMoneySetList" parameterType="map"
 		resultType="jp.co.lyc.cms.model.MoneySetModel">
-		SELECT * FROM newRams.T014SalesMoneySetting order by createTime DESC;
+		SELECT row_number() over(order by id desc) as rowNo, 
+		t14.employeeNo, 
+		t14.id, 
+		CONCAT(t1.employeeFristName, t1.employeeLastName) as employeeName, 
+		t14.additionMoneyCode,
+		t14.additionNumberOfTimesStatus,
+		t14.startYearAndMonth,
+		t14.additionMoneyResonCode,
+		t14.createTime,
+		max(t6.admissionStartDate) as admissionStartDate,
+		t6.admissionEndDate,
+		t6.workState
+		FROM T014SalesMoneySetting t14 
+		left join T001Employee t1 on t14.employeeNo=t1.employeeNo
+		left join T006EmployeeSiteInfo t6 on t14.employeeNo=t6.employeeNo
+		group by t14.employeeNo
+		order by t14.createTime DESC;
 	</select>
 
 	<insert id="insertMoneySet" parameterType="map">

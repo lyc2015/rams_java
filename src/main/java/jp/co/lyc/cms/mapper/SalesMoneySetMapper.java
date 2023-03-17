@@ -16,6 +16,6 @@ public interface SalesMoneySetMapper {
 
 	public int updateMoneySet(MoneySetModel model);
 	
-	public int deleteMoneySet(String id);
+	public int deleteMoneySet(MoneySetModel model);
 	
 }

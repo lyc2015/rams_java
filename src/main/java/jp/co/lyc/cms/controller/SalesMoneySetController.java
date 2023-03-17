@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,12 @@ public class SalesMoneySetController extends BaseController {
 	@ResponseBody
 	public List<MoneySetModel> getMoneySetList(@RequestBody MoneySetModel model) throws ParseException {
 		List<MoneySetModel> resultList = salesMoneySetService.getMoneySetList();
+		for(int i = 0; i < resultList.size(); i ++) {
+			MoneySetModel setModel = resultList.get(i);
+			if (null != setModel && "1".equals(setModel.getWorkState())) {
+				setModel.setFinalSiteFinish(true);
+			}
+		}
 		return resultList; 
 	}
 
@@ -39,6 +48,32 @@ public class SalesMoneySetController extends BaseController {
 	public Map<String, Object> insertMoneySet(@RequestBody MoneySetModel model) throws ParseException {
 		Map<String, Object> result = new HashMap<>();
 		model.setUpdateUser(getSession().getAttribute("employeeName").toString());
+		
+		if (TextUtils.isEmpty(model.getEmployeeName())) {
+			result.put("errorsMessage", "社員名入力してください。");
+			return result;
+		} 
+
+		if (TextUtils.isEmpty(model.getAdditionMoneyCode())) {
+			result.put("errorsMessage", "加算金額を選択してください");
+			return result;
+		} 
+
+		if (TextUtils.isEmpty(model.getAdditionNumberOfTimesStatus())) {
+			result.put("errorsMessage", "回數を選択してください");
+			return result;
+		} 
+		
+		if (TextUtils.isEmpty(model.getStartYearAndMonth())) {
+			result.put("errorsMessage", "開始年月を選択してください");
+			return result;
+		} 
+		
+		if (TextUtils.isEmpty(model.getAdditionMoneyResonCode())) {
+			result.put("errorsMessage", "加算理由を選択してください");
+			return result;
+		} 
+		
 		int reultCount = salesMoneySetService.insertMoneySet(model);
 		result.put("insertIndex", reultCount);
 		return result;
@@ -49,6 +84,31 @@ public class SalesMoneySetController extends BaseController {
 	public Map<String, Object> updateMoneySet(@RequestBody MoneySetModel model) throws ParseException {
 		Map<String, Object> result = new HashMap<>();
 		model.setUpdateUser(getSession().getAttribute("employeeName").toString());
+		
+		if (TextUtils.isEmpty(model.getEmployeeName())) {
+			result.put("errorsMessage", "社員名入力してください。");
+			return result;
+		} 
+		if (TextUtils.isEmpty(model.getAdditionMoneyCode())) {
+			result.put("errorsMessage", "加算金額を選択してください");
+			return result;
+		} 
+
+		if (TextUtils.isEmpty(model.getAdditionNumberOfTimesStatus())) {
+			result.put("errorsMessage", "回數を選択してください");
+			return result;
+		} 
+		
+		if (TextUtils.isEmpty(model.getStartYearAndMonth())) {
+			result.put("errorsMessage", "開始年月を選択してください");
+			return result;
+		} 
+		
+		if (TextUtils.isEmpty(model.getAdditionMoneyResonCode())) {
+			result.put("errorsMessage", "加算理由を選択してください");
+			return result;
+		} 
+		
 		int reultCount = salesMoneySetService.updateMoneySet(model);
 		result.put("updateIndex", reultCount);
 		return result;
@@ -56,9 +116,9 @@ public class SalesMoneySetController extends BaseController {
 
 	@RequestMapping(value = "/deleteMoneySet", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> deleteMoneySet(@RequestBody String id) throws ParseException {
+	public Map<String, Object> deleteMoneySet(@RequestBody MoneySetModel model) throws ParseException {
 		Map<String, Object> result = new HashMap<>();
-		int reultCount = salesMoneySetService.deleteMoneySet(id);
+		int reultCount = salesMoneySetService.deleteMoneySet(model);
 		result.put("deleteIndex", reultCount);
 		return result;
 	}

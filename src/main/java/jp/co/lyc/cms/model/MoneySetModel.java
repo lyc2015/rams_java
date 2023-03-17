@@ -7,6 +7,7 @@ public class MoneySetModel implements Serializable {
 	private static final long serialVersionUID = -2028159323401651353L;
 
 	public String id;
+	public String rowNo;
 	public String employeeNo;//社員番号
 	public String employeeName;
 	public String startYearAndMonth;
@@ -14,6 +15,10 @@ public class MoneySetModel implements Serializable {
 	public String additionNumberOfTimesStatus;
 	public String additionMoneyResonCode;
 	public String updateUser;
+	public String admissionStartDate;
+	public String admissionEndDate;
+	public String workState;
+	public boolean isFinalSiteFinish; // 最近的一个现场是否已经终了
 	public String getEmployeeNo() {
 		return employeeNo;
 	}
@@ -61,6 +66,36 @@ public class MoneySetModel implements Serializable {
 	}
 	public void setStartYearAndMonth(String startYearAndMonth) {
 		this.startYearAndMonth = startYearAndMonth;
+	}
+	public String getRowNo() {
+		return rowNo;
+	}
+	public void setRowNo(String rowNo) {
+		this.rowNo = rowNo;
+	}
+	public boolean isFinalSiteFinish() {
+		return isFinalSiteFinish;
+	}
+	public void setFinalSiteFinish(boolean isFinalSiteFinish) {
+		this.isFinalSiteFinish = isFinalSiteFinish;
+	}
+	public String getAdmissionStartDate() {
+		return admissionStartDate;
+	}
+	public String getAdmissionEndDate() {
+		return admissionEndDate;
+	}
+	public String getWorkState() {
+		return workState;
+	}
+	public void setAdmissionStartDate(String admissionStartDate) {
+		this.admissionStartDate = admissionStartDate;
+	}
+	public void setAdmissionEndDate(String admissionEndDate) {
+		this.admissionEndDate = admissionEndDate;
+	}
+	public void setWorkState(String workState) {
+		this.workState = workState;
 	}
 	
 }

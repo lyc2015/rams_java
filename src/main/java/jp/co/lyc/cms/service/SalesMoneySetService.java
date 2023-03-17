@@ -26,8 +26,8 @@ public class SalesMoneySetService {
 		return salesMoneySetMapper.updateMoneySet(model);
 	}
 	
-	public int deleteMoneySet(String id) {
-		return salesMoneySetMapper.deleteMoneySet(id);
+	public int deleteMoneySet(MoneySetModel model) {
+		return salesMoneySetMapper.deleteMoneySet(model);
 	}
 
 }
