@@ -606,6 +606,11 @@
 		employeeNo = #{employeeNo};
 	</delete>
 
+	<!-- 营业を削除 -->
+	<delete id="deleteSalesSentence" parameterType="String">
+		DELETE from T019SalesSentence where 
+		employeeNo = #{employeeNo};
+	</delete>
 	<!-- 住所情報を削除 -->
 	<delete id="deleteAddressInfo" parameterType="String">
 		DELETE

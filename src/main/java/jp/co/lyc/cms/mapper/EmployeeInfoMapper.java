@@ -179,4 +179,12 @@ public interface EmployeeInfoMapper {
 	 * @param sendMap
 	 */
 	public void deletebpInfo(String bpEmployeeNo, String unitPriceStartMonth);
+
+	/**
+	 * 营业信息削除
+	 * 
+	 * @param sendMap
+	 */
+	public void deleteSalesSentence(Map<String, Object> sendMap);
+	
 }

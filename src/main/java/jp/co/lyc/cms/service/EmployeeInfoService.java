@@ -264,6 +264,7 @@ public class EmployeeInfoService {
 			employeeInfoMapper.deleteAddressInfo(sendMap);
 			bpInfoMapper.deleteBpInfo(sendMap);
 			employeeInfoMapper.deleteResumeManagement(sendMap);
+			employeeInfoMapper.deleteSalesSentence(sendMap);
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			e.printStackTrace();
