@@ -10,6 +10,7 @@ public class MoneySetModel implements Serializable {
 	public String rowNo;
 	public String employeeNo;//社員番号
 	public String employeeName;
+	public String employeeNameTitle;
 	public String startYearAndMonth;
 	public String additionMoneyCode;
 	public String additionNumberOfTimesStatus;
@@ -96,6 +97,12 @@ public class MoneySetModel implements Serializable {
 	}
 	public void setWorkState(String workState) {
 		this.workState = workState;
+	}
+	public String getEmployeeNameTitle() {
+		return employeeNameTitle;
+	}
+	public void setEmployeeNameTitle(String employeeNameTitle) {
+		this.employeeNameTitle = employeeNameTitle;
 	}
 	
 }

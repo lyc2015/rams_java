@@ -39,6 +39,25 @@ public class SalesMoneySetController extends BaseController {
 			if (null != setModel && "1".equals(setModel.getWorkState())) {
 				setModel.setFinalSiteFinish(true);
 			}
+
+			if (!TextUtils.isEmpty(resultList.get(i).getEmployeeNo())) {
+				if (resultList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
+					resultList.get(i).setEmployeeNameTitle("(BPR)");
+					
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
+					resultList.get(i).setEmployeeNameTitle("");
+					
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
+					resultList.get(i).setEmployeeNameTitle("(SP)");
+					
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
+					resultList.get(i).setEmployeeNameTitle("(SC)");
+					
+				} else {
+
+					resultList.get(i).setEmployeeNameTitle("");
+				}
+			}
 		}
 		return resultList; 
 	}
