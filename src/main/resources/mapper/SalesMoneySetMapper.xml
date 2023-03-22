@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jp.co.lyc.cms.mapper.SalesMoneySetMapper">
+
+	<select id="getMoneySetList" parameterType="map"
+		resultType="jp.co.lyc.cms.model.MoneySetModel">
+		SELECT row_number() over(order by id DESC) as rowNo, 
+		t14.employeeNo, 
+		t14.id, 
+		CONCAT(t1.employeeFristName, t1.employeeLastName) as employeeName, 
+		t14.additionMoneyCode,
+		t14.additionNumberOfTimesStatus,
+		t14.startYearAndMonth,
+		t14.additionMoneyResonCode,
+		t14.createTime,
+		(select admissionStartDate from T006EmployeeSiteInfo tt6 where tt6.employeeNo=t14.employeeNo order by admissionStartDate DESC limit 1) admissionStartDate,
+		(select workstate from T006EmployeeSiteInfo tt6 where tt6.employeeNo=t14.employeeNo order by admissionStartDate DESC limit 1) workState
+		FROM T014SalesMoneySetting t14 
+		left join T001Employee t1 on t14.employeeNo=t1.employeeNo
+		order by t14.createTime DESC;
+	</select>
+
+	<insert id="insertMoneySet" parameterType="map">
+		INSERT INTO T014SalesMoneySetting
+		(
+		employeeNo,
+		additionMoneyCode,
+		additionNumberOfTimesStatus,
+		startYearAndMonth,
+		additionMoneyResonCode,
+		updateTime,
+		createTime,
+		updateUser)
+		VALUES
+		(
+		#{employeeNo},
+		#{additionMoneyCode},
+		#{additionNumberOfTimesStatus},
+		#{startYearAndMonth},
+		#{additionMoneyResonCode},
+		date_add(now(), interval 9 hour),
+		date_add(now(), interval 9 hour),
+		#{updateUser});
+	</insert>
+
+	<update id="updateMoneySet" parameterType="map">
+		UPDATE T014SalesMoneySetting
+		SET
+		employeeNo = #{employeeNo},
+		additionMoneyCode = #{additionMoneyCode},
+		additionNumberOfTimesStatus = #{additionNumberOfTimesStatus},
+		startYearAndMonth = #{startYearAndMonth},
+		additionMoneyResonCode = #{additionMoneyResonCode},
+		updateTime= date_add(now(), interval 9 hour),
+		updateUser = #{updateUser}
+		WHERE id = #{id};
+	</update>
+
+	<delete id="deleteMoneySet" parameterType="map">
+		DELETE FROM T014SalesMoneySetting
+		WHERE id= #{id};
+	</delete>
+
+</mapper>

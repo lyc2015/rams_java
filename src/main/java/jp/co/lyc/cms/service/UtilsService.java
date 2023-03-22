@@ -561,6 +561,24 @@ public class UtilsService {
 	}
 
 	/**
+	 * 加算金额取得
+	 * 
+	 * @return
+	 */
+	public List<ModelClass> getAdditionMoney() {
+		return utilsMapper.getAdditionMoney();
+	}
+
+	/**
+	 * 加算金额原因取得
+	 * 
+	 * @return
+	 */
+	public List<ModelClass> getAdditionMoneyReason() {
+		return utilsMapper.getAdditionMoneyReason();
+	}
+
+	/**
 	 * 面談回数取得
 	 * 
 	 * @return

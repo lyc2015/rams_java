@@ -770,6 +770,20 @@
 		M045InterviewClassification;
 	</select>
 
+	<!-- 加算金额取得 -->
+	<select id="getAdditionMoney"
+		resultType="jp.co.lyc.cms.model.ModelClass">
+		SELECT additionMoneyCode code, additionMoneyName name
+		FROM M046AdditionMoney;
+	</select>
+	
+	<!-- 加算金额原因取得 -->
+	<select id="getAdditionMoneyReason"
+		resultType="jp.co.lyc.cms.model.ModelClass">
+		SELECT additionMoneyReason code, additionMoneyReasonName name
+		FROM M023AdditionMoneyReason;
+	</select>
+
 	<!--メールパスワード取得 -->
 	<select id="getMailPass" resultType="String">
 		SELECT

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.lyc.cms.common.BaseController;
+import jp.co.lyc.cms.model.MoneySetModel;
 import jp.co.lyc.cms.model.SalesEmployeeModel;
 import jp.co.lyc.cms.model.SalesInfoModel;
 import jp.co.lyc.cms.model.SalesPointModel;
@@ -40,6 +41,7 @@ public class SalesProfitController extends BaseController {
 
 	String errorsMessage = "";
 
+	
 	@RequestMapping(value = "/getPointInfoNew", method = RequestMethod.POST)
 	@ResponseBody
 	public List<SalesInfoModel> getPointInfoNew(@RequestBody SalesProfitModel salesProfitModel) throws ParseException {
