@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,13 +19,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.lyc.cms.common.BaseController;
+import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.MoneySetModel;
 import jp.co.lyc.cms.model.SalesEmployeeModel;
 import jp.co.lyc.cms.model.SalesInfoModel;
 import jp.co.lyc.cms.model.SalesPointModel;
 import jp.co.lyc.cms.model.SalesProfitModel;
+import jp.co.lyc.cms.service.SalesMoneySetService;
 import jp.co.lyc.cms.service.SalesProfitService;
+import jp.co.lyc.cms.service.UtilsService;
 
+import org.apache.http.util.TextUtils;
 import org.apache.ibatis.io.ResolverUtil.IsA;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormat;
@@ -38,6 +43,10 @@ public class SalesProfitController extends BaseController {
 
 	@Autowired
 	SalesProfitService salesProfitService;
+	@Autowired
+	SalesMoneySetService salesMoneySetService;
+	@Autowired
+	UtilsService utilsService;
 
 	String errorsMessage = "";
 
@@ -416,7 +425,9 @@ public class SalesProfitController extends BaseController {
 		List<SalesInfoModel> employeeSales = salesProfitService.getEmployeeNoSalary();
 		List<SalesEmployeeModel> customerName = salesProfitService.getCustomerName();
 		List<SalesInfoModel> employeeNameToNo = salesProfitService.getEmployeeName();
-
+		List<MoneySetModel> salesMoneySetList = salesMoneySetService.getMoneySetList();
+		List<ModelClass> additionMoneyReasonList = utilsService.getAdditionMoneyReason();
+		
 		if (salesProfitModel.getEmployeeName() != null) {
 			for (int i = 0; i < employeeNameToNo.size(); i++) {
 				if (salesProfitModel.getEmployeeName().equals(employeeNameToNo.get(i).getEmployeeFristName()
@@ -599,7 +610,7 @@ public class SalesProfitController extends BaseController {
 				// siteRoleNameAll 粗利合计
 				siteRoleNameAll +=siteRoleName;
 				// BPSiteRoleName BP粗利
-				double BPSiteRoleName = 0;
+				double bPSiteRoleName = 0;
 
 				if (salesStaff != null && eiGyooccupationCode != null) {
 					if (eiGyooccupationCode.equals("5") ) {
@@ -609,19 +620,23 @@ public class SalesProfitController extends BaseController {
 						} else if (employeeStatus.equals("2")) {
 							rate = 0.5;
 						}
-						BPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
+						bPSiteRoleName = Integer.parseInt(siteList.get(i).getSiteRoleName()) * rate;
 					} else if (eiGyooccupationCode.equals("1")) {
 						// 职种是“营业”时， 运营的社员区分为BP，employeeStatus.equals("1")，则营业者粗利=10000
 						if (employeeStatus.equals("1")) {
-							BPSiteRoleName = 10000;
+							bPSiteRoleName = 10000;
 						}
 					}
 
 				}
-				siteList.get(i).setBpSiteRoleName(Double.toString(BPSiteRoleName));
+				
+				if (TextUtils.isEmpty(salesStaff)) {
+					// 没有营业的数据不需要返回
+					siteList.remove(i);
+					continue;
+				}
+				siteList.get(i).setBpSiteRoleName(Double.toString(bPSiteRoleName));
 
-				// BPsiteRoleNameAll BP粗利合计
-				BPsiteRoleNameAll += BPSiteRoleName;
 
 				siteList.get(i).setEmployeeStatusName(siteList.get(i).getEmployeeStatus().equals("1") ? "協力" : "社員");
 
@@ -643,15 +658,165 @@ public class SalesProfitController extends BaseController {
 				siteList.get(i).setProfit(formatString((float) Integer.parseInt(siteList.get(i).getProfit())));
 				siteList.get(i).setSalary(formatString((float) Integer.parseInt(siteList.get(i).getSalary())));
 
+
+				for (int j = 0; j < salesMoneySetList.size(); j++) {
+					MoneySetModel moneySetModel = salesMoneySetList.get(j);
+					if (null != moneySetModel && null != moneySetModel.getEmployeeNo() && moneySetModel.getEmployeeNo().equals(siteList.get(i).getEmployeeNo())) {
+						int monthDif = 0;
+						int money = moneySetModel.getAdditionMoneyNumber();
+						if (moneySetModel.isAdditionNumberOfTimesFix()) {
+							// 回数： 固定一回
+							monthDif = getMonthDifFix(startTime, endTime, moneySetModel.getStartYearAndMonth());
+							siteList.get(i).setRemarks("固定一回 (" + findAdditionMoneyReason(moneySetModel.getAdditionMoneyResonCode(),  additionMoneyReasonList) +")");
+						} else {
+							// 回数： 每月
+							monthDif = getMonthDif(startTime, endTime, moneySetModel.getStartYearAndMonth());
+							siteList.get(i).setRemarks("每月 (" + findAdditionMoneyReason(moneySetModel.getAdditionMoneyResonCode(),  additionMoneyReasonList) +")");
+						}
+						bPSiteRoleName = money * monthDif;
+						siteList.get(i).setBpSiteRoleName(Double.toString(bPSiteRoleName));
+						break;
+					}
+				}
+				
+
+				// BPsiteRoleNameAll BP粗利合计
+				BPsiteRoleNameAll += bPSiteRoleName;
 			}
 
 			siteList.get(0).setProfitAll(formatString((float) profitAll));
 			siteList.get(0).setSiteRoleNameAll(formatString((float) siteRoleNameAll));
 			siteList.get(0).setBpSiteRoleNameAll(formatString((float) BPsiteRoleNameAll));
+		
 		}
 		return siteList;
 	}
 
+	private String findAdditionMoneyReason(String code, List<ModelClass> list) {
+		if (TextUtils.isEmpty(code)) {
+			return "";
+		}
+		for (int i = 0; i < list.size(); i++) {
+			if (code.equals(list.get(i).getCode())) {
+				return list.get(i).getName();
+			}
+			
+		}
+		return code;
+	}
+
+	
+	public int getMonthDifFix(String searchStartTime, String searchEndTime, String moneySetStartTime) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+		try {
+
+			Calendar cSearchStartTime = Calendar.getInstance();
+			cSearchStartTime.setTime(dateFormat.parse(searchStartTime));
+			
+			Calendar cSearchEndTime = Calendar.getInstance();
+			cSearchEndTime.setTime(dateFormat.parse(searchEndTime));
+			
+			Calendar cMoneySetTime = Calendar.getInstance();
+			cMoneySetTime.setTime(dateFormat.parse(moneySetStartTime));
+
+			if (cMoneySetTime.compareTo(cSearchStartTime) == 0 || cMoneySetTime.compareTo(cSearchEndTime) == 0 || (cMoneySetTime.after(cSearchStartTime) && cMoneySetTime.before(cSearchEndTime))) {
+				return 1;
+			}
+			return 0;
+//			String MONTH_6 = "6";
+//			String MONTH_11 = "11";
+//			if (cMoneySetTime.before(cSearchStartTime) || cMoneySetTime.compareTo(cSearchStartTime) == 0) {
+//				// 如果设置time 早于<=搜索start时间，则DIF = (end - start)之间的存在6,11月份，则返回1
+//				int yearDif = cSearchEndTime.get(Calendar.YEAR) - cSearchStartTime.get(Calendar.YEAR);
+//				if(yearDif == 0) {
+//					int startMonth = cSearchStartTime.get(Calendar.MONTH) + 1;
+//					int endMonth = cSearchEndTime.get(Calendar.MONTH) + 1;
+//					for (int i = startMonth; i <= endMonth; i++) {
+//						if (MONTH_6.equals(String.valueOf(i))  || MONTH_11.equals(String.valueOf(i))) {
+//							return 1;
+//						}
+//					}
+//					
+//				} else {
+//					List<String> monethList = new ArrayList<String>();
+//					while (cSearchStartTime.before(cSearchEndTime)) {
+//						monethList.add(String.valueOf(cSearchStartTime.get(Calendar.MONTH) + 1));
+//						cSearchStartTime.add(Calendar.MONTH, 1);
+//					}
+//					System.out.println("monethList=" + monethList);
+//					if (monethList.contains(MONTH_6) || (monethList.contains(MONTH_11))) {
+//						return 1;
+//					}
+//				}
+//			} else if (cMoneySetTime.after(cSearchEndTime)) {
+//				// 如果设置time 晚于搜索end时间，则DIF = 0
+//				return 0;
+//			} else {
+//				// 如果设置time 介于搜索start - end时间，则DIF = (end - 设置time)之间的存在6,11月份，则返回1
+//				int yearDif = cSearchEndTime.get(Calendar.YEAR) - cMoneySetTime.get(Calendar.YEAR);
+//				if(yearDif == 0) {
+//					int startMonth = cMoneySetTime.get(Calendar.MONTH) + 1;
+//					int endMonth = cSearchEndTime.get(Calendar.MONTH) + 1;
+//					for (int i = startMonth; i <= endMonth; i++) {
+//						if (MONTH_6.equals(String.valueOf(i))  || MONTH_11.equals(String.valueOf(i))) {
+//							return 1;
+//						}
+//					}
+//				} else {
+//					List<String> monethList = new ArrayList<String>();
+//					while (cSearchStartTime.before(cSearchEndTime)) {
+//						monethList.add(String.valueOf(cSearchStartTime.get(Calendar.MONTH) + 1));
+//						cSearchStartTime.add(Calendar.MONTH, 1);
+//					}
+//					System.out.println("monethList=" + monethList);
+//					if (monethList.contains(MONTH_6) || (monethList.contains(MONTH_11))) {
+//						return 1;
+//					}
+//					
+//				}
+//				return 0;
+//			}
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return 0;
+	}
+	
+	public int getMonthDif(String searchStartTime, String searchEndTime, String moneySetStartTime) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+		try {
+
+			Calendar cSearchStartTime = Calendar.getInstance();
+			cSearchStartTime.setTime(dateFormat.parse(searchStartTime));
+			
+			Calendar cSearchEndTime = Calendar.getInstance();
+			cSearchEndTime.setTime(dateFormat.parse(searchEndTime));
+			
+			Calendar cMoneySetTime = Calendar.getInstance();
+			cMoneySetTime.setTime(dateFormat.parse(moneySetStartTime));
+
+			// 如果设置time 早于搜索start时间，则dif = end - start
+			if (cMoneySetTime.before(cSearchStartTime) || cMoneySetTime.compareTo(cSearchStartTime) == 0) {
+				return ((cSearchEndTime.get(Calendar.YEAR) - cSearchStartTime.get(Calendar.YEAR)) * 12) + (cSearchEndTime.get(Calendar.MONTH) - cSearchStartTime.get(Calendar.MONTH) + 1);
+			}
+
+			// 如果设置time 晚于搜索end时间，则dif = 0
+			if (cMoneySetTime.after(cSearchEndTime)) {
+				return 0;
+			}
+			
+			// 如果设置time 介于搜索start - end之间 ，则dif = end - 设置time
+			if (cMoneySetTime.after(cSearchStartTime) && cMoneySetTime.before(cSearchEndTime)) {
+				return ((cSearchEndTime.get(Calendar.YEAR) - cMoneySetTime.get(Calendar.YEAR)) * 12) + (cSearchEndTime.get(Calendar.MONTH) - cMoneySetTime.get(Calendar.MONTH)+1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return 0;
+	}
+	
 	private String formatString(Float data) {
 		DecimalFormat df = new DecimalFormat("#,###");
 		return df.format(data);

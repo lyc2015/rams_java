@@ -45,7 +45,7 @@ public class SalesMoneySetController extends BaseController {
 					resultList.get(i).setEmployeeNameTitle("(BPR)");
 					
 				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
-					resultList.get(i).setEmployeeNameTitle("");
+					resultList.get(i).setEmployeeNameTitle("(" + resultList.get(i).getBelongCustomerName() + ")");
 					
 				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
 					resultList.get(i).setEmployeeNameTitle("(SP)");

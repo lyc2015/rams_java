@@ -31,6 +31,7 @@ public class SalesProfitModel {
 	String pdf; // pdf
 	String startTime; // 現場開始時間
 	String endTime; // 現場終了時間
+	
 
 	public String getStartTime() {
 		return startTime;

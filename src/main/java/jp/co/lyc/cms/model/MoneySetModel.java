@@ -19,6 +19,7 @@ public class MoneySetModel implements Serializable {
 	public String admissionStartDate;
 	public String admissionEndDate;
 	public String workState;
+	public String belongCustomerName;
 	public boolean isFinalSiteFinish; // 最近的一个现场是否已经终了
 	public String getEmployeeNo() {
 		return employeeNo;
@@ -105,4 +106,34 @@ public class MoneySetModel implements Serializable {
 		this.employeeNameTitle = employeeNameTitle;
 	}
 	
+	public String getBelongCustomerName() {
+		return belongCustomerName;
+	}
+	public void setBelongCustomerName(String belongCustomerName) {
+		this.belongCustomerName = belongCustomerName;
+	}
+	// 加算回合=固定一回
+	public boolean isAdditionNumberOfTimesFix() {
+		return "1".equals(additionNumberOfTimesStatus);
+	}
+
+	// 获取加算金额
+	public int getAdditionMoneyNumber() {
+		if ("0".equals(additionMoneyCode)) {
+			return 10000;
+		}
+		if ("1".equals(additionMoneyCode)) {
+			return 20000;
+		}
+		if ("2".equals(additionMoneyCode)) {
+			return 30000;
+		}
+		if ("3".equals(additionMoneyCode)) {
+			return 40000;
+		}
+		if ("4".equals(additionMoneyCode)) {
+			return 50000;
+		}
+		return 0;
+	}
 }

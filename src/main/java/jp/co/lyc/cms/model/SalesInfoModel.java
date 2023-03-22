@@ -60,8 +60,16 @@ public class SalesInfoModel {
 	String occupationCode; // 職種 
 	String salesEmployeeName; // 営業name
 	String salesOccupationCode; // 営業職種
+	String remarks;
 	
-	
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 	
 	public String getIntroducerEmployeeName() {
 		return introducerEmployeeName;
