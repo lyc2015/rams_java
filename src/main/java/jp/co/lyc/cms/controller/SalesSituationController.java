@@ -123,7 +123,6 @@ public class SalesSituationController extends BaseController {
 			String dateHoliday = "";
 			try {
 				Date date = sdf.parse(model.getSalesYearAndMonth());
-				date = minusMonth(date);
 				dateHoliday = new SimpleDateFormat("yyyyMM").format(date);
 			} catch (Exception e) {
 				e.printStackTrace();
