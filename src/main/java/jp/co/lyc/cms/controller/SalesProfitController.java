@@ -634,7 +634,8 @@ public class SalesProfitController extends BaseController {
 					} else if (eiGyooccupationCode.equals("1")) {
 						// 职种是“营业”时， 运营的社员区分为BP，employeeStatus.equals("1")，则营业者粗利=10000
 						if (employeeStatus.equals("1")) {
-							bPSiteRoleName = 10000;
+							int monthDif = getMonthDif(startTime, endTime, admissionStartDate);
+							bPSiteRoleName = 10000 * monthDif;
 						}
 					}
 
