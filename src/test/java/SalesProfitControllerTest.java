@@ -45,7 +45,21 @@ public class SalesProfitControllerTest {
 			int dif = controller.getMonthDif("202206", "202306", "202307");
 			System.out.println("dif=" + dif + "," + ( dif == 0));
 		}
-		
+
+		{
+			int dif = controller.getMonthDif("202203", "202304", "202304");
+			System.out.println("dif=" + dif + "," + ( dif == 1));
+		}
+
+		{
+			int dif = controller.getMonthDif("202203", "202304", "202303");
+			System.out.println("dif=" + dif + "," + ( dif == 2));
+		}
+
+		{
+			int dif = controller.getMonthDif("202203", "202304", "202305");
+			System.out.println("dif=" + dif + "," + ( dif == 0));
+		}
 
 
 		{

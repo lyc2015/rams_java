@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -444,6 +445,15 @@ public class SalesProfitController extends BaseController {
 			int siteRoleNameAll = 0;
 			int BPsiteRoleNameAll = 0;
 			int profitAll = 0;
+
+			Iterator<SalesInfoModel> it = (Iterator<SalesInfoModel>) siteList.iterator();
+			while (it.hasNext()) {
+				String salesStaff = it.next().getSalesStaff(); // 营业者
+				if (TextUtils.isEmpty(salesStaff)) { // 没有营业的数据不需要返回
+					it.remove();
+				}
+			}
+			
 			for (int i = 0; i < siteList.size(); i++) {
 				String yearAndMonth = siteList.get(i).getAdmissionStartDate().substring(0, 6);
 				/*
@@ -630,11 +640,6 @@ public class SalesProfitController extends BaseController {
 
 				}
 				
-				if (TextUtils.isEmpty(salesStaff)) {
-					// 没有营业的数据不需要返回
-					siteList.remove(i);
-					continue;
-				}
 				siteList.get(i).setBpSiteRoleName(Double.toString(bPSiteRoleName));
 
 
@@ -705,7 +710,10 @@ public class SalesProfitController extends BaseController {
 		return code;
 	}
 
-	
+
+	/**
+	 * junit test /CMS/src/test/java/SalesProfitControllerTest.java
+	 */
 	public int getMonthDifFix(String searchStartTime, String searchEndTime, String moneySetStartTime) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
 		try {
@@ -784,6 +792,9 @@ public class SalesProfitController extends BaseController {
 		return 0;
 	}
 	
+	/**
+	 * junit test /CMS/src/test/java/SalesProfitControllerTest.java
+	 */
 	public int getMonthDif(String searchStartTime, String searchEndTime, String moneySetStartTime) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
 		try {
@@ -802,6 +813,11 @@ public class SalesProfitController extends BaseController {
 				return ((cSearchEndTime.get(Calendar.YEAR) - cSearchStartTime.get(Calendar.YEAR)) * 12) + (cSearchEndTime.get(Calendar.MONTH) - cSearchStartTime.get(Calendar.MONTH) + 1);
 			}
 
+			// searchEndTime=202304, moneySetStartTime=202304
+			if (cSearchEndTime.compareTo(cMoneySetTime) == 0) {
+				return 1;
+			}
+			
 			// 如果设置time 晚于搜索end时间，则dif = 0
 			if (cMoneySetTime.after(cSearchEndTime)) {
 				return 0;
