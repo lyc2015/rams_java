@@ -564,6 +564,7 @@ public class SalesSituationController extends BaseController {
 				i--;
 			}
 		}
+		
 		for (int i = 0; i < salesSituationList.size(); i++) {
 			if (salesSituationList.get(i).getSalesProgressCode() != null
 					&& !(salesSituationList.get(i).getSalesProgressCode().equals("1")
