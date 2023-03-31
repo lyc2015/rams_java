@@ -38,6 +38,7 @@ public class SalesSituationModel implements Serializable {
 	String hopeHighestPrice;
 	String hopeRemark;
 	String salesProgressCode;
+	String bpSalesProgressCode;
 	String remark;
 	String remark1;
 	String remark2;
@@ -897,6 +898,14 @@ public class SalesSituationModel implements Serializable {
 
 	public void setRetirementYearAndMonth(String retirementYearAndMonth) {
 		this.retirementYearAndMonth = retirementYearAndMonth;
+	}
+
+	public String getBpSalesProgressCode() {
+		return bpSalesProgressCode;
+	}
+
+	public void setBpSalesProgressCode(String bpSalesProgressCode) {
+		this.bpSalesProgressCode = bpSalesProgressCode;
 	}
 
 }

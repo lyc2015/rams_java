@@ -730,7 +730,7 @@
 	<select id="getT010SalesSituationByEmployeeNo"
 		parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		SELECT * FROM T010SalesSituation as T010
+		SELECT (select t11.bpSalesProgressCode from T011BpInfoSupplement t11 where t11.bpEmployeeNo=T010.employeeNo order by unitPriceStartMonth DESC limit 1) bpSalesProgressCode,T010.* FROM T010SalesSituation as T010
 		inner join (
 		SELECT
 		employeeNo,max(salesYearAndMonth) as salesYearAndMonth FROM
