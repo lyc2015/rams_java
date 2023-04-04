@@ -483,11 +483,14 @@ public class SalesSituationController extends BaseController {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 					String curDate = sdf.format(date);
 					if (Integer.parseInt(model.getSalesYearAndMonth()) <= Integer.parseInt(curDate)) {
-						if (salesSituationList.get(i).getEmployeeNo().startsWith("BP")) {
-							salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getBpSalesProgressCode());
-						} else {
-							salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
-						}
+						/*
+						 * if (salesSituationList.get(i).getEmployeeNo().startsWith("BP")) {
+						 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
+						 * getBpSalesProgressCode()); } else {
+						 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
+						 * getSalesProgressCode()); }
+						 */
+						salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
 						salesSituationList.get(i)
 								.setSalesDateUpdate(T010SalesSituationList.get(j).getSalesYearAndMonth());
 						salesSituationList.get(i).setInterviewDate1(T010SalesSituationList.get(j).getInterviewDate1());
@@ -515,11 +518,14 @@ public class SalesSituationController extends BaseController {
 								|| (salesSituationList.get(i).getAdmissionEndDate() != null
 										&& Integer.parseInt(salesSituationList.get(i).getAdmissionEndDate().substring(0,
 												6)) == Integer.parseInt(model.getSalesYearAndMonth()))) {
-							if (salesSituationList.get(i).getEmployeeNo().startsWith("BP")) {
-								salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getBpSalesProgressCode());
-							} else {
-								salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
-							}
+							/*
+							 * if (salesSituationList.get(i).getEmployeeNo().startsWith("BP")) {
+							 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
+							 * getBpSalesProgressCode()); } else {
+							 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
+							 * getSalesProgressCode()); }
+							 */
+							salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
 							salesSituationList.get(i)
 									.setSalesDateUpdate(T010SalesSituationList.get(j).getSalesYearAndMonth());
 							salesSituationList.get(i)
