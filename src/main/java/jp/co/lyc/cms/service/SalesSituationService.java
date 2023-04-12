@@ -111,6 +111,10 @@ public class SalesSituationService {
 		return salesSituationMapper.getPersonalSalesInfo(empNo);
 	}
 
+	public List<SalesSituationModel> getT010SalesSituationLatestByemployeeNo(String empNo) {
+		return salesSituationMapper.getT010SalesSituationLatestByemployeeNo(empNo);
+	}
+
 	public List<SalesSituationModel> getPersonalSalesInfoFromT019(String empNo) {
 		return salesSituationMapper.getPersonalSalesInfoFromT019(empNo);
 	}
@@ -121,6 +125,10 @@ public class SalesSituationService {
 
 	public int updateSalesSentence(SalesContent model) {
 		return salesSituationMapper.updateSalesSentence(model);
+	}
+	
+	public void updateSalesSentenceByemployeeNo(SalesContent model) {
+		salesSituationMapper.updateSalesSentenceByemployeeNo(model);
 	}
 
 	public int getCount(String empNo) {

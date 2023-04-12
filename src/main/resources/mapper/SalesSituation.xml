@@ -133,7 +133,7 @@
 		salesYearAndMonth
 		=
 		#{salesDate} and salesProgressCode in
-		("0","1")
+		("0","1") and employeeNo not in (select employeeNo from T006EmployeeSiteInfo where left(admissionStartDate,6)= #{salesDate} and workState in ('0','2'))
 		order
 		by
 		employeeNo
@@ -726,6 +726,14 @@
 		#{salesDate}
 		;
 	</select>
+
+	<select id="getT010SalesSituationLatestByemployeeNo" parameterType="String"
+		resultType="jp.co.lyc.cms.model.SalesSituationModel">
+		SELECT * FROM T010SalesSituation 
+		where employeeNo=#{employeeNo} and salesStaff is not null order by salesYearAndMonth desc limit 1
+		;
+	</select>
+
 
 	<select id="getT010SalesSituationByEmployeeNo"
 		parameterType="String"
@@ -1681,6 +1689,9 @@
 		WHERE
 		employeeNo = #{employeeNo}
 	</update>
+	
+
+
 	<insert id="updateSalesSentence" parameterType="String">
 		INSERT INTO
 		T019SalesSentence
@@ -1786,6 +1797,8 @@
 		AND
 		salesYearAndMonth = #{salesYearAndMonth}
 	</update>
+	
+	
 
 	<update id="updateBPR"
 		parameterType="jp.co.lyc.cms.model.SalesSituationModel">

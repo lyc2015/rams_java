@@ -865,11 +865,19 @@
 		UPDATE
 		T003AddressInfo
 		SET
-		postcode=#{postcode},
-		firstHalfAddress=#{firstHalfAddress},
-		lastHalfAddress=#{lastHalfAddress},
-		stationCode=#{stationCode},
-		updateTime=date_add(now(), interval 9 hour),
+		<if test="postcode!= null">
+			postcode=#{postcode},
+		</if>
+		<if test="firstHalfAddress!= null">
+			firstHalfAddress=#{firstHalfAddress},
+		</if>
+		<if test="lastHalfAddress!= null">
+			lastHalfAddress=#{lastHalfAddress},
+		</if>
+		<if test="stationCode!= null">
+			stationCode=#{stationCode},
+		</if>
+			updateTime=date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 		WHERE
 		employeeNo=#{employeeNo}

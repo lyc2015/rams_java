@@ -1,10 +1,13 @@
 package jp.co.lyc.cms.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +16,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import jp.co.lyc.cms.controller.SiteInfoController;
 import jp.co.lyc.cms.mapper.SiteInfoMapper;
+import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.SiteModel;
 import jp.co.lyc.cms.util.UtilsController;
 
@@ -21,6 +25,8 @@ public class SiteInfoService {
 
 	@Autowired
 	SiteInfoMapper siteInfoMapper;
+	@Autowired
+	SalesSituationService salesSituationService;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean insertSiteInfo(Map<String, Object> sendMap) {
@@ -69,6 +75,22 @@ public class SiteInfoService {
 				lastOne.setTypteOfContractCode((String) sendMap.get("typteOfContractCode"));
 				Map<String, Object> sendMapForUp = formateData(lastOne);
 				siteInfoMapper.siteUpdate(sendMapForUp);
+				
+				//lxf 单金调整后t010插入一条数据
+				List<SalesSituationModel> salesSituationList = salesSituationService.getT010SalesSituationLatestByemployeeNo((String)sendMap.get("employeeNo"));
+				if(salesSituationList!=null  && salesSituationList.size()>0) {
+					SalesSituationModel temp=salesSituationList.get(0);
+					temp.setAdmissionEndDate(null);
+					temp.setAdmissionStartDate(admissionEndDate.substring(0,6));
+					temp.setSalesYearAndMonth(admissionEndDate.substring(0,6));
+					temp.setSalesDateUpdate(admissionEndDate.substring(0,6));
+					temp.setRemark("ignore");
+					temp.setUpdateUser((String) sendMap.get("updateUser"));
+					salesSituationService.insertSalesSituation(temp);
+					//更新用户信息
+					temp.setCustomer(temp.getConfirmCustomer());
+					salesSituationService.updateDataStatus(temp);
+				}
 
 			} else {
 				if (sendMap.get("workState").equals("3")) {

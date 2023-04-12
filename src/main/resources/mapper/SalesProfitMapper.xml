@@ -49,6 +49,32 @@
 	<!-- 売上情報検索 -->
 	<select id="getSalesInfo" parameterType="string"
 		resultType="jp.co.lyc.cms.model.SalesInfoModel">
+		
+		select employeeNo, 
+max(workState) as workState
+,min(employeeFristName) employeeFristName
+,min(employeeLastName) employeeLastName
+,min(employeeStatus) employeeStatus
+,min(introducer) introducer
+,min(admissionStartDate) admissionStartDate
+,CASE max(admissionEndDate) 
+        WHEN max(admissionEndDate)='999999' THEN
+            null
+        ELSE
+             max(admissionEndDate)
+    END 'admissionEndDate'
+
+,min(unitPrice) unitPrice
+,min(customerName) customerName
+,min(customerAbbreviation) customerAbbreviation,
+min(bpBelongCustomerCode) bpBelongCustomerCode,
+  max(bpUnitPrice) bpUnitPrice, 
+  max(salesStaff) salesStaff, 
+ max(salesEmployeeName) salesEmployeeName, 
+  max(salesOccupationCode) salesOccupationCode, 
+  max(T002EmployeeDetail_introducer) T002EmployeeDetail_introducer, 
+  max(introducerEmployeeName) 
+ from (
 		SELECT
 		T006EmployeeSiteInfo.employeeNo,
 		T006EmployeeSiteInfo.workState,
@@ -57,7 +83,7 @@
 		T002EmployeeDetail.employeeStatus,
 		T002EmployeeDetail.introducer,
 		T006EmployeeSiteInfo.admissionStartDate,
-		T006EmployeeSiteInfo.admissionEndDate,
+		ifnull(T006EmployeeSiteInfo.admissionEndDate,'999999') admissionEndDate,
 		T006EmployeeSiteInfo.unitPrice,
 		T007CustomerInfo.customerName,
 		T007CustomerInfo.customerAbbreviation,
@@ -66,7 +92,7 @@
 		T010SalesSituation.salesStaff,
 		T010SalesSituation.salesEmployeeName,
 		T010SalesSituation.salesOccupationCode,
-		T002EmployeeDetail.introducer,
+		T002EmployeeDetail.introducer T002EmployeeDetail_introducer,
 		T002EmployeeDetail.introducerEmployeeName
 		FROM
 		T006EmployeeSiteInfo
@@ -152,6 +178,7 @@
 		and
 		T006EmployeeSiteInfo.admissionStartDate=T011BpInfoSupplement.admissionStartDate
 		where
+		  
 		T006EmployeeSiteInfo.admissionStartDate  <![CDATA[ < ]]>
 		#{endDate}
 		and (T006EmployeeSiteInfo.admissionEndDate  <![CDATA[ > ]]>
@@ -161,6 +188,7 @@
 		ifnull(#{intoCompanyCode},employeeStatus)
 		ORDER BY
 		T006EmployeeSiteInfo.admissionStartDate
+		 ) a group by employeeNo
 	</select>
 
 	<!-- 営業ポイント情報検索 -->

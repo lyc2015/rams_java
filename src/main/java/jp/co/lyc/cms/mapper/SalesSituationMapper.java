@@ -2,6 +2,9 @@ package jp.co.lyc.cms.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.SalesContent;
@@ -40,7 +43,9 @@ public interface SalesSituationMapper {
 	public int updateSalesSituation(SalesSituationModel model);
 
 	public List<SalesSituationModel> getPersonalSalesInfo(String empNo);
-
+	
+	public List<SalesSituationModel> getT010SalesSituationLatestByemployeeNo(String empNo);
+	
 	public List<SalesSituationModel> getPersonalSalesInfoFromT019(String empNo);
 
 	public int updateEmployeeAddressInfo(SalesSituationModel model);
@@ -58,6 +63,15 @@ public interface SalesSituationMapper {
 	public int updateEMPInfo(SalesSituationModel model);
 
 	public int updateBPAllEMPInfo(SalesSituationModel model);
+	
+	@Update("UPDATE\r\n"
+			+ "		T019SalesSentence\r\n"
+			+ "		SET\r\n"
+			+ "		stationCode = #{model.stationCode},\r\n"
+			+ "		updateTime= date_add(now(), interval 9 hour)\r\n"
+			+ "		WHERE\r\n"
+			+ "		employeeNo = #{model.employeeNo}")
+	public void updateSalesSentenceByemployeeNo(@Param("model") SalesContent model);
 
 	public int updateBPEMPInfo(SalesSituationModel model);
 

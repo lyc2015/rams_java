@@ -51,6 +51,7 @@ import com.amazonaws.util.StringUtils;
 
 import ch.qos.logback.core.joran.conditional.IfAction;
 import jp.co.lyc.cms.common.BaseController;
+import jp.co.lyc.cms.mapper.EmployeeInfoMapper;
 import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.MasterModel;
@@ -85,6 +86,9 @@ public class SalesSituationController extends BaseController {
 
 	@Autowired
 	EmployeeInfoService employeeInfoService;
+	
+	@Autowired
+	EmployeeInfoMapper employeeInfoMapper;
 	
 	// 12月
 	public static final String DECEMBER = "12";
@@ -1275,6 +1279,12 @@ public class SalesSituationController extends BaseController {
 		model.setBeginMonth(model.getTempDate());
 		try {
 			index = salesSituationService.updateSalesSentence(model);
+			// 個人情報情報の最寄駅情報を同期更新  lxf-20230412
+			Map<String, Object> sendMap=new HashMap<>();
+			sendMap.put("employeeNo", model.getEmployeeNo());
+			sendMap.put("stationCode", model.getStationCode());
+			sendMap.put("updateUser", (String) getSession().getAttribute("employeeName"));
+			employeeInfoMapper.updateAddressInfo(sendMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

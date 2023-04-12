@@ -18,6 +18,7 @@ import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.EmployeeInfoCsvModel;
 import jp.co.lyc.cms.model.EmployeeModel;
+import jp.co.lyc.cms.model.SalesContent;
 import jp.co.lyc.cms.util.UtilsController;
 
 @Component
@@ -34,6 +35,9 @@ public class EmployeeInfoService {
 
 	@Autowired
 	SiteInfoMapper siteInfoMapper;
+	
+	@Autowired
+	SalesSituationService salesSituationService;
 
 	/**
 	 * ログイン
@@ -306,6 +310,12 @@ public class EmployeeInfoService {
 			employeeInfoMapper.updateEmployeeInfo(sendMap);
 			employeeInfoMapper.updateEmployeeInfoDetail(sendMap);
 			employeeInfoMapper.updateAddressInfo(sendMap);
+			//個人情報の更新時にビジネス記事の駅情報を同期 lxf-20230412
+			SalesContent model=new SalesContent();
+			model.setEmployeeNo((String)sendMap.get("employeeNo"));
+			model.setStationCode((String)sendMap.get("stationCode"));
+			salesSituationService.updateSalesSentenceByemployeeNo(model);
+			
 			if (sendMap.get("bankInfoModel") != null) {// 口座情報
 				accountInfoMapper.replaceAccount(getParamBankInfoModel(sendMap));
 			}

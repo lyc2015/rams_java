@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.MoneySetModel;
@@ -452,9 +454,14 @@ public class SalesProfitController extends BaseController {
 				if (TextUtils.isEmpty(salesStaff)) { // 没有营业的数据不需要返回
 					it.remove();
 				}
+				
 			}
 			
+			//将数据库中临时标记的999999做还原 lxf 20230412	
 			for (int i = 0; i < siteList.size(); i++) {
+				if("999999".equals(siteList.get(i).getAdmissionEndDate())) {
+					siteList.get(i).setAdmissionEndDate(null);
+				}
 				String yearAndMonth = siteList.get(i).getAdmissionStartDate().substring(0, 6);
 				/*
 				 * if (i > 0) { String yearAndMonthTemp = yearAndMonth.substring(0, 4) + "/" +
