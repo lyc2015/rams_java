@@ -419,6 +419,7 @@ public class SalesSituationController extends BaseController {
 						+ "." + resumetemp.split("/")[resumetemp.split("/").length - 1].split(
 								"\\.")[resumetemp.split("/")[resumetemp.split("/").length - 1].split("\\.").length - 1];
 				salesSituationList.get(i).setResumeName1(resumeName);
+				salesSituationList.get(i).setResume1Date(salesSituationList.get(i).getResume1Date());
 			}
 
 			if (salesSituationList.get(i).getResumeInfo2() != null
@@ -690,8 +691,8 @@ public class SalesSituationController extends BaseController {
 				}
 			}
 		}
-		salesSituationListTemp=salesSituationListTemp.stream()
-				.sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
+		//salesSituationListTemp=salesSituationListTemp.stream()
+				//.sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
 		return salesSituationListTemp;
 	}
 

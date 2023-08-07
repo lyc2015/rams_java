@@ -66,6 +66,7 @@ public class SalesSituationModel implements Serializable {
 	String scheduledEndDate;
 	String resumeInfo1;// 履歴書情報1
 	String resumeInfo2;// 履歴書情報2
+	Date resume1Date;
 	String resumeName1;// 履歴書情報1
 	String resumeName2;// 履歴書情報2
 	int rowNo;//
@@ -274,6 +275,12 @@ public class SalesSituationModel implements Serializable {
 		this.resumeName1 = resumeName1;
 	}
 
+	public Date getResume1Date() {
+		return resume1Date;
+	}
+	public void setResume1Date(Date resume1Date) {
+		this.resume1Date = resume1Date;
+	}
 	public String getResumeName2() {
 		return resumeName2;
 	}

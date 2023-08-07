@@ -968,7 +968,8 @@
 		T015.resumeInfo1,
 		T015.resumeName1,
 		T015.resumeInfo2,
-		T015.resumeName2
+		T015.resumeName2,
+		T015.updateTime
 	</sql>
 	<sql id="tableJoin">
 		FROM

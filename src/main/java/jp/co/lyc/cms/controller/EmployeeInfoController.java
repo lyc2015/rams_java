@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -526,13 +527,13 @@ public class EmployeeInfoController extends BaseController {
 				s3Model.setFilePath(filePath);
 				s3Controller.uploadFile(s3Model);
 			} else {
-				if (!resumeInfo2Key.equals("") && emp.getResumeName2().equals("")) {
+				if (!StringUtils.isBlank(resumeInfo2Key) && StringUtils.isBlank(emp.getResumeName2())) {
 					String deletefileKey = resumeInfo2Key.split("/file/")[1];
 					s3Model.setFileKey(deletefileKey);
 					s3Controller.deleteFile(s3Model);
 				}
 			}
-			if (emp.getResumeName1().equals("") && emp.getResumeName2().equals("")) {
+			if (StringUtils.isBlank(emp.getResumeName1()) && StringUtils.isBlank(emp.getResumeName2())) {
 				if(!resumeInfo2Key.equals("")) {
 					String deletefileKey = resumeInfo2Key.split("/file/")[1].substring(0,
 							resumeInfo2Key.split("/file/")[1].lastIndexOf("/") + 1);

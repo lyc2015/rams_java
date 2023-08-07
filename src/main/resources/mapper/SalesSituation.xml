@@ -251,6 +251,7 @@
 		T015ResumeManagement.resumeInfo2,
 		T015ResumeManagement.resumeName1,
 		T015ResumeManagement.resumeName2,
+		T015ResumeManagement.updateTime as resume1Date,
 		if(T002EmployeeDetail.yearsOfExperience =
 		"",T002EmployeeDetail.graduationYearAndMonth,T002EmployeeDetail.yearsOfExperience)
 		as intoCompanyYearAndMonth,
@@ -363,6 +364,7 @@
 		T015ResumeManagement.resumeInfo2,
 		T015ResumeManagement.resumeName1,
 		T015ResumeManagement.resumeName2,
+		T015ResumeManagement.updateTime as resume1Date,
 		M013Station.stationName AS nearestStation,
 		if(T019SalesSentence.unitPrice = "" or T019SalesSentence.unitPrice is
 		null,T011BpInfoSupplement.bpUnitPrice,T019SalesSentence.unitPrice) as
