@@ -85,12 +85,12 @@ public class DutyManagementController extends BaseController {
 					newCostRegistrationModelList.add(costRegistrationModel);
 				}
 			}
-			int cost = 0;
-			int costTotal = 0;
+			double cost = 0;
+			double costTotal = 0;
 			for (int j = 0; j < newCostRegistrationModelList.size(); j++) {
-				cost += Integer.parseInt(newCostRegistrationModelList.get(j).getCost());
+				cost += Double.parseDouble(newCostRegistrationModelList.get(j).getCost());
 				if (!newCostRegistrationModelList.get(j).getCostClassificationCode().equals("0")) {
-					costTotal += Integer.parseInt(newCostRegistrationModelList.get(j).getCost());
+					costTotal += Double.parseDouble(newCostRegistrationModelList.get(j).getCost());
 				}
 				if (j == newCostRegistrationModelList.size() - 1) {
 					newCostRegistrationModelList.get(j).setCostTotal(String.valueOf(costTotal));

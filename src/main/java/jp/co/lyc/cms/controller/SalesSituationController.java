@@ -48,7 +48,9 @@ import com.amazonaws.util.StringUtils;
 import ch.qos.logback.core.joran.conditional.IfAction;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.mapper.EmployeeInfoMapper;
+import jp.co.lyc.cms.mapper.SiteInfoMapper;
 import jp.co.lyc.cms.model.SalesSituationModel;
+import jp.co.lyc.cms.model.SiteModel;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.MasterModel;
 import jp.co.lyc.cms.model.ModelClass;
@@ -85,6 +87,9 @@ public class SalesSituationController extends BaseController {
 	
 	@Autowired
 	EmployeeInfoMapper employeeInfoMapper;
+	
+	@Autowired
+	SiteInfoMapper siteInfoMapper;
 	
 	// 12月
 	public static final String DECEMBER = "12";
@@ -1346,6 +1351,20 @@ public class SalesSituationController extends BaseController {
 				errorsMessage += "を入力してください。";
 				result.put("errorsMessage", errorsMessage);
 				return result;
+			}
+		}
+		
+		//進歩为空时 判断是否删除稼动中现场
+		if (model.getSalesProgressCode() != null && (model.getSalesProgressCode().equals(""))) {
+			List<SiteModel> siteList = new ArrayList<SiteModel>();
+			siteList = salesSituationService.getEmpLastAdmission(model.getEmployeeNo());
+			//最后一个现场开始时间为下个月 且稼动中时 删除现场
+			if(siteList.get(siteList.size() - 1).getAdmissionStartDate().substring(0,6).equals(model.getAdmissionEndDate())
+					&& siteList.get(siteList.size() - 1).getWorkState().equals("0")) {
+				Map<String, Object> sendMap = new HashMap<String, Object>();
+				sendMap.put("employeeNo", model.getEmployeeNo());
+				sendMap.put("admissionStartDate", siteList.get(siteList.size() - 1).getAdmissionStartDate());
+				siteInfoMapper.deleteSiteInfo(sendMap);
 			}
 		}
 

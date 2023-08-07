@@ -10,15 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jp.co.lyc.cms.mapper.SalesSituationMapper;
+import jp.co.lyc.cms.mapper.SiteInfoMapper;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.SalesContent;
 import jp.co.lyc.cms.model.SalesSituationModel;
+import jp.co.lyc.cms.model.SiteModel;
 
 @Component
 public class SalesSituationService {
 
 	@Autowired
 	SalesSituationMapper salesSituationMapper;
+	@Autowired
+	SiteInfoMapper siteInfoMapper;
 
 	public String getEmpNextAdmission(String employeeNo) {
 		return salesSituationMapper.getEmpNextAdmission(employeeNo);
@@ -210,6 +214,11 @@ public class SalesSituationService {
 	
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date) {
 		return salesSituationMapper.getBpEmployeeConfirm(employeeNoList, date);
+	}
+
+	public List<SiteModel> getEmpLastAdmission(String employeeNo) {
+		List<SiteModel> siteList = siteInfoMapper.getSiteInfo(employeeNo);
+		return siteList;
 	}
 	
 }
