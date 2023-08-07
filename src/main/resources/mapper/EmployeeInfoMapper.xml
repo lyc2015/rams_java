@@ -882,6 +882,34 @@
 		WHERE
 		employeeNo=#{employeeNo}
 	</update>
+	<!-- 得意言語を修正 -->
+	<update id="updateDevelopLanguageCode" parameterType="String">
+		UPDATE
+		T002EmployeeDetail
+		SET
+		<if test="developLanguage1!= null">
+			developLanguage1=#{developLanguage1},
+		</if>
+		<if test="developLanguage2!= null">
+			developLanguage2=#{developLanguage2},
+		</if>
+		<if test="developLanguage3!= null">
+			developLanguage3=#{developLanguage3},
+		</if>
+		<if test="developLanguage4!= null">
+			developLanguage4=#{developLanguage4},
+		</if>
+		<if test="frameWork1!= null">
+			frameWork1=#{frameWork1},
+		</if>
+		<if test="frameWork2!= null">
+			frameWork2=#{frameWork2},
+		</if>
+			updateTime=date_add(now(), interval 9 hour),
+		updateUser=#{updateUser}
+		WHERE
+		employeeNo=#{employeeNo}
+	</update>
 	<sql id="T001">
 		T001.employeeNo,
 		T001.employeeFristName,
