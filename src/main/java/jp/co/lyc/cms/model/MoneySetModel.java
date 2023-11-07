@@ -21,6 +21,7 @@ public class MoneySetModel implements Serializable {
 	public String workState;
 	public String belongCustomerName;
 	public boolean isFinalSiteFinish; // 最近的一个现场是否已经终了
+	String salesStaff;
 	public String getEmployeeNo() {
 		return employeeNo;
 	}
@@ -111,6 +112,12 @@ public class MoneySetModel implements Serializable {
 	}
 	public void setBelongCustomerName(String belongCustomerName) {
 		this.belongCustomerName = belongCustomerName;
+	}
+	public String getSalesStaff() {
+		return salesStaff;
+	}
+	public void setSalesStaff(String salesStaff) {
+		this.salesStaff = salesStaff;
 	}
 	// 加算回合=固定一回
 	public boolean isAdditionNumberOfTimesFix() {

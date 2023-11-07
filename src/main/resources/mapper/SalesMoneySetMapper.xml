@@ -18,7 +18,8 @@
 		(select t7.customerAbbreviation from T011BpInfoSupplement t11 left join T007CustomerInfo t7 on t11.bpBelongCustomerCode = t7.customerNo 
 			where t11.bpEmployeeNo=t14.employeeNo 
 			order by bpOtherCompanyAdmissionEndDate DESC limit 1
-        ) as belongCustomerName
+        ) as belongCustomerName,
+        (select salesStaff from T010SalesSituation t10 where t10.employeeNo=t14.employeeNo order by updateTime DESC limit 1) salesStaff
 		FROM T014SalesMoneySetting t14 
 		left join T001Employee t1 on t14.employeeNo=t1.employeeNo
 		order by t14.createTime DESC;

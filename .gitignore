@@ -1,3 +1,5 @@
 /target/
 /logback.logdir/
 /bin/jasperreports-fonts-6.10.0.jar
+.classpath
+/.settings/
