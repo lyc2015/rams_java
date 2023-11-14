@@ -19,9 +19,11 @@
 			where t11.bpEmployeeNo=t14.employeeNo 
 			order by bpOtherCompanyAdmissionEndDate DESC limit 1
         ) as belongCustomerName,
-        (select salesStaff from T010SalesSituation t10 where t10.employeeNo=t14.employeeNo order by updateTime DESC limit 1) salesStaff
-		FROM T014SalesMoneySetting t14 
+        CONCAT(t001.employeeFristName, t001.employeeLastName) as salesStaff
+		FROM T014SalesMoneySetting t14
 		left join T001Employee t1 on t14.employeeNo=t1.employeeNo
+		left join T010SalesSituation t10 on t10.employeeNo=t14.employeeNo and t14.startYearAndMonth=t10.salesYearAndMonth
+		left join T001Employee t001 on t10.salesStaff=t001.employeeNo
 		order by t14.createTime DESC;
 	</select>
 

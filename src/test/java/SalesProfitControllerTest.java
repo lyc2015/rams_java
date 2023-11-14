@@ -6,61 +6,60 @@ public class SalesProfitControllerTest {
 		SalesProfitController controller = new SalesProfitController();
 
 		{
-			int dif = controller.getMonthDif("202302", "202302", "202301");
+			int dif = controller.getMonthDif("202302", "202302", "202301", "202303");
 			System.out.println("dif=" + ( dif == 1));
 		}
 		{
-			int dif = controller.getMonthDif("202302", "202302", "202302");
+			int dif = controller.getMonthDif("202302", "202302", "202302", "202303");
 			System.out.println("dif=" + ( dif == 1));
 		}
 		{
-			int dif = controller.getMonthDif("202302", "202302", "202303");
+			int dif = controller.getMonthDif("202302", "202302", "202303", "202303");
 			System.out.println("dif=" + ( dif == 0));
 		}
 		{
-			int dif = controller.getMonthDif("202302", "202306", "202301");
+			int dif = controller.getMonthDif("202302", "202306", "202301", "202306");
 			System.out.println("dif=" + ( dif == 5));
 		}
 		{
-			int dif = controller.getMonthDif("202302", "202306", "202303");
+			int dif = controller.getMonthDif("202302", "202306", "202303", "202306");
 			System.out.println("dif=" + ( dif == 4));
 		}
 
 		{
-			int dif = controller.getMonthDif("202302", "202306", "202307");
+			int dif = controller.getMonthDif("202302", "202306", "202307", "202306");
 			System.out.println("dif=" + ( dif == 0));
 		}
 
 		{
-			int dif = controller.getMonthDif("202206", "202306", "202201");
+			int dif = controller.getMonthDif("202206", "202306", "202201", "202306");
 			System.out.println("dif=" + dif + "," + ( dif == 13));
 		}
 		
 		{
-			int dif = controller.getMonthDif("202206", "202306", "202208");
+			int dif = controller.getMonthDif("202206", "202306", "202208", "202306");
 			System.out.println("dif=" + dif + "," + ( dif == 11));
 		}
 
 		{
-			int dif = controller.getMonthDif("202206", "202306", "202307");
+			int dif = controller.getMonthDif("202206", "202306", "202307", "202306");
 			System.out.println("dif=" + dif + "," + ( dif == 0));
 		}
 
 		{
-			int dif = controller.getMonthDif("202203", "202304", "202304");
+			int dif = controller.getMonthDif("202203", "202304", "202304", "202304");
 			System.out.println("dif=" + dif + "," + ( dif == 1));
 		}
 
 		{
-			int dif = controller.getMonthDif("202203", "202304", "202303");
+			int dif = controller.getMonthDif("202203", "202304", "202303", "202304");
 			System.out.println("dif=" + dif + "," + ( dif == 2));
 		}
 
 		{
-			int dif = controller.getMonthDif("202203", "202304", "202305");
+			int dif = controller.getMonthDif("202203", "202304", "202305", "202304");
 			System.out.println("dif=" + dif + "," + ( dif == 0));
 		}
-
 
 		{
 			int dif = controller.getMonthDifFix("202306", "202306", "202211");
