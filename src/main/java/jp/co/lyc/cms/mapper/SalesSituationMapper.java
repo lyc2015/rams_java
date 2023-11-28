@@ -112,4 +112,6 @@ public interface SalesSituationMapper {
 	public List<SalesSituationModel> getBpEmployeeConfirmNoList();
 	
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date);
+
+	public List<SalesSituationModel> getEmployeeSiteWorkTermList(String salesYearAndMonth);
 }

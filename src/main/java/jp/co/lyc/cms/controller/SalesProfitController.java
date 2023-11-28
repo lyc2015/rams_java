@@ -647,6 +647,10 @@ public class SalesProfitController extends BaseController {
 							int monthDif = getMonthDif(startTime, endTime, admissionStartDate, workEndYearMonth);
 							bPSiteRoleName = 10000 * monthDif;
 						}
+						if (employeeStatus.equals("2")) {
+							int monthDif = getMonthDif(startTime, endTime, admissionStartDate, workEndYearMonth);
+							bPSiteRoleName = 10000 * monthDif;
+						}
 					}
 
 				}

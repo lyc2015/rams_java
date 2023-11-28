@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.math.IntRange;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.util.TextUtils;
+import org.aspectj.weaver.ast.Var;
 import org.castor.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -645,12 +646,12 @@ public class SalesSituationController extends BaseController {
 					if (salesSituationListTemp.get(i).getEmployeeNo()
 							.equals(T011BpInfoSupplementList.get(j).getBpEmployeeNo())) {
 						if (T011BpInfoSupplementList.get(j).getBpSalesProgressCode().equals("4")) {
-							if (salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp
-									.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
+							//if (salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp
+									//.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
 								salesSituationListTemp.remove(i);
 								i--;
 								break;
-							}
+							//}
 						} else {
 							salesSituationListTemp.remove(i);
 							i--;
@@ -1609,6 +1610,61 @@ public class SalesSituationController extends BaseController {
 		s3Controller.uploadFile(s3Model);
 
 		return result;
+	}
+	
+	
+	@RequestMapping(value = "/getEmployeeSiteWorkTermList", method = RequestMethod.POST)
+	@ResponseBody
+	public List<SalesSituationModel> getEmployeeSiteWorkTermList(@RequestBody SalesSituationModel model) throws ParseException {
+		List<SalesSituationModel> resultList = new ArrayList<SalesSituationModel>();
+
+		String salesYearAndMonth = "";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+			Date date = sdf.parse(model.getSalesYearAndMonth());
+
+			// 拿到页面选择时间的一个月前的时间
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			calendar.add(Calendar.MONTH, -1);
+			Date convertDate = calendar.getTime();
+
+			salesYearAndMonth = new SimpleDateFormat("yyyyMM").format(convertDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resultList = salesSituationService.getEmployeeSiteWorkTermList(salesYearAndMonth);
+		if (resultList == null || resultList.size() == 0) {
+			return resultList;
+		}
+
+		// 处理名字和番号
+		if (null != resultList && resultList.size() > 0) {
+			for (int i = 0; i < resultList.size(); i++) {
+				resultList.get(i).setRowNo(i + 1);
+
+				if (resultList.get(i).getEmployeeFristName() == null ) {
+					resultList.get(i).setEmployeeFristName("");
+				}
+				if (resultList.get(i).getEmployeeLastName() == null ) {
+					resultList.get(i).setEmployeeLastName("");
+				}
+				resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeFristName() + resultList.get(i).getEmployeeLastName());
+
+				if (resultList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(BPR)");
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("BP")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName());
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SP")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(SP)");
+				} else if (resultList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
+					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(SC)");
+				}
+			}
+		}
+
+		return resultList;
 	}
 
 	private static void deleteFile(File file) {

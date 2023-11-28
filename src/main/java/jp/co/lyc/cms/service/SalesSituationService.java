@@ -221,4 +221,7 @@ public class SalesSituationService {
 		return siteList;
 	}
 	
+	public List<SalesSituationModel> getEmployeeSiteWorkTermList(String salesYearAndMonth) {
+		return salesSituationMapper.getEmployeeSiteWorkTermList(salesYearAndMonth);
+	}
 }

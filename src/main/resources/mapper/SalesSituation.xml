@@ -2003,4 +2003,39 @@
 		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 	</update>
+
+	<select id="getEmployeeSiteWorkTermList" parameterType="String" resultType="jp.co.lyc.cms.model.SalesSituationModel">
+	SELECT
+	* 
+	FROM
+	(
+	SELECT
+		distinct T011BpInfoSupplement.bpEmployeeNo,
+		employeeSiteInfo.employeeNo,
+		employee.employeeFristName,
+		employee.employeeLastName,
+		CONCAT( employee.employeeFristName, employee.employeeLastName ) AS employeeName,
+		employeeSiteInfo.unitPrice,
+		employeeSiteInfo.customerNo AS customer,
+		T007CustomerInfo.customerAbbreviation,
+		employeeSiteInfo.admissionStartDate,
+		employeeSiteInfo.admissionEndDate,
+		TIMESTAMPDIFF( MONTH, employeeSiteInfo.admissionStartDate, IF ( employeeSiteInfo.admissionEndDate IS NULL, #{salesYearAndMonth}, IF (employeeSiteInfo.admissionEndDate &gt; #{salesYearAndMonth}, #{salesYearAndMonth}, employeeSiteInfo.admissionEndDate) ) ) AS admissionPeriodDate,
+		CONCAT( employee1.employeeFristName, employee1.employeeLastName ) AS salesStaff  
+	FROM
+		T006EmployeeSiteInfo employeeSiteInfo
+		LEFT JOIN T001Employee employee ON employeeSiteInfo.employeeNo = employee.employeeNo
+		LEFT JOIN T007CustomerInfo customerInfo ON employeeSiteInfo.customerNo = customerInfo.customerNo
+		LEFT JOIN T010SalesSituation salesSituation ON employeeSiteInfo.employeeNo = salesSituation.employeeNo 
+		AND date_format(employeeSiteInfo.admissionStartDate, '%Y%m') = salesSituation.salesYearAndMonth 
+		AND employeeSiteInfo.customerNo = salesSituation.confirmCustomer
+		LEFT JOIN T001Employee employee1 ON salesSituation.salesStaff = employee1.employeeNo
+		LEFT JOIN T011BpInfoSupplement ON employee.employeeNo = T011BpInfoSupplement.bpEmployeeNo
+		LEFT JOIN T007CustomerInfo ON T011BpInfoSupplement.bpBelongCustomerCode = T007CustomerInfo.customerNo
+	) a
+	WHERE
+	a.admissionPeriodDate >= 11
+	ORDER BY 
+	a.salesStaff;
+	</select>
 </mapper>
