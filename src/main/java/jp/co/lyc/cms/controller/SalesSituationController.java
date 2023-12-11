@@ -1143,6 +1143,8 @@ public class SalesSituationController extends BaseController {
 				interviewLists.get(i).setInterviewCustomer1(interviewLists.get(i).getInterviewCustomer2());
 				interviewLists.get(i).setInterviewInfo1(interviewLists.get(i).getInterviewInfo2());
 				interviewLists.get(i).setInterviewUrl1(interviewLists.get(i).getInterviewUrl2());
+				interviewLists.get(i).setSuccessRate1(interviewLists.get(i).getSuccessRate2());
+				interviewLists.get(i).setSalesStaff1(interviewLists.get(i).getSalesStaff2());
 
 				interviewLists.get(i).setInterviewClassificationCode2(null);
 				interviewLists.get(i).setInterviewDate2(null);
@@ -1150,6 +1152,8 @@ public class SalesSituationController extends BaseController {
 				interviewLists.get(i).setInterviewCustomer2(null);
 				interviewLists.get(i).setInterviewInfo2(null);
 				interviewLists.get(i).setInterviewUrl2(null);
+				interviewLists.get(i).setSuccessRate2(null);
+				interviewLists.get(i).setSalesStaff2(null);
 			}
 		}
 
@@ -1167,6 +1171,8 @@ public class SalesSituationController extends BaseController {
 					temp.setInterviewCustomer1(interviewLists.get(i).getInterviewCustomer1());
 					temp.setInterviewInfo1(interviewLists.get(i).getInterviewInfo1());
 					temp.setInterviewUrl1(interviewLists.get(i).getInterviewUrl1());
+					temp.setSuccessRate1(interviewLists.get(i).getSuccessRate1());
+					temp.setSalesStaff1(interviewLists.get(i).getSalesStaff1());
 
 					interviewLists.get(i)
 							.setInterviewClassificationCode1(interviewLists.get(i).getInterviewClassificationCode2());
@@ -1175,6 +1181,8 @@ public class SalesSituationController extends BaseController {
 					interviewLists.get(i).setInterviewCustomer1(interviewLists.get(i).getInterviewCustomer2());
 					interviewLists.get(i).setInterviewInfo1(interviewLists.get(i).getInterviewInfo2());
 					interviewLists.get(i).setInterviewUrl1(interviewLists.get(i).getInterviewUrl2());
+					interviewLists.get(i).setSuccessRate1(interviewLists.get(i).getSuccessRate2());
+					interviewLists.get(i).setSalesStaff1(interviewLists.get(i).getSalesStaff2());
 
 					interviewLists.get(i).setInterviewClassificationCode2(temp.getInterviewClassificationCode1());
 					interviewLists.get(i).setInterviewDate2(temp.getInterviewDate1());
@@ -1182,6 +1190,8 @@ public class SalesSituationController extends BaseController {
 					interviewLists.get(i).setInterviewCustomer2(temp.getInterviewCustomer1());
 					interviewLists.get(i).setInterviewInfo2(temp.getInterviewInfo1());
 					interviewLists.get(i).setInterviewUrl2(temp.getInterviewUrl1());
+					interviewLists.get(i).setSuccessRate2(temp.getSuccessRate1());
+					interviewLists.get(i).setSalesStaff2(temp.getSalesStaff1());
 				}
 			}
 		}
@@ -1201,6 +1211,8 @@ public class SalesSituationController extends BaseController {
 					interviewLists.get(i).setInterviewCustomer1(interviewLists.get(i).getInterviewCustomer2());
 					interviewLists.get(i).setInterviewInfo1(interviewLists.get(i).getInterviewInfo2());
 					interviewLists.get(i).setInterviewUrl1(interviewLists.get(i).getInterviewUrl2());
+					interviewLists.get(i).setSuccessRate1(interviewLists.get(i).getSuccessRate2());
+					interviewLists.get(i).setSalesStaff1(interviewLists.get(i).getSalesStaff2());
 
 					interviewLists.get(i).setInterviewClassificationCode2(null);
 					interviewLists.get(i).setInterviewDate2(null);
@@ -1208,6 +1220,8 @@ public class SalesSituationController extends BaseController {
 					interviewLists.get(i).setInterviewCustomer2(null);
 					interviewLists.get(i).setInterviewInfo2(null);
 					interviewLists.get(i).setInterviewUrl2(null);
+					interviewLists.get(i).setSuccessRate2(null);
+					interviewLists.get(i).setSalesStaff2(null);
 
 					i--;
 				}
