@@ -34,6 +34,10 @@ public class SalesSituationModel implements Serializable {
 	String stationCode1;
 	String stationCode2;
 	String interviewCustomer2;
+	String successRate1;
+	String successRate2;
+	String salesStaff1;
+	String salesStaff2;
 	String hopeLowestPrice;
 	String hopeHighestPrice;
 	String hopeRemark;
@@ -759,6 +763,38 @@ public class SalesSituationModel implements Serializable {
 
 	public void setInterviewCustomer2(String interviewCustomer2) {
 		this.interviewCustomer2 = interviewCustomer2;
+	}
+
+	public String getSuccessRate1() {
+		return successRate1;
+	}
+
+	public void setSuccessRate1(String successRate1) {
+		this.successRate1 = successRate1;
+	}
+
+	public String getSuccessRate2() {
+		return successRate2;
+	}
+
+	public void setSuccessRate2(String successRate2) {
+		this.successRate2 = successRate2;
+	}
+
+	public String getSalesStaff1() {
+		return salesStaff1;
+	}
+
+	public void setSalesStaff1(String salesStaff1) {
+		this.salesStaff1 = salesStaff1;
+	}
+
+	public String getSalesStaff2() {
+		return salesStaff2;
+	}
+
+	public void setSalesStaff2(String salesStaff2) {
+		this.salesStaff2 = salesStaff2;
 	}
 
 	public String getHopeLowestPrice() {
