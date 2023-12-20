@@ -133,7 +133,8 @@
 		salesYearAndMonth
 		=
 		#{salesDate} and salesProgressCode in
-		("0","1") and employeeNo not in (select employeeNo from T006EmployeeSiteInfo where left(admissionStartDate,6)= #{salesDate} and workState in ('0','2'))
+		<!-- ("0","1") and employeeNo not in (select employeeNo from T006EmployeeSiteInfo where left(admissionStartDate,6)= #{salesDate} and workState in ('0','2')) -->
+		("0","1")
 		order
 		by
 		employeeNo
