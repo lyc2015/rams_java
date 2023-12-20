@@ -65,6 +65,8 @@ import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
 import software.amazon.ion.impl.PrivateScalarConversions.ValueVariant;
 
+import hirondelle.date4j.DateTime;
+
 @Controller
 @RequestMapping(value = "/salesSituation")
 public class SalesSituationController extends BaseController {
@@ -646,12 +648,20 @@ public class SalesSituationController extends BaseController {
 					if (salesSituationListTemp.get(i).getEmployeeNo()
 							.equals(T011BpInfoSupplementList.get(j).getBpEmployeeNo())) {
 						if (T011BpInfoSupplementList.get(j).getBpSalesProgressCode().equals("4")) {
-							//if (salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp
-									//.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
+							//以下两行代码被注释掉，因为这个月之前的BP状况变成所属确定以后在营业一览里面（这个月消息，以前的确定的不能消失）出不来了这个问题的修正，代码重新打开
+							//以下的三个条件分别是	
+							//1.营业状况的年月是空（针对于系统做成之前的数据试用，或者营业状况表(T11)不存在的数据）	
+							//2.T10表里面最新的一条的数据的营业状况年月不能于目前营业一览湖面的选中的营业状况年月，主要是为了不把以前营业一栏里面的数据拿掉（比如当前月202401，上次营业一览确定是202304）	
+							//3.T10表里面最新的一条的数据的营业状况年月和画面选择的营业状况年月相当，并且T10表的営業状況コード是4的情况，主要是bp现场终了，但是没有直接在bp小画面点击所属确定， 在营业一览更新了这套数据（T0会生成一条数据）	
+							//这样的情况下的话，如果我们在营业一栏画面更新了BP的 所属确定的时候，这条数据也会自动的消息(营业状况的主画面如果更新了BP的状态，BP表的状态也会变化)
+							if (salesSituationListTemp.get(i).getSalesDateUpdate() == null || 
+									!salesSituationListTemp.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth()) || 
+									(salesSituationListTemp.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth()) && 
+									salesSituationListTemp.get(i).getSalesProgressCode().equals("4"))) {
 								salesSituationListTemp.remove(i);
 								i--;
 								break;
-							//}
+							}
 						} else {
 							salesSituationListTemp.remove(i);
 							i--;
@@ -1196,14 +1206,21 @@ public class SalesSituationController extends BaseController {
 			}
 		}
 
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-		String now = dateFormat.format(date);
 		for (int i = 0; i < interviewLists.size(); i++) {
 			if (!(interviewLists.get(i).getInterviewDate1() == null
 					|| interviewLists.get(i).getInterviewDate1().equals(""))) {
-				if (Long.parseLong(now) > Long.parseLong(interviewLists.get(i).getInterviewDate1())) {
+				String interviewDate = interviewLists.get(i).getInterviewDate1();
 
+				int year = Integer.parseInt(interviewDate.substring(0, 4));
+				int month = Integer.parseInt(interviewDate.substring(4, 6));
+				int day = Integer.parseInt(interviewDate.substring(6, 8));
+				int hour = Integer.parseInt(interviewDate.substring(8, 10));
+				int minute = Integer.parseInt(interviewDate.substring(10, 12));
+				
+				DateTime now = DateTime.now(TimeZone.getDefault());
+				DateTime interviewDateTime = new DateTime(year, month, day, hour, minute, 0, 0);
+
+				if (now.minusDays(3).gteq(interviewDateTime)) {
 					interviewLists.get(i)
 							.setInterviewClassificationCode1(interviewLists.get(i).getInterviewClassificationCode2());
 					interviewLists.get(i).setInterviewDate1(interviewLists.get(i).getInterviewDate2());
@@ -1226,6 +1243,16 @@ public class SalesSituationController extends BaseController {
 					i--;
 				}
 			}
+		}
+
+		for (int i = 0; i < interviewLists.size(); i++) {
+			if (interviewLists.get(i).getInterviewResultAwaiting1() == null
+					|| interviewLists.get(i).getInterviewResultAwaiting1().equals("")) {
+				SalesSituationModel temp = new SalesSituationModel();
+				temp.setInterviewResultAwaiting1(interviewLists.get(i).getInterviewResultAwaiting1());
+				interviewLists.get(i).setInterviewResultAwaiting1(interviewLists.get(i).getInterviewResultAwaiting2());
+				interviewLists.get(i).setInterviewResultAwaiting2(temp.getInterviewResultAwaiting1());
+			} 
 		}
 
 		return interviewLists;
