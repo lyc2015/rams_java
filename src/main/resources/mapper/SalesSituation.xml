@@ -768,8 +768,8 @@
 		T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
 		as
 		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
-		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.successRate1,T010.salesStaff1,T010.interviewDate2,T010.stationCode2,
-		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.successRate2,T010.salesStaff2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.successRate1,T010.salesStaff1,T010.interviewResultAwaiting1,T010.interviewDate2,T010.stationCode2,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.successRate2,T010.salesStaff2,T010.interviewResultAwaiting2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
 		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
 		T010SalesSituation as T010
 		inner join
@@ -794,8 +794,8 @@
 		T001.employeeNo,concat(T001.employeeFristName,T001.employeeLastName)
 		as
 		employeeName,T010.salesYearAndMonth,T010.interviewClassificationCode1,T010.interviewDate1,
-		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.successRate1,T010.salesStaff1,T010.interviewDate2,T010.stationCode2,
-		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.successRate2,T010.salesStaff2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
+		T010.stationCode1,T010.interviewCustomer1,T010.interviewInfo1,T010.interviewUrl1,T010.successRate1,T010.salesStaff1,T010.interviewResultAwaiting1,T010.interviewDate2,T010.stationCode2,
+		T010.interviewClassificationCode2,T010.interviewCustomer2,T010.interviewInfo2,T010.interviewUrl2,T010.successRate2,T010.salesStaff2,T010.interviewResultAwaiting2,T010.salesPriorityStatus,T010.salesProgressCode,T010.remark1,T010.remark2,T010.customerContractStatus,
 		T010.confirmPrice,T010.confirmCustomer,T010.salesStaff FROM
 		T001Employee as T001
 		left join T010SalesSituation as T010
@@ -1034,7 +1034,7 @@
 		T010.salesProgressCode) AS 'salesProgressCode',
 		T010.salesYearAndMonth,
 		T010.salesYearAndMonth AS salesDateUpdate,
-		T010.interviewDate1,
+	  T010.interviewDate1,
 		T010.stationCode1,
 		T010.interviewCustomer1,
 		T010.interviewDate2,
@@ -1974,14 +1974,14 @@
 		parameterType="jp.co.lyc.cms.model.SalesSituationModel">
 		INSERT INTO T010SalesSituation
 		(employeeNo,salesYearAndMonth,
-		interviewClassificationCode1,interviewDate1,stationCode1,interviewCustomer1,interviewInfo1,interviewUrl1,successRate1,salesStaff1,
-		interviewClassificationCode2,interviewDate2,stationCode2,interviewCustomer2,interviewInfo2,interviewUrl2,successRate2,salesStaff2,
+		interviewClassificationCode1,interviewDate1,stationCode1,interviewCustomer1,interviewInfo1,interviewUrl1,successRate1,salesStaff1,interviewResultAwaiting1,
+		interviewClassificationCode2,interviewDate2,stationCode2,interviewCustomer2,interviewInfo2,interviewUrl2,successRate2,salesStaff2,interviewResultAwaiting2,
 		updateTime,createTime,updateUser
 		)
 		VALUES
 		(#{employeeNo},#{salesYearAndMonth},
-		#{interviewClassificationCode1},#{interviewDate1},#{stationCode1},#{interviewCustomer1},#{interviewInfo1},#{interviewUrl1},#{successRate1},#{salesStaff1},
-		#{interviewClassificationCode2},#{interviewDate2},#{stationCode2},#{interviewCustomer2},#{interviewInfo2},#{interviewUrl2},#{successRate2},#{salesStaff2},
+		#{interviewClassificationCode1},#{interviewDate1},#{stationCode1},#{interviewCustomer1},#{interviewInfo1},#{interviewUrl1},#{successRate1},#{salesStaff1},#{interviewResultAwaiting1},
+		#{interviewClassificationCode2},#{interviewDate2},#{stationCode2},#{interviewCustomer2},#{interviewInfo2},#{interviewUrl2},#{successRate2},#{salesStaff2},#{interviewResultAwaiting2},
 		date_add(now(), interval 9 hour),date_add(now(), interval 9 hour),#{updateUser})
 		ON DUPLICATE KEY
 		UPDATE
@@ -1994,6 +1994,7 @@
 		interviewUrl1 = #{interviewUrl1},
 		successRate1 = #{successRate1},
 		salesStaff1 = #{salesStaff1},
+		interviewResultAwaiting1 = #{interviewResultAwaiting1},
 		interviewClassificationCode2 =
 		#{interviewClassificationCode2},
 		interviewDate2 = #{interviewDate2},
@@ -2004,6 +2005,7 @@
 		interviewUrl2 = #{interviewUrl2},
 		successRate2 = #{successRate2},
 		salesStaff2 = #{salesStaff2},
+		interviewResultAwaiting2 = #{interviewResultAwaiting2},
 		updateTime= date_add(now(), interval 9 hour),
 		updateUser=#{updateUser}
 	</update>

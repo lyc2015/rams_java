@@ -65,6 +65,8 @@ import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
 import software.amazon.ion.impl.PrivateScalarConversions.ValueVariant;
 
+import hirondelle.date4j.DateTime;
+
 @Controller
 @RequestMapping(value = "/salesSituation")
 public class SalesSituationController extends BaseController {
@@ -1196,14 +1198,21 @@ public class SalesSituationController extends BaseController {
 			}
 		}
 
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-		String now = dateFormat.format(date);
 		for (int i = 0; i < interviewLists.size(); i++) {
 			if (!(interviewLists.get(i).getInterviewDate1() == null
 					|| interviewLists.get(i).getInterviewDate1().equals(""))) {
-				if (Long.parseLong(now) > Long.parseLong(interviewLists.get(i).getInterviewDate1())) {
+				String interviewDate = interviewLists.get(i).getInterviewDate1();
 
+				int year = Integer.parseInt(interviewDate.substring(0, 4));
+				int month = Integer.parseInt(interviewDate.substring(4, 6));
+				int day = Integer.parseInt(interviewDate.substring(6, 8));
+				int hour = Integer.parseInt(interviewDate.substring(8, 10));
+				int minute = Integer.parseInt(interviewDate.substring(10, 12));
+				
+				DateTime now = DateTime.now(TimeZone.getDefault());
+				DateTime interviewDateTime = new DateTime(year, month, day, hour, minute, 0, 0);
+
+				if (now.minusDays(3).gteq(interviewDateTime)) {
 					interviewLists.get(i)
 							.setInterviewClassificationCode1(interviewLists.get(i).getInterviewClassificationCode2());
 					interviewLists.get(i).setInterviewDate1(interviewLists.get(i).getInterviewDate2());
@@ -1226,6 +1235,16 @@ public class SalesSituationController extends BaseController {
 					i--;
 				}
 			}
+		}
+
+		for (int i = 0; i < interviewLists.size(); i++) {
+			if (interviewLists.get(i).getInterviewResultAwaiting1() == null
+					|| interviewLists.get(i).getInterviewResultAwaiting1().equals("")) {
+				SalesSituationModel temp = new SalesSituationModel();
+				temp.setInterviewResultAwaiting1(interviewLists.get(i).getInterviewResultAwaiting1());
+				interviewLists.get(i).setInterviewResultAwaiting1(interviewLists.get(i).getInterviewResultAwaiting2());
+				interviewLists.get(i).setInterviewResultAwaiting2(temp.getInterviewResultAwaiting1());
+			} 
 		}
 
 		return interviewLists;
