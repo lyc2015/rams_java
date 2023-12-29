@@ -17,7 +17,8 @@ On T.employeeNo = T001Employee.employeeNo) AS M
 LEFT JOIN T001Employee
 On M.salesStaff = T001Employee.employeeNo) AS S
 LEFT JOIN T006EmployeeSiteInfo
-On S.employeeNo = T006EmployeeSiteInfo.employeeNo AND S.salesYearAndMonth = SUBSTRING(T006EmployeeSiteInfo.admissionStartDate, 1, 6)) AS K
+On S.employeeNo = T006EmployeeSiteInfo.employeeNo AND S.salesYearAndMonth = SUBSTRING(T006EmployeeSiteInfo.admissionStartDate, 1, 6) OR (S.employeeNo = T006EmployeeSiteInfo.employeeNo AND SUBSTRING(T006EmployeeSiteInfo.admissionStartDate, 1, 6) = IF(SUBSTRING(S.salesYearAndMonth, 5, 2) = '01', CONCAT(CONVERT(CONVERT(SUBSTRING(S.salesYearAndMonth, 1, 4), SIGNED) - 1, CHAR), '12'), CONVERT(CONVERT(S.salesYearAndMonth, SIGNED) - 1, CHAR)))
+) AS K
 LEFT JOIN T007CustomerInfo
 On K.customerNo = T007CustomerInfo.customerNo;
   </select>
