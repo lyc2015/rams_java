@@ -5,7 +5,7 @@
 		type="jp.co.lyc.cms.model.AnnualSalesSituationConfirmModel" />
 	<select id="getAnnualSalesSituationConfirmList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.AnnualSalesSituationConfirmModel">
-    select K.*, T007CustomerInfo.customerName from
+    select K.*, T007CustomerInfo.customerAbbreviation from
 (select S.*, T006EmployeeSiteInfo.customerNo, T006EmployeeSiteInfo.admissionEndDate from
 (select M.*, T001Employee.employeeFristName as salesStaffFirstName, T001Employee.employeeLastName as salesStaffLastName from
 (select T.employeeNo, T.salesYearAndMonth, T.salesStaff, employeeFristName as employeeFirstName, employeeLastName from
