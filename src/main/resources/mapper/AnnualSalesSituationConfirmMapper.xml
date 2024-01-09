@@ -6,7 +6,16 @@
 	<select id="getAnnualSalesSituationConfirmList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.AnnualSalesSituationConfirmModel">
     select K.*, T007CustomerInfo.customerAbbreviation from
-(select S.*, T006EmployeeSiteInfo.customerNo, T006EmployeeSiteInfo.admissionEndDate from
+(select S.*, CASE
+                WHEN t2.customerNo IS NOT NULL THEN t2.customerNo
+                WHEN t3.customerNo IS NOT NULL THEN t3.customerNo
+                ELSE NULL
+            END AS customerNo,
+            CASE
+                WHEN t2.customerNo IS NOT NULL THEN t2.admissionEndDate
+                WHEN t3.customerNo IS NOT NULL THEN t3.admissionEndDate
+                ELSE NULL
+            END AS admissionEndDate from
 (select M.*, T001Employee.employeeFristName as salesStaffFirstName, T001Employee.employeeLastName as salesStaffLastName from
 (select T.employeeNo, T.salesYearAndMonth, T.salesStaff, employeeFristName as employeeFirstName, employeeLastName from
 (select employeeNo, salesYearAndMonth, salesStaff from T010SalesSituation
@@ -16,8 +25,19 @@ LEFT JOIN T001Employee
 On T.employeeNo = T001Employee.employeeNo) AS M
 LEFT JOIN T001Employee
 On M.salesStaff = T001Employee.employeeNo) AS S
-LEFT JOIN T006EmployeeSiteInfo
-On S.employeeNo = T006EmployeeSiteInfo.employeeNo AND S.salesYearAndMonth = SUBSTRING(T006EmployeeSiteInfo.admissionStartDate, 1, 6) OR (S.employeeNo = T006EmployeeSiteInfo.employeeNo AND SUBSTRING(T006EmployeeSiteInfo.admissionStartDate, 1, 6) = IF(SUBSTRING(S.salesYearAndMonth, 5, 2) = '01', CONCAT(CONVERT(CONVERT(SUBSTRING(S.salesYearAndMonth, 1, 4), SIGNED) - 1, CHAR), '12'), CONVERT(CONVERT(S.salesYearAndMonth, SIGNED) - 1, CHAR)))
+LEFT JOIN T006EmployeeSiteInfo t2 On (S.employeeNo = t2.employeeNo AND
+            S.salesYearAndMonth = SUBSTRING(
+                t2.admissionStartDate,
+                1,
+                6
+            )) 
+            LEFT JOIN T006EmployeeSiteInfo t3 On (S.employeeNo = t3.employeeNo AND SUBSTRING(t3.admissionStartDate, 1, 6) = IF(SUBSTRING(S.salesYearAndMonth, 5, 2) = '01', CONCAT(CONVERT(CONVERT(SUBSTRING(S.salesYearAndMonth, 1, 4), SIGNED) - 1, CHAR), '12'), CONVERT(CONVERT(S.salesYearAndMonth, SIGNED) - 1, CHAR)))
+            WHERE
+                CASE
+                    WHEN t2.customerNo IS NOT NULL THEN 1
+                    WHEN t3.customerNo IS NOT NULL THEN 1
+                    ELSE 0
+                END = 1
 ) AS K
 LEFT JOIN T007CustomerInfo
 On K.customerNo = T007CustomerInfo.customerNo;
