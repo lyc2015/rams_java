@@ -240,6 +240,7 @@ public class SiteInfoController extends BaseController {
 		Map<String, Object> sendMap = putData(siteModel);
 		sendMap.put("prevWorkState", model.getPrevWorkState());
 		sendMap.put("prevAdmissionEndDate", model.getPrevAdmissionEndDate());
+		sendMap.put("prevScheduledEndDate", model.getPrevScheduledEndDate());
 
 		if (update(sendMap)) {
 			result.put("result", true);
