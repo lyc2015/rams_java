@@ -114,4 +114,6 @@ public interface SalesSituationMapper {
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date);
 
 	public List<SalesSituationModel> getEmployeeSiteWorkTermList(String salesYearAndMonth);
+
+	public void deleteUselessSalesSituationRecord(String employeeNo, String admissionEndDate);
 }

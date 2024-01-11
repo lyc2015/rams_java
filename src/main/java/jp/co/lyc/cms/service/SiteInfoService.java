@@ -112,6 +112,11 @@ public class SiteInfoService {
 				if(sendMap.get("workState").equals("1")) {
 					siteInfoMapper.salesSentenceUpdate(sendMap);
 				}
+
+				// 工作状态由终了变成稼动中的时候，删除T010表中无用的数据
+				if (sendMap.get("prevWorkState").equals("1") && sendMap.get("workState").equals("0") && sendMap.get("prevAdmissionEndDate") != null) {
+					salesSituationService.deleteUselessSalesSituationRecord(sendMap.get("employeeNo").toString(), sendMap.get("prevAdmissionEndDate").toString());
+				}
 			}
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

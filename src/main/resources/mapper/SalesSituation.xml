@@ -2048,4 +2048,12 @@
     ORDER BY 
     a.salesStaff;
 	</select>
+
+<!-- 根据employeeNo和现场结束日期删除T010表中无用的数据-->
+	<delete id="deleteUselessSalesSituationRecord" parameterType="String">
+	DELETE FROM
+	T010SalesSituation
+	WHERE
+	employeeNo = #{employeeNo} AND salesYearAndMonth > #{admissionEndDate}
+	</delete>
 </mapper>

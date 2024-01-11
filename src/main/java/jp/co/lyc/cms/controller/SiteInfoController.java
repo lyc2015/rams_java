@@ -23,6 +23,7 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.mapper.SiteInfoMapper;
 import jp.co.lyc.cms.mapper.SiteSearchMapper;
 import jp.co.lyc.cms.model.SiteModel;
+import jp.co.lyc.cms.model.SiteModelWithPrevState;
 import jp.co.lyc.cms.model.SiteSearchModel;
 import jp.co.lyc.cms.service.SiteInfoService;
 import jp.co.lyc.cms.util.StatusCodeToMsgMap;
@@ -207,7 +208,9 @@ public class SiteInfoController extends BaseController {
 
 	@RequestMapping(value = "/updateSiteInfo")
 	@ResponseBody
-	public Map<String, Object> updateSiteInfo(@RequestBody SiteModel siteModel) {
+	public Map<String, Object> updateSiteInfo(@RequestBody SiteModelWithPrevState model) {
+		SiteModel siteModel = model.getSiteModel();
+
 		Map<String, Object> result = new HashMap<>();
 		errorsMessage = "";
 		DataBinder binder = new DataBinder(siteModel);
@@ -234,7 +237,11 @@ public class SiteInfoController extends BaseController {
 			}
 		}
 		// 登陆处理
-		if (update(putData(siteModel))) {
+		Map<String, Object> sendMap = putData(siteModel);
+		sendMap.put("prevWorkState", model.getPrevWorkState());
+		sendMap.put("prevAdmissionEndDate", model.getPrevAdmissionEndDate());
+
+		if (update(sendMap)) {
 			result.put("result", true);
 		} else {
 			result.put("result", false);
