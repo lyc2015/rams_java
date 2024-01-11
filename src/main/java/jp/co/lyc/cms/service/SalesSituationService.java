@@ -224,4 +224,9 @@ public class SalesSituationService {
 	public List<SalesSituationModel> getEmployeeSiteWorkTermList(String salesYearAndMonth) {
 		return salesSituationMapper.getEmployeeSiteWorkTermList(salesYearAndMonth);
 	}
+
+	public void deleteUselessSalesSituationRecord(String employeeNo, String admissionEndDate) {
+		salesSituationMapper.deleteUselessSalesSituationRecord(employeeNo, admissionEndDate);
+	}
+	
 }
