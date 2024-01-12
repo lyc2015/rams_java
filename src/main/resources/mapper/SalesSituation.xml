@@ -2054,6 +2054,6 @@
 	DELETE FROM
 	T010SalesSituation
 	WHERE
-	employeeNo = #{employeeNo} AND salesYearAndMonth > #{admissionEndDate}
+	employeeNo = #{employeeNo} AND salesYearAndMonth >= #{admissionEndDate}
 	</delete>
 </mapper>

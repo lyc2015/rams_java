@@ -118,8 +118,12 @@ public class SiteInfoService {
 				// 工作状态由终了变成稼动中的时候，删除T010表中无用的数据
 				if ((sendMap.get("prevWorkState").equals("1") || sendMap.get("prevWorkState").equals("2")) && sendMap.get("workState").equals("0") && sendMap.get("prevAdmissionEndDate") != null) {
 					salesSituationService.deleteUselessSalesSituationRecord(sendMap.get("employeeNo").toString(), sendMap.get("prevAdmissionEndDate").toString());
+					// 存在预定终了日期的时候，删除T010表中无用的数据
 				} else if (sendMap.get("scheduledEndDate") == null && sendMap.get("prevScheduledEndDate") != null) {
 					salesSituationService.deleteUselessSalesSituationRecord(sendMap.get("employeeNo").toString(), sendMap.get("prevScheduledEndDate").toString());
+					// 当工作状态变为休假中的时候，删除T010表中无用的数据
+				} else if (sendMap.get("workState").equals("3") && sendMap.get("admissionStartDate") != null) {
+					salesSituationService.deleteUselessSalesSituationRecord(sendMap.get("employeeNo").toString(), sendMap.get("admissionStartDate").toString().substring(0, 6));
 				}
 			}
 		} catch (Exception e) {
