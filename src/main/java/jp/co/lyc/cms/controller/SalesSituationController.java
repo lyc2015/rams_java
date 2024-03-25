@@ -1,35 +1,25 @@
 package jp.co.lyc.cms.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.math.IntRange;
+import com.amazonaws.util.IOUtils;
+import jp.co.lyc.cms.model.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.util.TextUtils;
-import org.castor.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,32 +31,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.amazonaws.internal.FIFOCache;
 import com.amazonaws.util.StringUtils;
-
-import ch.qos.logback.core.joran.conditional.IfAction;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.mapper.EmployeeInfoMapper;
-import jp.co.lyc.cms.model.SalesSituationModel;
-import jp.co.lyc.cms.model.BpInfoModel;
-import jp.co.lyc.cms.model.MasterModel;
-import jp.co.lyc.cms.model.ModelClass;
-import jp.co.lyc.cms.model.S3Model;
-import jp.co.lyc.cms.model.SalesContent;
 import jp.co.lyc.cms.service.EmployeeInfoService;
 import jp.co.lyc.cms.service.SalesSituationService;
 import jp.co.lyc.cms.service.UtilsService;
-import jp.co.lyc.cms.util.StatusCodeToMsgMap;
 import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
-import software.amazon.ion.impl.PrivateScalarConversions.ValueVariant;
 
 @Controller
 @RequestMapping(value = "/salesSituation")
 public class SalesSituationController extends BaseController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	EmployeeInfoController employeeInfoController;
+
+	@Autowired
+	EmployeeInfoService employeeInfoService;
 
 	@Autowired
 	SalesSituationService salesSituationService;
@@ -79,9 +63,6 @@ public class SalesSituationController extends BaseController {
 
 	@Autowired
 	UtilsController utilsController;
-
-	@Autowired
-	EmployeeInfoService employeeInfoService;
 	
 	@Autowired
 	EmployeeInfoMapper employeeInfoMapper;
@@ -94,7 +75,7 @@ public class SalesSituationController extends BaseController {
 
 	/**
 	 * month minus
-	 * @param 202304
+	 * @param
 	 * @return 202303
 	 */
 	public Date minusMonth(Date date) {
@@ -127,7 +108,7 @@ public class SalesSituationController extends BaseController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			List<SalesSituationModel> temp = salesSituationService.getEmployeeHoliday(dateHoliday);
 			if (null != temp && temp.size() > 0) {
 				for (int i = 0; i < temp.size(); i++) {
@@ -144,7 +125,7 @@ public class SalesSituationController extends BaseController {
 				}
 			}
 		}
-		
+
 		{
 			// 离职
 			// T002EmployeeDetail.employeeFormCode=4, 更新时间=retirementYearAndMonth
@@ -160,7 +141,7 @@ public class SalesSituationController extends BaseController {
 			}
 			List<SalesSituationModel> temp = salesSituationService.getEmployeeRetire(dateRetire);
 			List<String> employeeNoList = new ArrayList<String>();
-			
+
 			if (null != temp && temp.size() > 0) {
 				// 如果resultList 已经存在同个员工,休假的状态的话,离职状态优先,对休假进行覆盖
 				if (null != resultList && resultList.size() > 0) {
@@ -236,7 +217,7 @@ public class SalesSituationController extends BaseController {
 				}
 			}
 		}
-		
+
 		// 处理名字和番号
 		if (null != resultList && resultList.size() > 0) {
 			for (int i = 0; i < resultList.size(); i++) {
@@ -256,8 +237,23 @@ public class SalesSituationController extends BaseController {
 		}
 
 		return resultList;
-	}
 
+
+	/*	EmployeeModel emp;
+		Map<String, Object> sendMap = employeeInfoController.getParam( emp);
+		List<EmployeeModel> employeeList = employeeInfoService.getEmployeeInfo(sendMap);
+		for (int i = 0; i < employeeList.size(); i++) {
+			// ローマ字
+			if (employeeList.get(i).getAlphabetName() != null) {
+				String alphabetName = employeeList.get(i).getAlphabetName();
+				if (alphabetName.split(" ").length > 2) {
+					String[] temp = alphabetName.split(" ");
+					alphabetName = temp[0] + " " + temp[1] + temp[2];
+					employeeList.get(i).setAlphabetName(alphabetName);
+				}
+			}
+		}*/
+	}
 	
 	private String getDifMonthByRetire(String admissionStartDate, String retirementYearAndMonth) {
 		if (!TextUtils.isEmpty(admissionStartDate) && !TextUtils.isEmpty(retirementYearAndMonth)) {
@@ -281,7 +277,7 @@ public class SalesSituationController extends BaseController {
 	/**
 	 * データを取得 ffff
 	 * 
-	 * @param emp
+	 * @param
 	 * @return List
 	 * @throws ParseException
 	 */
@@ -408,6 +404,28 @@ public class SalesSituationController extends BaseController {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SP)");
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SC)");
+			}
+
+			//// ローマ字
+        	if (salesSituationList.get(i).getAlphabetName() != null
+					&& !salesSituationList.get(i).getAlphabetName().equals("")) {
+				String alphabetName = salesSituationList.get(i).getAlphabetName();
+				if (alphabetName.split(" ").length ==2) {
+					String[] temp = alphabetName.split(" ");
+					alphabetName =  " " + temp[1].charAt(0);
+					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
+
+					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+
+				}
+				if (alphabetName.split(" ").length >2) {
+					String[] temp = alphabetName.split(" ");
+					alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
+					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
+
+					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+
+				}
 			}
 
 			// 履歴書名前
@@ -690,15 +708,15 @@ public class SalesSituationController extends BaseController {
 				}
 			}
 		}
-		salesSituationListTemp=salesSituationListTemp.stream()
-				.sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
+		//salesSituationListTemp=salesSituationListTemp.stream()
+				//.sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
 		return salesSituationListTemp;
 	}
 
 	/**
 	 * データを取得 ffff
 	 * 
-	 * @param emp
+	 * @param
 	 * @return List
 	 */
 
@@ -959,7 +977,7 @@ public class SalesSituationController extends BaseController {
 	/**
 	 * データを取得
 	 * 
-	 * @param emp
+	 * @param
 	 * @return List
 	 */
 
@@ -984,7 +1002,7 @@ public class SalesSituationController extends BaseController {
 	/**
 	 * 画面初期化のデータを取得
 	 * 
-	 * @param emp
+	 * @param
 	 * @return List
 	 * @throws Exception
 	 */
@@ -1238,7 +1256,7 @@ public class SalesSituationController extends BaseController {
 	/**
 	 * データを取得
 	 * 
-	 * @param emp
+	 * @param
 	 * @return List
 	 */
 
