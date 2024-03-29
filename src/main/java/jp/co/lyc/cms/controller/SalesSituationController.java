@@ -406,25 +406,24 @@ public class SalesSituationController extends BaseController {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SC)");
 			}
 
-			//// ローマ字
+			// 名字と名前のローマ字の略称
         	if (salesSituationList.get(i).getAlphabetName() != null
 					&& !salesSituationList.get(i).getAlphabetName().equals("")) {
 				String alphabetName = salesSituationList.get(i).getAlphabetName();
 				if (alphabetName.split(" ").length ==2) {
 					String[] temp = alphabetName.split(" ");
+					//名前のローマ字の略称　頭文字（二番）
 					alphabetName =  " " + temp[1].charAt(0);
 					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-
 					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
-
 				}
+
 				if (alphabetName.split(" ").length >2) {
 					String[] temp = alphabetName.split(" ");
+					//名前のローマ字の略称　頭文字（二番と三番）
 					alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
 					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-
 					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
-
 				}
 			}
 

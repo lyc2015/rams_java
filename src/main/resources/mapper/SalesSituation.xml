@@ -229,7 +229,7 @@
 	<select id="getSalesSituationList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT T001Employee.employeeFristName,
-		    T002EmployeeDetail.alphabetName,
+		T002EmployeeDetail.alphabetName,
 		T006EmployeeSiteInfo.employeeNo,
 		T006EmployeeSiteInfo.admissionStartDate,
 		T006EmployeeSiteInfo.admissionEndDate,

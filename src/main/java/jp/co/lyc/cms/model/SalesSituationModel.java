@@ -914,7 +914,7 @@ public class SalesSituationModel implements Serializable {
 		return alphabetName;
     }
 
-	public void setAlphabetName(String alphabetName) {
-		this.alphabetName = alphabetName;
-	}
+	public void setAlphabetName(String alphabetName) { this.alphabetName = alphabetName;}
+
+
 }
