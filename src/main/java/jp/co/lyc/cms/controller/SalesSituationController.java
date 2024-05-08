@@ -434,7 +434,7 @@ public class SalesSituationController extends BaseController {
 			} else if (salesSituationList.get(i).getEmployeeNo().substring(0, 2).equals("SC")) {
 				salesSituationList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeName() + "(SC)");
 			}
-
+			System.out.println("履歴書名前");
 			// 履歴書名前
 			if (salesSituationList.get(i).getResumeInfo1() != null
 					&& !salesSituationList.get(i).getResumeInfo1().equals("")) {
