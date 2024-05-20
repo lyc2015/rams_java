@@ -40,6 +40,8 @@ import jp.co.lyc.cms.service.UtilsService;
 import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
 
+
+
 @Controller
 @RequestMapping(value = "/salesSituation")
 public class SalesSituationController extends BaseController {
@@ -273,6 +275,70 @@ public class SalesSituationController extends BaseController {
 		}
 		return "";
 	}
+	/**
+	* csvをdownload
+	*
+	* @param
+	* @return List
+	* @throws ParseException
+	*/
+	@RequestMapping(value="/csvDownload",method = RequestMethod.POST)
+	@ResponseBody
+	public List<SalesSituationCsvModel> salesSituationCsvModelDownload(@RequestBody List<String> employeeNo ) throws Exception {
+		logger.info(employeeNo + "employeeNo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111");
+		logger.info("salesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力開始");
+		List<SalesSituationCsvModel> salesSituationCsvList = new ArrayList<>();
+		salesSituationCsvList = salesSituationService.getSalesSituationCsvList(employeeNo);
+		System.out.println(salesSituationCsvList.toString() + "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+		List<DevelopLanguagelistModel> developLanguagelist = new ArrayList<>();
+		developLanguagelist = salesSituationService.getDevelopLanguages(employeeNo);
+
+		for (int i = 0; i < salesSituationCsvList.size(); i++) {
+			for (int j = 0; j < developLanguagelist.size(); j++) {
+				if (salesSituationCsvList.get(i).getEmployeeNo().equals(developLanguagelist.get(j).getEmployeeNo())) {
+					String a = developLanguagelist.get(j).getDevelopLanguage();
+					a = a.substring(1, a.length() - 1);
+					a = a.replace("\"", "");
+					String[] arr = a.split(",");
+					StringJoiner sj = new StringJoiner(" 、");
+					for (String s : arr) {
+						if (s != null && !s.equals("")) {
+							sj.add(s);
+						}
+					}
+					String developLanguage = sj.toString();
+
+					salesSituationCsvList.get(i).setDevelopLanguage(developLanguage);
+				}
+				List<SalesSituationModel> salesSituationList = new ArrayList<SalesSituationModel>();
+				if (employeeNo.size() > 0)
+					salesSituationList = salesSituationService.getSalesSituationList(employeeNo);
+// 名字と名前のローマ字の略称
+				if (salesSituationList.get(i).getAlphabetName() != null
+						&& !salesSituationList.get(i).getAlphabetName().equals("")) {
+					String alphabetName = salesSituationList.get(i).getAlphabetName();
+					if (alphabetName.split(" ").length ==2) {
+						String[] temp = alphabetName.split(" ");
+						//名前のローマ字の略称　頭文字（二番）
+						alphabetName =  " " + temp[1].charAt(0);
+						String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
+						salesSituationCsvList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+					}
+
+					if (alphabetName.split(" ").length >2) {
+						String[] temp = alphabetName.split(" ");
+						//名前のローマ字の略称　頭文字（二番と三番）
+						alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
+						String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
+						salesSituationCsvList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+					}
+				}
+			}
+		}
+
+		logger.info("salesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力開始");
+		return salesSituationCsvList;
+		}
 
 	/**
 	 * データを取得 ffff

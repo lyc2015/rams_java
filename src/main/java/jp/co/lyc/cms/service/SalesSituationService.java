@@ -6,13 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import jp.co.lyc.cms.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jp.co.lyc.cms.mapper.SalesSituationMapper;
-import jp.co.lyc.cms.model.BpInfoModel;
-import jp.co.lyc.cms.model.SalesContent;
-import jp.co.lyc.cms.model.SalesSituationModel;
 
 @Component
 public class SalesSituationService {
@@ -211,5 +209,12 @@ public class SalesSituationService {
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date) {
 		return salesSituationMapper.getBpEmployeeConfirm(employeeNoList, date);
 	}
-	
+
+	public List<SalesSituationCsvModel> getSalesSituationCsvList(List<String> employeeNo) {
+		return salesSituationMapper.getSalesSituationCsvList(employeeNo);
+	}
+
+	public List<DevelopLanguagelistModel> getDevelopLanguages(List<String> employeeNo) {
+		return salesSituationMapper.getDevelopLanguages(employeeNo);
+	}
 }

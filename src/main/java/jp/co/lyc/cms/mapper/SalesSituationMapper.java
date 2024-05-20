@@ -1,14 +1,12 @@
 package jp.co.lyc.cms.mapper;
 
 import java.util.List;
+
+import jp.co.lyc.cms.model.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-
-import jp.co.lyc.cms.model.BpInfoModel;
-import jp.co.lyc.cms.model.SalesContent;
-import jp.co.lyc.cms.model.SalesSituationModel;
 
 @Mapper
 public interface SalesSituationMapper {
@@ -112,4 +110,8 @@ public interface SalesSituationMapper {
 	public List<SalesSituationModel> getBpEmployeeConfirmNoList();
 	
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date);
+
+	public List<SalesSituationCsvModel> getSalesSituationCsvList(List<String> employeeNo);
+
+	List<DevelopLanguagelistModel> getDevelopLanguages(List<String> employeeNo);
 }

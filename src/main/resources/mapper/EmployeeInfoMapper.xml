@@ -6,6 +6,7 @@
 	<resultMap id="stringResult" type="String" />
 	<select id="getEmployeeInfo" parameterType="map"
 		resultMap="Employee">
+		set @rowNo = 0;
 		SELECT
 		(@rowNo:=@rowNo + 1) AS rowNo,
 		T001.employeeNo,
