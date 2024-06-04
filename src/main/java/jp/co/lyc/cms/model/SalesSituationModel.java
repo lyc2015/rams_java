@@ -129,6 +129,8 @@ public class SalesSituationModel implements Serializable {
 	String workState;
 	String retirementYearAndMonth;
 
+	String alphabetName;
+
 	public String getComeToJapanYearAndMonth() {
 		return comeToJapanYearAndMonth;
 	}
@@ -979,4 +981,12 @@ public class SalesSituationModel implements Serializable {
 		this.bpSalesProgressCode = bpSalesProgressCode;
 	}
 
+	public String getAlphabetName() {
+
+		return alphabetName;
+	}
+
+	public void setAlphabetName(String alphabetName) {
+		this.alphabetName = alphabetName;
+	}
 }
