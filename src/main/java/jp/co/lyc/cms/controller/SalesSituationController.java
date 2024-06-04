@@ -1,6 +1,5 @@
 package jp.co.lyc.cms.controller;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,8 +39,6 @@ import jp.co.lyc.cms.service.UtilsService;
 import jp.co.lyc.cms.util.UtilsController;
 import jp.co.lyc.cms.validation.SalesSituationValidation;
 
-
-
 @Controller
 @RequestMapping(value = "/salesSituation")
 public class SalesSituationController extends BaseController {
@@ -65,18 +62,18 @@ public class SalesSituationController extends BaseController {
 
 	@Autowired
 	UtilsController utilsController;
-	
+
 	@Autowired
 	EmployeeInfoMapper employeeInfoMapper;
-	
+
 	// 12月
 	public static final String DECEMBER = "12";
 	// 1月
 	public static final String JANUARY = "01";
 
-
 	/**
 	 * month minus
+	 * 
 	 * @param
 	 * @return 202303
 	 */
@@ -87,7 +84,7 @@ public class SalesSituationController extends BaseController {
 		Date returnDate = calendar.getTime();
 		return returnDate;
 	}
-	
+
 	/**
 	 * Finish データを取得
 	 *
@@ -115,7 +112,8 @@ public class SalesSituationController extends BaseController {
 			if (null != temp && temp.size() > 0) {
 				for (int i = 0; i < temp.size(); i++) {
 					SalesSituationModel employeeHoliday = temp.get(i);
-					List<SalesSituationModel> salesSituationRecent = salesSituationService.getEmployeeHolidayRecentSite(employeeHoliday.getEmployeeNo());
+					List<SalesSituationModel> salesSituationRecent = salesSituationService
+							.getEmployeeHolidayRecentSite(employeeHoliday.getEmployeeNo());
 					if (null != salesSituationRecent && salesSituationRecent.size() > 0) {
 						if (salesSituationRecent.size() >= 2) {
 							// 显示休假前的一条现场记录
@@ -151,7 +149,8 @@ public class SalesSituationController extends BaseController {
 						SalesSituationModel employeeHoliday = resultList.get(i);
 						for (int j = 0; j < temp.size(); j++) {
 							SalesSituationModel employeeRetire = temp.get(j);
-							if (null != employeeHoliday.getEmployeeNo() && null != employeeRetire.getEmployeeNo() && employeeRetire.getEmployeeNo().equals(employeeHoliday.getEmployeeNo())) {
+							if (null != employeeHoliday.getEmployeeNo() && null != employeeRetire.getEmployeeNo()
+									&& employeeRetire.getEmployeeNo().equals(employeeHoliday.getEmployeeNo())) {
 								resultList.remove(i);
 							}
 						}
@@ -166,19 +165,27 @@ public class SalesSituationController extends BaseController {
 			}
 			// 在获取unitPrice和addmissionStartDate
 			if (null != employeeNoList && employeeNoList.size() > 0) {
-				List<SalesSituationModel> tempWithPriceAndDate = salesSituationService.getEmployeeRetireSiteInfo(employeeNoList);
+				List<SalesSituationModel> tempWithPriceAndDate = salesSituationService
+						.getEmployeeRetireSiteInfo(employeeNoList);
 				if (null != tempWithPriceAndDate && tempWithPriceAndDate.size() > 0) {
 					for (int i = 0; i < resultList.size(); i++) {
 						SalesSituationModel employeeHolidayAndRetire = resultList.get(i);
 						for (int j = 0; j < tempWithPriceAndDate.size(); j++) {
 							SalesSituationModel employeeWithPriceAndDate = tempWithPriceAndDate.get(j);
-							if (null != employeeWithPriceAndDate.getEmployeeNo() && null != employeeHolidayAndRetire.getEmployeeNo() && employeeHolidayAndRetire.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
+							if (null != employeeWithPriceAndDate.getEmployeeNo()
+									&& null != employeeHolidayAndRetire.getEmployeeNo() && employeeHolidayAndRetire
+											.getEmployeeNo().equals(employeeWithPriceAndDate.getEmployeeNo())) {
 								employeeHolidayAndRetire.setUnitPrice(employeeWithPriceAndDate.getUnitPrice());
-								employeeHolidayAndRetire.setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
-								employeeHolidayAndRetire.setAdmissionPeriodDate(employeeWithPriceAndDate.getAdmissionPeriodDate());
+								employeeHolidayAndRetire
+										.setAdmissionStartDate(employeeWithPriceAndDate.getAdmissionStartDate());
+								employeeHolidayAndRetire
+										.setAdmissionPeriodDate(employeeWithPriceAndDate.getAdmissionPeriodDate());
 								employeeHolidayAndRetire.setCustomer(employeeWithPriceAndDate.getCustomer());
-								if (TextUtils.isEmpty(employeeWithPriceAndDate.getAdmissionPeriodDate()) && "0".equals(employeeWithPriceAndDate.getWorkState())) {
-									employeeHolidayAndRetire.setAdmissionPeriodDate(getDifMonthByRetire(employeeWithPriceAndDate.getAdmissionStartDate(), employeeHolidayAndRetire.getRetirementYearAndMonth()));
+								if (TextUtils.isEmpty(employeeWithPriceAndDate.getAdmissionPeriodDate())
+										&& "0".equals(employeeWithPriceAndDate.getWorkState())) {
+									employeeHolidayAndRetire.setAdmissionPeriodDate(
+											getDifMonthByRetire(employeeWithPriceAndDate.getAdmissionStartDate(),
+													employeeHolidayAndRetire.getRetirementYearAndMonth()));
 								}
 							}
 						}
@@ -188,7 +195,8 @@ public class SalesSituationController extends BaseController {
 		}
 		// 协力
 		{
-			// 终了且所属确定 T011BpInfoSupplement.bpSalesProgressCode=4 && T006EmployeeSiteInfo.workstate=1, 更新时间=bpOtherCompanyAdmissionEndDate
+			// 终了且所属确定 T011BpInfoSupplement.bpSalesProgressCode=4 &&
+			// T006EmployeeSiteInfo.workstate=1, 更新时间=bpOtherCompanyAdmissionEndDate
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 			String dateBpConfirm = "";
 			try {
@@ -204,13 +212,15 @@ public class SalesSituationController extends BaseController {
 				for (int i = 0; i < employeeList.size(); i++) {
 					employeeNoList.add(employeeList.get(i).getEmployeeNo());
 				}
-				List<SalesSituationModel> temp = salesSituationService.getBpEmployeeConfirm(employeeNoList, dateBpConfirm);
+				List<SalesSituationModel> temp = salesSituationService.getBpEmployeeConfirm(employeeNoList,
+						dateBpConfirm);
 				if (null != temp && temp.size() > 0) {
 					for (int i = 0; i < temp.size(); i++) {
 						SalesSituationModel newEmployee = temp.get(i);
 						for (int j = 0; j < employeeList.size(); j++) {
 							SalesSituationModel oldEmployee = employeeList.get(j);
-							if (null != oldEmployee.getEmployeeNo() && null != newEmployee.getEmployeeNo() && oldEmployee.getEmployeeNo().equals(newEmployee.getEmployeeNo())) {
+							if (null != oldEmployee.getEmployeeNo() && null != newEmployee.getEmployeeNo()
+									&& oldEmployee.getEmployeeNo().equals(newEmployee.getEmployeeNo())) {
 								newEmployee.setCustomerAbbreviation(oldEmployee.getCustomerAbbreviation());
 							}
 						}
@@ -224,7 +234,8 @@ public class SalesSituationController extends BaseController {
 		if (null != resultList && resultList.size() > 0) {
 			for (int i = 0; i < resultList.size(); i++) {
 				resultList.get(i).setRowNo(i + 1);
-				resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeFristName() + resultList.get(i).getEmployeeLastName());
+				resultList.get(i).setEmployeeName(
+						resultList.get(i).getEmployeeFristName() + resultList.get(i).getEmployeeLastName());
 
 				if (resultList.get(i).getEmployeeNo().substring(0, 3).equals("BPR")) {
 					resultList.get(i).setEmployeeName(resultList.get(i).getEmployeeName() + "(BPR)");
@@ -240,30 +251,32 @@ public class SalesSituationController extends BaseController {
 
 		return resultList;
 
-
-	/*	EmployeeModel emp;
-		Map<String, Object> sendMap = employeeInfoController.getParam( emp);
-		List<EmployeeModel> employeeList = employeeInfoService.getEmployeeInfo(sendMap);
-		for (int i = 0; i < employeeList.size(); i++) {
-			// ローマ字
-			if (employeeList.get(i).getAlphabetName() != null) {
-				String alphabetName = employeeList.get(i).getAlphabetName();
-				if (alphabetName.split(" ").length > 2) {
-					String[] temp = alphabetName.split(" ");
-					alphabetName = temp[0] + " " + temp[1] + temp[2];
-					employeeList.get(i).setAlphabetName(alphabetName);
-				}
-			}
-		}*/
+		/*
+		 * EmployeeModel emp;
+		 * Map<String, Object> sendMap = employeeInfoController.getParam( emp);
+		 * List<EmployeeModel> employeeList =
+		 * employeeInfoService.getEmployeeInfo(sendMap);
+		 * for (int i = 0; i < employeeList.size(); i++) {
+		 * // ローマ字
+		 * if (employeeList.get(i).getAlphabetName() != null) {
+		 * String alphabetName = employeeList.get(i).getAlphabetName();
+		 * if (alphabetName.split(" ").length > 2) {
+		 * String[] temp = alphabetName.split(" ");
+		 * alphabetName = temp[0] + " " + temp[1] + temp[2];
+		 * employeeList.get(i).setAlphabetName(alphabetName);
+		 * }
+		 * }
+		 * }
+		 */
 	}
-	
+
 	private String getDifMonthByRetire(String admissionStartDate, String retirementYearAndMonth) {
 		if (!TextUtils.isEmpty(admissionStartDate) && !TextUtils.isEmpty(retirementYearAndMonth)) {
 			try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 				LocalDate startDate = LocalDate.parse(admissionStartDate, formatter);
 				LocalDate retireDate = LocalDate.parse(retirementYearAndMonth, formatter);
-				
+
 				Period p = Period.between(startDate, retireDate);
 				int months = p.getYears() * 12 + p.getMonths();
 				if (months > 0) {
@@ -275,21 +288,24 @@ public class SalesSituationController extends BaseController {
 		}
 		return "";
 	}
+
 	/**
-	* csvをdownload
-	*
-	* @param
-	* @return List
-	* @throws ParseException
-	*/
-	@RequestMapping(value="/csvDownload",method = RequestMethod.POST)
+	 * csvをdownload
+	 *
+	 * @param
+	 * @return List
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/csvDownload", method = RequestMethod.POST)
 	@ResponseBody
-	public List<SalesSituationCsvModel> salesSituationCsvModelDownload(@RequestBody List<String> employeeNo ) throws Exception {
+	public List<SalesSituationCsvModel> salesSituationCsvModelDownload(@RequestBody List<String> employeeNo)
+			throws Exception {
 		logger.info(employeeNo + "employeeNo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111");
 		logger.info("salesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力開始");
 		List<SalesSituationCsvModel> salesSituationCsvList = new ArrayList<>();
 		salesSituationCsvList = salesSituationService.getSalesSituationCsvList(employeeNo);
-		System.out.println(salesSituationCsvList.toString() + "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+		System.out.println(
+				salesSituationCsvList.toString() + "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 		List<DevelopLanguagelistModel> developLanguagelist = new ArrayList<>();
 		developLanguagelist = salesSituationService.getDevelopLanguages(employeeNo);
 
@@ -313,24 +329,26 @@ public class SalesSituationController extends BaseController {
 				List<SalesSituationModel> salesSituationList = new ArrayList<SalesSituationModel>();
 				if (employeeNo.size() > 0)
 					salesSituationList = salesSituationService.getSalesSituationList(employeeNo);
-// 名字と名前のローマ字の略称
+				// 名字と名前のローマ字の略称
 				if (salesSituationList.get(i).getAlphabetName() != null
 						&& !salesSituationList.get(i).getAlphabetName().equals("")) {
 					String alphabetName = salesSituationList.get(i).getAlphabetName();
-					if (alphabetName.split(" ").length ==2) {
+					if (alphabetName.split(" ").length == 2) {
 						String[] temp = alphabetName.split(" ");
-						//名前のローマ字の略称　頭文字（二番）
-						alphabetName =  " " + temp[1].charAt(0);
+						// 名前のローマ字の略称 頭文字（二番）
+						alphabetName = " " + temp[1].charAt(0);
 						String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-						salesSituationCsvList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+						salesSituationCsvList.get(i)
+								.setEmployeeName(salesSituationList.get(i).getEmployeeFristName() + " " + alphabetName);
 					}
 
-					if (alphabetName.split(" ").length >2) {
+					if (alphabetName.split(" ").length > 2) {
 						String[] temp = alphabetName.split(" ");
-						//名前のローマ字の略称　頭文字（二番と三番）
-						alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
+						// 名前のローマ字の略称 頭文字（二番と三番）
+						alphabetName = " " + temp[1].charAt(0) + temp[2].charAt(0);
 						String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-						salesSituationCsvList.get(i).setEmployeeName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
+						salesSituationCsvList.get(i)
+								.setEmployeeName(salesSituationList.get(i).getEmployeeFristName() + " " + alphabetName);
 					}
 				}
 			}
@@ -338,7 +356,7 @@ public class SalesSituationController extends BaseController {
 
 		logger.info("salesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力開始");
 		return salesSituationCsvList;
-		}
+	}
 
 	/**
 	 * データを取得 ffff
@@ -409,24 +427,25 @@ public class SalesSituationController extends BaseController {
 
 		ArrayList<ModelClass> dropDownGetJapaneseLevelList = new ArrayList<ModelClass>();
 		ArrayList<ModelClass> dropDownGetJapaneaseConversationLevelList = new ArrayList<ModelClass>();
-		
+
 		// 日本語等级，例： N1，N2，N3
 		try {
 			Method methodGetJapaneseLevel = utilsController.getClass().getMethod("getJapaneseLevel");
-			dropDownGetJapaneseLevelList = (ArrayList<ModelClass>)methodGetJapaneseLevel.invoke(utilsController);
+			dropDownGetJapaneseLevelList = (ArrayList<ModelClass>) methodGetJapaneseLevel.invoke(utilsController);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// 日本語会话等级，例： N1流暢，N1弱い
 		try {
-			Method methodGetJapaneaseConversationLevel = utilsController.getClass().getMethod("getJapaneaseConversationLevel");
-			dropDownGetJapaneaseConversationLevelList = (ArrayList<ModelClass>)methodGetJapaneaseConversationLevel.invoke(utilsController);
+			Method methodGetJapaneaseConversationLevel = utilsController.getClass()
+					.getMethod("getJapaneaseConversationLevel");
+			dropDownGetJapaneaseConversationLevelList = (ArrayList<ModelClass>) methodGetJapaneaseConversationLevel
+					.invoke(utilsController);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		for (int i = 0; i < salesSituationList.size(); i++) {
 			// 日本語
 			String japaneaseLevelDes = "";
@@ -434,7 +453,9 @@ public class SalesSituationController extends BaseController {
 				// 从营业文章中查询
 				try {
 					if (null != salesSituationList.get(i).getJapaneaseConversationLevel()) {
-						String japaneaseConversationLevelName = dropDownGetJapaneaseConversationLevelList.get(Integer.parseInt(salesSituationList.get(i).getJapaneaseConversationLevel())).getName();
+						String japaneaseConversationLevelName = dropDownGetJapaneaseConversationLevelList
+								.get(Integer.parseInt(salesSituationList.get(i).getJapaneaseConversationLevel()))
+								.getName();
 						japaneaseLevelDes = japaneaseConversationLevelName;
 						if (japaneaseLevelDes.endsWith("業務確認")) {
 							japaneaseLevelDes = japaneaseLevelDes.substring(0, japaneaseLevelDes.length() - 5);
@@ -447,12 +468,13 @@ public class SalesSituationController extends BaseController {
 					e.printStackTrace();
 				}
 			}
-			
-			if(TextUtils.isEmpty(japaneaseLevelDes)) {
+
+			if (TextUtils.isEmpty(japaneaseLevelDes)) {
 				// 从个人情报中查询
 				try {
 					if (null != salesSituationList.get(i).getJapaneseLevelCode()) {
-						String japaneseLevelCodeName = dropDownGetJapaneseLevelList.get(Integer.parseInt(salesSituationList.get(i).getJapaneseLevelCode())).getName();
+						String japaneseLevelCodeName = dropDownGetJapaneseLevelList
+								.get(Integer.parseInt(salesSituationList.get(i).getJapaneseLevelCode())).getName();
 						japaneaseLevelDes = japaneseLevelCodeName;
 					}
 				} catch (Exception e) {
@@ -473,25 +495,31 @@ public class SalesSituationController extends BaseController {
 			}
 
 			// 名字と名前のローマ字の略称
-        	if (salesSituationList.get(i).getAlphabetName() != null
-					&& !salesSituationList.get(i).getAlphabetName().equals("")) {
-				String alphabetName = salesSituationList.get(i).getAlphabetName();
-				if (alphabetName.split(" ").length ==2) {
-					String[] temp = alphabetName.split(" ");
-					//名前のローマ字の略称　頭文字（二番）
-					alphabetName =  " " + temp[1].charAt(0);
-					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
-				}
+			// if (salesSituationList.get(i).getAlphabetName() != null
+			// && !salesSituationList.get(i).getAlphabetName().equals("")) {
+			// String alphabetName = salesSituationList.get(i).getAlphabetName();
+			// if (alphabetName.split(" ").length ==2) {
+			// String[] temp = alphabetName.split(" ");
+			// //名前のローマ字の略称 頭文字（二番）
+			// alphabetName = " " + temp[1].charAt(0);
+			// String employeeFristName = salesSituationList.get(i).getEmployeeFristName() +
+			// " ";
+			// salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+"
+			// " +alphabetName);
+			// }
 
-				if (alphabetName.split(" ").length >2) {
-					String[] temp = alphabetName.split(" ");
-					//名前のローマ字の略称　頭文字（二番と三番）
-					alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
-					String employeeFristName = salesSituationList.get(i).getEmployeeFristName() + " ";
-					salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+" " +alphabetName);
-				}
-			}
+			// if (alphabetName.split(" ").length >2) {
+			// String[] temp = alphabetName.split(" ");
+			// //名前のローマ字の略称 頭文字（二番と三番）
+			// alphabetName =" " + temp[1].charAt(0) + temp[2].charAt(0);
+			// String employeeFristName = salesSituationList.get(i).getEmployeeFristName() +
+			// " ";
+			// salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getEmployeeFristName()+"
+			// " +alphabetName);
+			// }
+			// }
+
+			salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getAlphabetName());
 
 			// 履歴書名前
 			if (salesSituationList.get(i).getResumeInfo1() != null
@@ -573,7 +601,8 @@ public class SalesSituationController extends BaseController {
 						 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
 						 * getSalesProgressCode()); }
 						 */
-						salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
+						salesSituationList.get(i)
+								.setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
 						salesSituationList.get(i)
 								.setSalesDateUpdate(T010SalesSituationList.get(j).getSalesYearAndMonth());
 						salesSituationList.get(i).setInterviewDate1(T010SalesSituationList.get(j).getInterviewDate1());
@@ -608,7 +637,8 @@ public class SalesSituationController extends BaseController {
 							 * salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).
 							 * getSalesProgressCode()); }
 							 */
-							salesSituationList.get(i).setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
+							salesSituationList.get(i)
+									.setSalesProgressCode(T010SalesSituationList.get(j).getSalesProgressCode());
 							salesSituationList.get(i)
 									.setSalesDateUpdate(T010SalesSituationList.get(j).getSalesYearAndMonth());
 							salesSituationList.get(i)
@@ -653,7 +683,7 @@ public class SalesSituationController extends BaseController {
 				i--;
 			}
 		}
-		
+
 		for (int i = 0; i < salesSituationList.size(); i++) {
 			if (salesSituationList.get(i).getSalesProgressCode() != null
 					&& !(salesSituationList.get(i).getSalesProgressCode().equals("1")
@@ -702,13 +732,14 @@ public class SalesSituationController extends BaseController {
 
 					if (salesSituationListTemp.get(i).getEmployeeNo()
 							.equals(T011BpInfoSupplementList.get(j).getBpEmployeeNo())) {
-						if(T011BpInfoSupplementList.get(j).getBpSalesProgressCode().equals("4")) {
-							if(salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
+						if (T011BpInfoSupplementList.get(j).getBpSalesProgressCode().equals("4")) {
+							if (salesSituationListTemp.get(i).getSalesDateUpdate() == null || !salesSituationListTemp
+									.get(i).getSalesDateUpdate().equals(model.getSalesYearAndMonth())) {
 								salesSituationListTemp.remove(i);
 								i--;
 								break;
 							}
-						}else{
+						} else {
 							salesSituationListTemp.remove(i);
 							i--;
 							break;
@@ -766,15 +797,15 @@ public class SalesSituationController extends BaseController {
 					|| salesSituationListTemp.get(i).getAdmissionEndDate().equals("")) {
 				if (salesSituationListTemp.get(i).getSalesProgressCode() == null
 						|| salesSituationListTemp.get(i).getSalesProgressCode().equals("")) {
-					if(!salesSituationListTemp.get(i).getEmployeeStatus().equals("1")) {
+					if (!salesSituationListTemp.get(i).getEmployeeStatus().equals("1")) {
 						salesSituationListTemp.get(i).setSalesProgressCode("2");
 					}
-					
+
 				}
 			}
 		}
-		//salesSituationListTemp=salesSituationListTemp.stream()
-				//.sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
+		// salesSituationListTemp=salesSituationListTemp.stream()
+		// .sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
 		return salesSituationListTemp;
 	}
 
@@ -802,7 +833,8 @@ public class SalesSituationController extends BaseController {
 			String curDate = sdf.format(date);
 			// 社員営業され日付
 			String salesDate = getSalesDate(model.getSalesYearAndMonth());
-//			String salesDate = String.valueOf(Integer.valueOf(model.getSalesYearAndMonth()) + 1);
+			// String salesDate =
+			// String.valueOf(Integer.valueOf(model.getSalesYearAndMonth()) + 1);
 			salesSituationList = salesSituationService.getSalesSituationModel(model.getSalesYearAndMonth(), curDate,
 					salesDate);
 			developLanguageList = salesSituationService.getDevelopLanguage();
@@ -1360,8 +1392,8 @@ public class SalesSituationController extends BaseController {
 		model.setBeginMonth(model.getTempDate());
 		try {
 			index = salesSituationService.updateSalesSentence(model);
-			// 個人情報情報の最寄駅情報を同期更新  lxf-20230412
-			Map<String, Object> sendMap=new HashMap<>();
+			// 個人情報情報の最寄駅情報を同期更新 lxf-20230412
+			Map<String, Object> sendMap = new HashMap<>();
 			sendMap.put("employeeNo", model.getEmployeeNo());
 			sendMap.put("stationCode", model.getStationCode());
 			sendMap.put("updateUser", (String) getSession().getAttribute("employeeName"));
@@ -1408,9 +1440,9 @@ public class SalesSituationController extends BaseController {
 					String nextAdmission = salesSituationService.getEmpNextAdmission(model.getEmployeeNo());
 					if (nextAdmission != null && nextAdmission.equals("0")) {
 						salesSituationService.updateEmpNextAdmission(model);
-//						errorsMessage += "稼働中の現場存在しています、現場データをチェックしてください。";
-//						result.put("errorsMessage", errorsMessage);
-//						return result;
+						// errorsMessage += "稼働中の現場存在しています、現場データをチェックしてください。";
+						// result.put("errorsMessage", errorsMessage);
+						// return result;
 					} else {
 						salesSituationService.insertEmpNextAdmission(model);
 					}

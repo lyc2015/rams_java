@@ -24,7 +24,7 @@ public class SalesSituationModel implements Serializable {
 	String employeeNo;
 	String employeeFristName;
 	String employeeLastName;
-	
+
 	String salesYearAndMonth;
 	String intoCompanyYearAndMonth;
 	String interviewDate1;
@@ -122,7 +122,7 @@ public class SalesSituationModel implements Serializable {
 	String retirementYearAndMonth;
 
 	String alphabetName;
-	
+
 	public String getComeToJapanYearAndMonth() {
 		return comeToJapanYearAndMonth;
 	}
@@ -909,12 +909,12 @@ public class SalesSituationModel implements Serializable {
 		this.bpSalesProgressCode = bpSalesProgressCode;
 	}
 
-    public String getAlphabetName() {
+	public String getAlphabetName() {
 
 		return alphabetName;
-    }
+	}
 
-	public void setAlphabetName(String alphabetName) { this.alphabetName = alphabetName;}
-
-
+	public void setAlphabetName(String alphabetName) {
+		this.alphabetName = alphabetName;
+	}
 }
