@@ -438,7 +438,6 @@ public class SalesSituationController extends BaseController {
 
 			salesSituationList.get(i).setAlphabetName(salesSituationList.get(i).getAlphabetName());
 
-			System.out.println("履歴書名前");
 			// 履歴書名前
 			if (salesSituationList.get(i).getResumeInfo1() != null
 					&& !salesSituationList.get(i).getResumeInfo1().equals("")) {
