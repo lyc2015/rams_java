@@ -51,6 +51,7 @@ import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.mapper.EmployeeInfoMapper;
 import jp.co.lyc.cms.mapper.SiteInfoMapper;
 import jp.co.lyc.cms.model.SalesSituationModel;
+import jp.co.lyc.cms.model.SalesSituationCsvModel;
 import jp.co.lyc.cms.model.SiteModel;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.MasterModel;
@@ -1122,6 +1123,26 @@ public class SalesSituationController extends BaseController {
 
 		logger.info("updateSalesSituation" + "検索結束");
 		return salesSituationList;
+	}
+
+	/**
+	 * 営業csv
+	 * 
+	 * @param emp
+	 * @return List
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/csvDownload", method = RequestMethod.POST)
+	@ResponseBody
+	public List<SalesSituationCsvModel> csvDownload(@RequestBody List<String> employeeNo) throws Exception {
+
+		logger.info("SalesSituationController.csvDownload:" + "csvDownloadによると、社員情報csvを出力開始");
+		List<SalesSituationCsvModel> salesSituationInfoCsvList = new ArrayList<SalesSituationCsvModel>();
+
+		salesSituationInfoCsvList = salesSituationService.getSalesSituationCSV(employeeNo);
+		logger.info(
+				"SalesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力結束");
+		return salesSituationInfoCsvList;
 	}
 
 	@RequestMapping(value = "/getInterviewLists", method = RequestMethod.POST)

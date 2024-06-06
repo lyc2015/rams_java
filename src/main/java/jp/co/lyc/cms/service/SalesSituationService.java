@@ -13,6 +13,7 @@ import jp.co.lyc.cms.mapper.SalesSituationMapper;
 import jp.co.lyc.cms.mapper.SiteInfoMapper;
 import jp.co.lyc.cms.model.BpInfoModel;
 import jp.co.lyc.cms.model.SalesContent;
+import jp.co.lyc.cms.model.SalesSituationCsvModel;
 import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.SiteModel;
 
@@ -64,7 +65,7 @@ public class SalesSituationService {
 
 	public List<SalesSituationModel> getT010SalesSituation(String sysDate, String curDate, String salesDate) {
 		List<String> employeeNoList = salesSituationMapper.getT010SalesSituation(sysDate, curDate, salesDate);
-		return salesSituationMapper.getT010SalesSituationByEmployeeNo(employeeNoList,salesDate);
+		return salesSituationMapper.getT010SalesSituationByEmployeeNo(employeeNoList, salesDate);
 	}
 
 	public List<SalesSituationModel> getT010SalesSituationBefore(String sysDate, String curDate, String salesDate) {
@@ -130,7 +131,7 @@ public class SalesSituationService {
 	public int updateSalesSentence(SalesContent model) {
 		return salesSituationMapper.updateSalesSentence(model);
 	}
-	
+
 	public void updateSalesSentenceByemployeeNo(SalesContent model) {
 		salesSituationMapper.updateSalesSentenceByemployeeNo(model);
 	}
@@ -160,7 +161,7 @@ public class SalesSituationService {
 	}
 
 	public int updateBPEMPInfo(SalesSituationModel model) {
-		//salesSituationMapper.updateBPEMPInfo(model);
+		// salesSituationMapper.updateBPEMPInfo(model);
 		if (model.getSalesProgressCode().equals("4") || model.getSalesProgressCode().equals("5")
 				|| model.getSalesProgressCode().equals("7")) {
 			model.setAdmissionEndDate("");
@@ -191,7 +192,6 @@ public class SalesSituationService {
 		return reStr;
 	}
 
-
 	public List<SalesSituationModel> getEmployeeHoliday(String date) {
 		return salesSituationMapper.getEmployeeHoliday(date);
 	}
@@ -199,7 +199,7 @@ public class SalesSituationService {
 	public List<SalesSituationModel> getEmployeeHolidayRecentSite(String employeeNo) {
 		return salesSituationMapper.getEmployeeHolidayRecentSite(employeeNo);
 	}
-	
+
 	public List<SalesSituationModel> getEmployeeRetire(String date) {
 		return salesSituationMapper.getEmployeeRetire(date);
 	}
@@ -211,7 +211,7 @@ public class SalesSituationService {
 	public List<SalesSituationModel> getBpEmployeeConfirmNoList() {
 		return salesSituationMapper.getBpEmployeeConfirmNoList();
 	}
-	
+
 	public List<SalesSituationModel> getBpEmployeeConfirm(List<String> employeeNoList, String date) {
 		return salesSituationMapper.getBpEmployeeConfirm(employeeNoList, date);
 	}
@@ -220,7 +220,7 @@ public class SalesSituationService {
 		List<SiteModel> siteList = siteInfoMapper.getSiteInfo(employeeNo);
 		return siteList;
 	}
-	
+
 	public List<SalesSituationModel> getEmployeeSiteWorkTermList(String salesYearAndMonth) {
 		return salesSituationMapper.getEmployeeSiteWorkTermList(salesYearAndMonth);
 	}
@@ -228,5 +228,8 @@ public class SalesSituationService {
 	public void deleteUselessSalesSituationRecord(String employeeNo, String admissionEndDate) {
 		salesSituationMapper.deleteUselessSalesSituationRecord(employeeNo, admissionEndDate);
 	}
-	
+
+	public List<SalesSituationCsvModel> getSalesSituationCSV(List<String> employeeNo) {
+		return salesSituationMapper.getSalesSituationCSV(employeeNo);
+	}
 }
