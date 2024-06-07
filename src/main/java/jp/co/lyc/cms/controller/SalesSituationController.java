@@ -537,6 +537,7 @@ public class SalesSituationController extends BaseController {
 						salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
 						salesSituationList.get(i).setRemark2(T010SalesSituationList.get(j).getRemark2());
 						salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
+						salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
 						salesSituationList.get(i)
 								.setSalesPriorityStatus(T010SalesSituationList.get(j).getSalesPriorityStatus());
 						salesSituationList.get(i).setCustomer(T010SalesSituationList.get(j).getConfirmCustomer());
@@ -1139,6 +1140,20 @@ public class SalesSituationController extends BaseController {
 		List<SalesSituationCsvModel> salesSituationInfoCsvList = new ArrayList<SalesSituationCsvModel>();
 
 		salesSituationInfoCsvList = salesSituationService.getSalesSituationCSV(employeeNo);
+
+		for (int i = 0; i < salesSituationInfoCsvList.size(); i++) {
+			if (salesSituationInfoCsvList.get(i).getYearsOfExperience() != null
+					&& salesSituationInfoCsvList.get(i).getYearsOfExperience().length() >= 4) {
+				Calendar date = Calendar.getInstance();
+				String year = String.valueOf(date.get(Calendar.YEAR));
+				int tempYear = Integer.parseInt(year)
+						- Integer.parseInt(salesSituationInfoCsvList.get(i).getYearsOfExperience().substring(0, 4)) + 1;
+				if (tempYear < 0)
+					tempYear = 0;
+				salesSituationInfoCsvList.get(i).setYearsOfExperience(String.valueOf(tempYear));
+			}
+		}
+
 		logger.info(
 				"SalesSituationController.csvDownload:" + "csvDownloadによると、営業情報csvを出力結束");
 		return salesSituationInfoCsvList;

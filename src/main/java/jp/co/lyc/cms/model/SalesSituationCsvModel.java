@@ -8,6 +8,8 @@ public class SalesSituationCsvModel implements Serializable {
 	 */
 	// private static final long serialVersionUID = -2028159323401651353L;
 	String employeeNo;// 社員番号
+	String alphabetName;// alphabetName
+	String employeeFristName;// employeeFristName
 	String employeeName;// 社員氏名
 	String yearsOfExperience;// 経験
 	String theMonthOfStartWork;// 稼動
@@ -28,6 +30,22 @@ public class SalesSituationCsvModel implements Serializable {
 	String unitPrice;// 単価
 	String salesProgressCode;// 営業状況
 	String remark;// 備考
+
+	public String getEmployeeFristName() {
+		return employeeFristName;
+	}
+
+	public void setEmployeeFristName(String employeeFristName) {
+		this.employeeFristName = employeeFristName;
+	}
+
+	public String getAlphabetName() {
+		return alphabetName;
+	}
+
+	public void setAlphabetName(String alphabetName) {
+		this.alphabetName = alphabetName;
+	}
 
 	public String getStationName() {
 		return stationName;

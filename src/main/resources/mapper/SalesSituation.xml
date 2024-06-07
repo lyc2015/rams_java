@@ -2060,61 +2060,67 @@
 	employeeNo = #{employeeNo} AND salesYearAndMonth >= #{admissionEndDate}
 	</delete>
 
-		<!-- 営業csv -->
+	<!-- 営業csv -->
 	<select id="getSalesSituationCSV"
-		resultType="jp.co.lyc.cms.model.SalesSituationCsvModel">
-	SELECT 
-	T001.employeeNo,
-	CONCAT(T001.employeeFristName, T001.employeeLastName) AS employeeName,
-	COALESCE(T019.yearsOfExperience, T002.yearsOfExperience) AS yearsOfExperience,
-	T002.developLanguage1,
-	T002.developLanguage2,
-	T002.developLanguage3,
-	T002.developLanguage4,
-	T002.developLanguage5,
-	T019.developLanguageCode6,
-	T019.developLanguageCode7,
-	T019.developLanguageCode8,
-	T019.developLanguageCode9,
-	T019.developLanguageCode10,
-	T019.developLanguageCode11,
-	T019.remark,
-	T019.unitPrice,
-	T019.theMonthOfStartWork,
-	T010.salesYearAndMonth,
-	T010.salesProgressCode,
-	M012.siteRoleName AS siteRoleCode,
-	M013.stationName,
-	COALESCE(T019.japaneaseConversationLevel, T002.japaneseLevelCode) AS japaneaseConversationLevel
-	FROM
-	T001Employee AS T001
-	LEFT JOIN T019SalesSentence AS T019
-		ON T001.employeeNo = T019.employeeNo
-	LEFT JOIN T002EmployeeDetail AS T002
-		ON T001.employeeNo = T002.employeeNo
-	LEFT JOIN T010SalesSituation AS T010
-		ON T001.employeeNo = T010.employeeNo
-	LEFT JOIN M012SiteRole AS M012
-		ON T002.siteRoleCode = M012.siteRoleCode
-	LEFT JOIN M013Station AS M013
-		ON T019.stationCode = M013.stationCode
-	LEFT JOIN (
-		SELECT 
-		employeeNo, 
-		MAX(salesYearAndMonth) AS maxSalesYearAndMonth
-		FROM T010SalesSituation
-		GROUP BY employeeNo
-	) AS LatestSales
-		ON T010.employeeNo = LatestSales.employeeNo 
-		AND T010.salesYearAndMonth = LatestSales.maxSalesYearAndMonth
-	WHERE LatestSales.maxSalesYearAndMonth IS NOT NULL AND
-			T001.employeeNo in
-			<foreach item="item" open="(" close=")" collection="list"
-				separator=",">
-				#{item}
-			</foreach>
-			GROUP BY
-	T001.employeeNo
-			;
+    resultType="jp.co.lyc.cms.model.SalesSituationCsvModel">
+    SELECT 
+        T001.employeeNo,
+		T002.alphabetName,
+		T001.employeeFristName,
+        CONCAT(T001.employeeFristName, T001.employeeLastName) AS employeeName,
+        COALESCE(T019.yearsOfExperience, T002.yearsOfExperience) AS yearsOfExperience,
+        T002.developLanguage1,
+        T002.developLanguage2,
+        T002.developLanguage3,
+        T002.developLanguage4,
+        T002.developLanguage5,
+        T019.developLanguageCode6,
+        T019.developLanguageCode7,
+        T019.developLanguageCode8,
+        T019.developLanguageCode9,
+        T019.developLanguageCode10,
+        T019.developLanguageCode11,
+        T019.remark,
+        T019.unitPrice,
+        T019.theMonthOfStartWork,
+        T010.salesYearAndMonth,
+        T010.salesProgressCode,
+        M012.siteRoleName AS siteRoleCode,
+        M013.stationName,
+        COALESCE(T019.japaneaseConversationLevel, T002.japaneseLevelCode) AS japaneaseConversationLevel
+    FROM
+        T001Employee AS T001
+    LEFT JOIN T019SalesSentence AS T019
+        ON T001.employeeNo = T019.employeeNo
+    LEFT JOIN T002EmployeeDetail AS T002
+        ON T001.employeeNo = T002.employeeNo
+    LEFT JOIN T010SalesSituation AS T010
+        ON T001.employeeNo = T010.employeeNo
+    LEFT JOIN M012SiteRole AS M012
+        ON T002.siteRoleCode = M012.siteRoleCode
+    LEFT JOIN M013Station AS M013
+        ON T019.stationCode = M013.stationCode
+    LEFT JOIN (
+        SELECT 
+            employeeNo, 
+            MAX(salesYearAndMonth) AS maxSalesYearAndMonth
+        FROM T010SalesSituation
+        GROUP BY employeeNo
+    ) AS LatestSales
+        ON T010.employeeNo = LatestSales.employeeNo 
+        AND T010.salesYearAndMonth = LatestSales.maxSalesYearAndMonth
+    WHERE LatestSales.maxSalesYearAndMonth IS NOT NULL
+    AND T001.employeeNo in
+        <foreach item="item" open="(" close=")" collection="list"
+            separator=",">
+            #{item}
+        </foreach>
+    GROUP BY T001.employeeNo
+    ORDER BY FIELD(T001.employeeNo, 
+        <foreach item="item" open="" close="" collection="list"
+            separator=",">
+            #{item}
+        </foreach>)
+    ;
 	</select>
 </mapper>
