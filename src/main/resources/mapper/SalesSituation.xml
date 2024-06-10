@@ -727,7 +727,17 @@
 
 	<select id="getT010SalesSituationBefore" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		SELECT * FROM T010SalesSituation where salesYearAndMonth
+		SELECT
+		*,
+			CONCAT (
+			T001.employeeFristName,
+			T001.employeeLastName
+		) salesStaffName
+		FROM
+		T010SalesSituation
+		LEFT JOIN T001Employee AS T001
+			ON T010SalesSituation.salesStaff = T001.employeeNo	
+		where salesYearAndMonth
 		=
 		#{salesDate}
 		;
@@ -744,7 +754,12 @@
 	<select id="getT010SalesSituationByEmployeeNo"
 		parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
-		SELECT (select t11.bpSalesProgressCode from T011BpInfoSupplement t11 where t11.bpEmployeeNo=T010.employeeNo order by unitPriceStartMonth DESC limit 1) bpSalesProgressCode,T010.* FROM T010SalesSituation as T010
+		SELECT (select t11.bpSalesProgressCode from T011BpInfoSupplement t11 where t11.bpEmployeeNo=T010.employeeNo order by unitPriceStartMonth DESC limit 1) bpSalesProgressCode,T010.*,
+		CONCAT (
+		T001.employeeFristName,
+		T001.employeeLastName
+	) salesStaffName FROM T010SalesSituation as T010
+		LEFT JOIN T001Employee AS T001 ON T010.salesStaff = T001.employeeNo
 		inner join (
 		SELECT
 		employeeNo,max(salesYearAndMonth) as salesYearAndMonth FROM

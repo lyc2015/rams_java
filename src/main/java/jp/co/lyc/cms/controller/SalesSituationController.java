@@ -537,7 +537,7 @@ public class SalesSituationController extends BaseController {
 						salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
 						salesSituationList.get(i).setRemark2(T010SalesSituationList.get(j).getRemark2());
 						salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
-						salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
+						salesSituationList.get(i).setSalesStaffName(T010SalesSituationList.get(j).getSalesStaffName());
 						salesSituationList.get(i)
 								.setSalesPriorityStatus(T010SalesSituationList.get(j).getSalesPriorityStatus());
 						salesSituationList.get(i).setCustomer(T010SalesSituationList.get(j).getConfirmCustomer());
@@ -576,6 +576,8 @@ public class SalesSituationController extends BaseController {
 							salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
 							salesSituationList.get(i).setRemark2(T010SalesSituationList.get(j).getRemark2());
 							salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
+							salesSituationList.get(i)
+									.setSalesStaffName(T010SalesSituationList.get(j).getSalesStaffName());
 							salesSituationList.get(i)
 									.setSalesPriorityStatus(T010SalesSituationList.get(j).getSalesPriorityStatus());
 							salesSituationList.get(i).setCustomer(T010SalesSituationList.get(j).getConfirmCustomer());
@@ -865,6 +867,7 @@ public class SalesSituationController extends BaseController {
 					salesSituationList.get(i).setRemark1(T010SalesSituationList.get(j).getRemark1());
 					salesSituationList.get(i).setRemark2(T010SalesSituationList.get(j).getRemark2());
 					salesSituationList.get(i).setSalesStaff(T010SalesSituationList.get(j).getSalesStaff());
+					salesSituationList.get(i).setSalesStaffName(T010SalesSituationList.get(j).getSalesStaffName());
 					salesSituationList.get(i)
 							.setSalesPriorityStatus(T010SalesSituationList.get(j).getSalesPriorityStatus());
 					salesSituationList.get(i).setCustomer(T010SalesSituationList.get(j).getConfirmCustomer());

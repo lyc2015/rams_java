@@ -49,6 +49,8 @@ public class SalesSituationModel implements Serializable {
 	String remark1;
 	String remark2;
 	String salesStaff;
+	String salesStaffName;
+
 	Date updateTime;
 	Date createTime;
 	String updateUser;
@@ -130,6 +132,14 @@ public class SalesSituationModel implements Serializable {
 	String retirementYearAndMonth;
 
 	String alphabetName;
+
+	public String getSalesStaffName() {
+		return salesStaffName;
+	}
+
+	public void setSalesStaffName(String salesStaffName) {
+		this.salesStaffName = salesStaffName;
+	}
 
 	public String getComeToJapanYearAndMonth() {
 		return comeToJapanYearAndMonth;

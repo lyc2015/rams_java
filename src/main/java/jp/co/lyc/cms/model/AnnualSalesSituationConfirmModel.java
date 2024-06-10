@@ -58,6 +58,14 @@ public class AnnualSalesSituationConfirmModel implements Serializable {
     return salesStaffFirstName;
   }
 
+  public void setSalesStaffFirstName(String salesStaffFirstName) {
+    this.salesStaffFirstName = salesStaffFirstName;
+  }
+
+  public String getSalesStaffLastName() {
+    return salesStaffLastName;
+  }
+
   public void setSalesStaffLastName(String salesStaffLastName) {
     this.salesStaffLastName = salesStaffLastName;
   }
