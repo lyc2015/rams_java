@@ -668,7 +668,9 @@
 		<if test="employeeFristName!= null">
 			authorityCode =#{authorityCode},
 		</if>
-		updateTime = date_add(now(), interval 9 hour),
+		<if test="updateTime!= null">
+			updateTime =#{updateTime},
+		</if>
 		updateUser =
 		#{updateUser}
 		WHERE

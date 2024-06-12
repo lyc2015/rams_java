@@ -59,7 +59,7 @@ public class EmployeeModel implements Serializable {
 	String resumeName1;// 履歴書備考1
 	String resumeInfo2;// 履歴書情報2
 	String resumeName2;// 履歴書備考2
-	String updateTime;//更新時間
+	String updateTime;// 更新時間
 	String residentCardInfo;// 在留カード情報
 	String passportInfo;// 在留カード情報
 	String passportNo;// パスポート
@@ -107,6 +107,15 @@ public class EmployeeModel implements Serializable {
 
 	String residentCardInfoName;
 	String passportInfoName;
+	Boolean resume1Changed;
+
+	public Boolean getResume1Changed() {
+		return resume1Changed;
+	}
+
+	public void setResume1Changed(Boolean resume1Changed) {
+		this.resume1Changed = resume1Changed;
+	}
 
 	String introducer;
 
@@ -608,7 +617,7 @@ public class EmployeeModel implements Serializable {
 	public void setResumeName2(String resumeName2) {
 		this.resumeName2 = resumeName2;
 	}
-	
+
 	public String getUpdateTime() {
 		return updateTime;
 	}

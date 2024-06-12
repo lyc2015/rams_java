@@ -1,6 +1,8 @@
 package jp.co.lyc.cms.controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -625,6 +627,7 @@ public class EmployeeInfoController extends BaseController {
 		String major = emp.getMajor();// 専門
 		String graduationYearAndMonth = emp.getGraduationYearAndMonth();// 卒業年月
 		String introducer = emp.getIntroducer();// 紹介者
+		Boolean resume1Changed = emp.getResume1Changed() != null ? emp.getResume1Changed() : false;
 
 		// 入社年月
 		String intoCompanyYearAndMonth = null;
@@ -936,6 +939,15 @@ public class EmployeeInfoController extends BaseController {
 		Date date = new Date();// 此时date为当前的时间
 		SimpleDateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");// 设置当前时间的格式，为年-月-日
 		sendMap.put("nowDate", dateFormat.format(date));
+		if (resume1Changed) {
+			// 画面是直接显示并没有做jst和utc的9小时转化，因此这里也保持和以前一样直接存当地时间
+			LocalDateTime now = LocalDateTime.now();
+			// LocalDateTime updatedTime = now.plusHours(9);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			String formattedTime = now.format(formatter);
+			sendMap.put("updateTime", formattedTime);
+		}
+
 		return sendMap;
 	}
 
