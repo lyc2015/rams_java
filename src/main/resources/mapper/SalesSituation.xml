@@ -2124,8 +2124,7 @@
     ) AS LatestSales
         ON T010.employeeNo = LatestSales.employeeNo 
         AND T010.salesYearAndMonth = LatestSales.maxSalesYearAndMonth
-    WHERE LatestSales.maxSalesYearAndMonth IS NOT NULL
-    AND T001.employeeNo in
+    WHERE T001.employeeNo in
         <foreach item="item" open="(" close=")" collection="list"
             separator=",">
             #{item}
