@@ -2154,13 +2154,18 @@
 			AND T006EmployeeSiteInfo.admissionStartDate = Temp.b) AS LatestT006
 		ON T001.employeeNo = LatestT006.employeeNo
 	LEFT JOIN
-		(SELECT
+		(SELECT 
 		employeeNo,
-		MAX(salesYearAndMonth) AS salesYearAndMonth,
+		salesYearAndMonth,
 		salesProgressCode
-		FROM
+		FROM 
 		T010SalesSituation
-		GROUP BY employeeNo) AS T010
+		WHERE  salesYearAndMonth = (
+			SELECT 
+			MAX(salesYearAndMonth)
+			FROM 
+			T010SalesSituation
+  	)) AS T010
 		ON T001.employeeNo = T010.employeeNo
 	LEFT JOIN T019SalesSentence AS T019
 		ON T001.employeeNo = T019.employeeNo
