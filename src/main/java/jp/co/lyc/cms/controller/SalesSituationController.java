@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.FileChannel;
@@ -34,6 +36,7 @@ import org.castor.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -54,10 +57,12 @@ import jp.co.lyc.cms.model.SalesSituationModel;
 import jp.co.lyc.cms.model.SalesSituationCsvModel;
 import jp.co.lyc.cms.model.SiteModel;
 import jp.co.lyc.cms.model.BpInfoModel;
+import jp.co.lyc.cms.model.CompletePercetModal;
 import jp.co.lyc.cms.model.MasterModel;
 import jp.co.lyc.cms.model.ModelClass;
 import jp.co.lyc.cms.model.S3Model;
 import jp.co.lyc.cms.model.SalesContent;
+import jp.co.lyc.cms.service.CompletePercetService;
 import jp.co.lyc.cms.service.EmployeeInfoService;
 import jp.co.lyc.cms.service.SalesSituationService;
 import jp.co.lyc.cms.service.UtilsService;
@@ -76,6 +81,9 @@ public class SalesSituationController extends BaseController {
 
 	@Autowired
 	SalesSituationService salesSituationService;
+
+	@Autowired
+	CompletePercetService completePercetService;
 
 	@Autowired
 	S3Controller s3Controller;
@@ -329,10 +337,15 @@ public class SalesSituationController extends BaseController {
 
 			// 社員営業され日付
 			String salesDate = getSalesDate(model.getSalesYearAndMonth());
+			String salesYearAndMonth = "";
+
 			if (Integer.parseInt(model.getSalesYearAndMonth()) <= Integer.parseInt(curDate)) {
 				employeeNoList = salesSituationService.getEmployeeNoListBefore(salesDate);
 				T010SalesSituationList = salesSituationService.getT010SalesSituationBefore(model.getSalesYearAndMonth(),
 						curDate, salesDate);
+
+				// 检索过去月份的完成率时，直接从T026完成率表中拿。当前月以后的话，就根据该月检索出的数据进行计算，并将数字存到T026完成率表中。
+				salesYearAndMonth = model.getSalesYearAndMonth();
 			} else {
 				employeeNoList = salesSituationService.getEmployeeNoList(model.getSalesYearAndMonth(), salesDate);
 				BpNoList = salesSituationService.getBpNoList(model.getSalesYearAndMonth(), salesDate);
@@ -340,7 +353,7 @@ public class SalesSituationController extends BaseController {
 						curDate, salesDate);
 			}
 			if (employeeNoList.size() > 0)
-				salesSituationList = salesSituationService.getSalesSituationList(employeeNoList);
+				salesSituationList = salesSituationService.getSalesSituationList(employeeNoList, salesYearAndMonth);
 			if (BpNoList.size() > 0)
 				bpSalesSituationList = salesSituationService.getBpSalesSituationList(BpNoList);
 			developLanguageList = salesSituationService.getDevelopLanguage();
@@ -750,6 +763,87 @@ public class SalesSituationController extends BaseController {
 		// .sorted(Comparator.comparing(SalesSituationModel::getSalesPriorityStatus)).collect(Collectors.toList());
 
 		return salesSituationListTemp;
+	}
+
+	private static final int MAX_RETRIES = 3; // 最大重试次数
+
+	// @Scheduled(cron = "0 0 21 28-31 * ? ") // 任务在每个月的28号到31号的21点到23点之间每小时执行一次。
+	@Scheduled(cron = "0 0 21-23 28-31 * ?") // 任务在每个月的28号到31号的21点到23点之间每小时执行一次。
+	public void getSalesSituationNewAndUpdateCompleteRate() throws ParseException {
+
+		int retryCount = 0;
+		boolean success = false;
+		// 每个月的最后一天才执行
+		if (isLastDayOfMonth()) {
+			while (retryCount < MAX_RETRIES && !success) {
+				try {
+					SalesSituationModel model = new SalesSituationModel();
+					model.setSalesYearAndMonth(getNextYearMonth());
+					List<SalesSituationModel> salesSituationListTemp = this.getSalesSituationNew(model);
+
+					int completeCount = 0;
+					for (int i = 0; i < salesSituationListTemp.size(); i++) {
+						if (salesSituationListTemp.get(i).getSalesProgressCode() != null) {
+							if (salesSituationListTemp.get(i).getSalesProgressCode().equals("1")
+									|| salesSituationListTemp.get(i).getSalesProgressCode().equals("0")) {
+								completeCount++;
+							}
+						}
+
+					}
+
+					BigDecimal completeCountBD = new BigDecimal(completeCount);
+					BigDecimal totalCountBD = new BigDecimal(salesSituationListTemp.size());
+
+					// 完成百分比 = (completeCount / totalCount) * 100
+					BigDecimal percentage = completeCountBD.divide(totalCountBD, 3, RoundingMode.HALF_UP)
+							.multiply(new BigDecimal("100"));
+
+					// HttpSession session = getSession();// ->nullのため
+					CompletePercetModal completePercetModal = new CompletePercetModal();
+					completePercetModal.setYearAndMonthOfPercent(model.getSalesYearAndMonth());
+					completePercetModal.setUpdateUser("autoUpdateCompleteP");
+					// completePercetModal.setUpdateUser(session.getAttribute("employeeName").toString());
+					completePercetModal.setCompletePercet(percentage);
+
+					// T026に保存。
+					completePercetService.upsertCompletePercet(completePercetModal);
+					success = true;
+					logger.info("Scheduled task executed successfully.");
+				} catch (Exception e) {
+					retryCount++;
+					logger.error("Scheduled task execution failed. Retry count: " + retryCount, e);
+					if (retryCount >= MAX_RETRIES) {
+						notifyAdmin(e); // 发送通知给管理员
+					}
+				}
+			}
+		}
+
+	}
+
+	private boolean isLastDayOfMonth() {
+		// 获取当前日期
+		Calendar cal = Calendar.getInstance();
+		int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+		int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		return dayOfMonth == maxDay;
+	}
+
+	private void notifyAdmin(Exception e) {
+		// 实现通知逻辑，例如发送邮件或短信通知管理员
+		logger.error("Scheduled task failed after maximum retries. Sending notification to admin.", e);
+	}
+
+	public static String getNextYearMonth() {
+		// 创建一个SimpleDateFormat实例，指定格式为"yyyyMM"
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+		// 获取当前日期
+		Calendar cal = Calendar.getInstance();
+		// 将月份加1
+		cal.add(Calendar.MONTH, 1);
+		// 将当前日期格式化为指定格式
+		return sdf.format(cal.getTime());
 	}
 
 	/**

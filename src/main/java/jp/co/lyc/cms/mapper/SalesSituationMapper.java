@@ -82,7 +82,7 @@ public interface SalesSituationMapper {
 
 	public List<String> getBpNoList(String salesYearAndMonth, String salesDate);
 
-	public List<SalesSituationModel> getSalesSituationList(List<String> employeeNoList);
+	public List<SalesSituationModel> getSalesSituationList(List<String> employeeNoList,String salesYearAndMonth);
 
 	public List<SalesSituationModel> getBpSalesSituationList(List<String> BpNoList);
 

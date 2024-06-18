@@ -132,6 +132,15 @@ public class SalesSituationModel implements Serializable {
 	String retirementYearAndMonth;
 
 	String alphabetName;
+	String completePercet;
+
+	public String getCompletePercet() {
+		return completePercet;
+	}
+
+	public void setCompletePercet(String completePercet) {
+		this.completePercet = completePercet;
+	}
 
 	public String getSalesStaffName() {
 		return salesStaffName;

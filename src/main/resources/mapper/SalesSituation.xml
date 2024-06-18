@@ -230,6 +230,7 @@
 	<select id="getSalesSituationList" parameterType="String"
 		resultType="jp.co.lyc.cms.model.SalesSituationModel">
 		SELECT 
+		T026.completePercet,
 		T001Employee.employeeFristName,
 		T002EmployeeDetail.alphabetName,
 		T006EmployeeSiteInfo.employeeNo,
@@ -305,6 +306,10 @@
 		on
 		T011.bpEmployeeNo =
 		T006EmployeeSiteInfo.employeeNo
+		LEFT JOIN 
+		T026CompletePercet AS T026
+		ON 
+		T026.yearAndMonthOfPercent = #{salesYearAndMonth}
 		LEFT JOIN
 		T003AddressInfo AS
 		T003AddressInfo
@@ -342,7 +347,7 @@
 		M012SiteRole.siteRoleCode
 		where
 		T006EmployeeSiteInfo.employeeNo in
-		<foreach item="item" collection="list" open="(" close=")"
+		<foreach item="item" collection="employeeNoList" open="(" close=")"
 			separator=",">
 			#{item}
 		</foreach>

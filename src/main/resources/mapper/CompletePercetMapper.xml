@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jp.co.lyc.cms.mapper.CompletePercetMapper">
+	<resultMap id="CompletePercet" type="jp.co.lyc.cms.model.CompletePercetModal" />
+
+    <select id="getCompletePercetByYearAndMonth"  resultMap="CompletePercet">
+        SELECT * FROM T026CompletePercet WHERE T026CompletePercet. yearAndMonthOfPercent = #{yearAndMonthOfPercent}
+    </select>
+    
+    <insert id="upsertCompletePercet" parameterType="jp.co.lyc.cms.model.CompletePercetModal">
+        INSERT INTO T026CompletePercet (yearAndMonthOfPercent, completePercet, createTime, updateTime, updateUser)
+        VALUES (#{yearAndMonthOfPercent}, #{completePercet}, date_add(now(), interval 9 hour), date_add(now(), interval 9 hour), #{updateUser})
+        ON DUPLICATE KEY UPDATE
+            completePercet = #{completePercet},
+            updateTime = date_add(now(), interval 9 hour),
+            updateUser = #{updateUser}
+    </insert>
+</mapper>

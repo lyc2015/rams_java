@@ -92,8 +92,8 @@ public class SalesSituationService {
 		return salesSituationMapper.getEmployeeNoListBefore(salesDate);
 	}
 
-	public List<SalesSituationModel> getSalesSituationList(List<String> employeeNoList) {
-		return salesSituationMapper.getSalesSituationList(employeeNoList);
+	public List<SalesSituationModel> getSalesSituationList(List<String> employeeNoList,String salesYearAndMonth) {
+		return salesSituationMapper.getSalesSituationList(employeeNoList,salesYearAndMonth);
 	}
 
 	public List<SalesSituationModel> getBpSalesSituationList(List<String> BpNoList) {
