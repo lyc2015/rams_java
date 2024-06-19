@@ -71,9 +71,14 @@ public interface WagesInfoMapper {
 	public void delete(HashMap<String, String> sendMap);
 
 	public void updateEmployeeInfo(String table, String employeeNo, String newEmployeeNo);
-	
+
 	public void updateT002EmployeeDetail(String employeeNo, String newEmployeeNo);
 
 	public void updateT004AccountInfo(String employeeNo, String newEmployeeNo);
+
+	/**
+	 * 社員区分を変更するとき、Bpを更新
+	 */
+	public void updateBpInfoNo(String employeeNo, String newEmployeeNo, String bpRemark);
 
 }

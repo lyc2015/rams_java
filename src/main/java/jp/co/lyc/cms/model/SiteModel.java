@@ -43,6 +43,15 @@ public class SiteModel {
 	String workState;// 現場状態
 	String typteOfContractCode; // 契約形態
 	String holidayStartDate;// 休假开始日付
+	int bpInfoNum;// BP情報あるかどうかのフラグ
+
+	public int getBpInfoNum() {
+		return bpInfoNum;
+	}
+
+	public void setBpInfoNum(int bpInfoNum) {
+		this.bpInfoNum = bpInfoNum;
+	}
 
 	public String getDevelopLanguageCode2() {
 		return developLanguageCode2;

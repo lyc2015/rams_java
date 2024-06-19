@@ -264,4 +264,11 @@
 		WHERE
 		employeeOrCustomerNo = #{employeeNo}
 	</update>
+
+	<update id="updateBpInfoNo" parameterType="String">
+	UPDATE T011BpInfoSupplement
+	SET bpEmployeeNo = #{newEmployeeNo},
+		bpRemark = CONCAT(IFNULL(bpRemark, ''), #{bpRemark})
+	WHERE bpEmployeeNo = #{employeeNo}
+	</update>
 </mapper>

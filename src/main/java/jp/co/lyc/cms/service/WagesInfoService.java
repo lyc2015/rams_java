@@ -1,5 +1,7 @@
 package jp.co.lyc.cms.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,12 +126,24 @@ public class WagesInfoService {
 		wagesInfoMapper.updateEmployeeInfo("T018WorkTotalTime", employeeNo, newEmployeeNo);
 		wagesInfoMapper.updateEmployeeInfo("T019SalesSentence", employeeNo, newEmployeeNo);
 		wagesInfoMapper.updateEmployeeInfo("T020CostInfo", employeeNo, newEmployeeNo);
+		wagesInfoMapper.updateEmployeeInfo("T025WorkTotalTimeSupplement", employeeNo, newEmployeeNo);
 
 		if (newEmployeeNo.substring(0, 2).equals("SP"))
 			wagesInfoMapper.updateT002EmployeeDetail(employeeNo, newEmployeeNo);
 		else
 			wagesInfoMapper.updateEmployeeInfo("T002EmployeeDetail", employeeNo, newEmployeeNo);
 		wagesInfoMapper.updateT004AccountInfo(employeeNo, newEmployeeNo);
+
+		String bpRemark = null;
+		if (employeeNo.startsWith("BP")) {
+			// 获取当前年月日时
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			String currentDate = LocalDateTime.now().format(formatter);
+
+			// bpRemark的内容是 当前年月日 emp.getEmployeeNo()からemp.getNewEmployeeNo()に変更。
+			bpRemark = currentDate + " " + employeeNo + "から" + newEmployeeNo + "に変更。";
+		}
+		wagesInfoMapper.updateBpInfoNo(employeeNo, newEmployeeNo, bpRemark);
 
 	}
 
