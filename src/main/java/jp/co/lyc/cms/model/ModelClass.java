@@ -15,6 +15,15 @@ public class ModelClass implements Serializable {
 	String mail;
 	String employeeFristName;
 	String employeeLastName;
+	String employeeFormCode;
+
+	public String getEmployeeFormCode() {
+		return employeeFormCode;
+	}
+
+	public void setEmployeeFormCode(String employeeFormCode) {
+		this.employeeFormCode = employeeFormCode;
+	}
 
 	public String getEmployeeFristName() {
 		return employeeFristName;

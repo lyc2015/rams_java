@@ -722,7 +722,8 @@
 		code,CONCAT(T001Employee.employeeFristName,T001Employee.employeeLastName)
 		name,
 		CONCAT( T001Employee.employeeFristName,
-		T001Employee.employeeLastName ) TEXT
+		T001Employee.employeeLastName ) TEXT,
+		T002EmployeeDetail.employeeFormCode
 		FROM T002EmployeeDetail
 		LEFT JOIN
 		T001Employee
@@ -737,10 +738,10 @@
 		or T002EmployeeDetail.occupationCode = "1"
 		or
 		T002EmployeeDetail.occupationCode = "5")
-		AND (T002EmployeeDetail.employeeFormCode !=
+		<!-- AND (T002EmployeeDetail.employeeFormCode !=
 		"4" or
 		T002EmployeeDetail.retirementResonClassification = "2" or
-		T002EmployeeDetail.retirementYearAndMonth &gt; now());
+		T002EmployeeDetail.retirementYearAndMonth &gt; now()); -->
 	</select>
 
 	<!--フレームワーク -->
