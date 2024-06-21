@@ -137,9 +137,9 @@ public class WagesInfoService {
 		String bpRemark = null;
 		if (employeeNo.startsWith("BP")) {
 			// 获取当前年月日时
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM");
 			String currentDate = LocalDateTime.now().format(formatter);
-
+			
 			// bpRemark的内容是 当前年月日 emp.getEmployeeNo()からemp.getNewEmployeeNo()に変更。
 			bpRemark = currentDate + " " + employeeNo + "から" + newEmployeeNo + "に変更。";
 		}
