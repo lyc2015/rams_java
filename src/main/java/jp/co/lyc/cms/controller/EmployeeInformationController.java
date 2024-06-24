@@ -130,6 +130,20 @@ public class EmployeeInformationController {
 				}
 			}
 		}
+
+		// パスポート
+		for (int i = 0; i < employeeList.size(); i++) {
+			if (!employeeList.get(i).getDealDistinctioCode().equals("2")
+					&& (employeeList.get(i).getPassportStayPeriod() == null
+							|| employeeList.get(i).getPassportStayPeriod().equals("")
+									? false
+									: (employeeList.get(i).getPassportStayPeriodDate()) <= 90)) {
+				TempList.add(employeeList.get(i));
+				employeeList.remove(i);
+				i--;
+			}
+		}
+
 		for (int i = 0; i < TempList.size(); i++) {
 			newEmployeeList.add(TempList.get(i));
 		}
