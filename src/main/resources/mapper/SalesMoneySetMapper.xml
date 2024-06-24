@@ -19,7 +19,10 @@
 			where t11.bpEmployeeNo=t14.employeeNo 
 			order by bpOtherCompanyAdmissionEndDate DESC limit 1
         ) as belongCustomerName,
-        CONCAT(t001.employeeFristName, t001.employeeLastName) as salesStaff
+        CASE 
+        	WHEN t14.salesStaff IS NOT NULL THEN t14.salesStaff 
+        	ELSE t001.employeeNo
+    	END as salesStaff
 		FROM T014SalesMoneySetting t14
 		left join T001Employee t1 on t14.employeeNo=t1.employeeNo
 		left join T010SalesSituation t10 on t10.employeeNo=t14.employeeNo and t14.startYearAndMonth=t10.salesYearAndMonth
@@ -35,6 +38,7 @@
 		additionNumberOfTimesStatus,
 		startYearAndMonth,
 		additionMoneyResonCode,
+		salesStaff,
 		updateTime,
 		createTime,
 		updateUser)
@@ -45,6 +49,7 @@
 		#{additionNumberOfTimesStatus},
 		#{startYearAndMonth},
 		#{additionMoneyResonCode},
+		#{salesStaff},
 		date_add(now(), interval 9 hour),
 		date_add(now(), interval 9 hour),
 		#{updateUser});
@@ -58,6 +63,7 @@
 		additionNumberOfTimesStatus = #{additionNumberOfTimesStatus},
 		startYearAndMonth = #{startYearAndMonth},
 		additionMoneyResonCode = #{additionMoneyResonCode},
+		salesStaff = #{salesStaff},
 		updateTime= date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE id = #{id};

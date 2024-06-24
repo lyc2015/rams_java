@@ -21,7 +21,7 @@ public class MoneySetModel implements Serializable {
 	public String workState;
 	public String belongCustomerName;
 	public boolean isFinalSiteFinish; // 最近的一个现场是否已经终了
-	String salesStaff;
+	public String salesStaff;
 	public String getEmployeeNo() {
 		return employeeNo;
 	}
