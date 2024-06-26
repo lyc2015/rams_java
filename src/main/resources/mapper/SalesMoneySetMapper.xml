@@ -13,7 +13,17 @@
 		t14.startYearAndMonth,
 		t14.additionMoneyResonCode,
 		t14.createTime,
-		(select admissionStartDate from T006EmployeeSiteInfo tt6 where tt6.employeeNo=t14.employeeNo order by admissionStartDate DESC limit 1) admissionStartDate,
+		(SELECT MIN(admissionStartDate)
+        FROM T006EmployeeSiteInfo tt6
+        WHERE tt6.employeeNo = t14.employeeNo
+          AND tt6.customerNo = (
+              SELECT tt6sub.customerNo
+              FROM T006EmployeeSiteInfo tt6sub
+              WHERE tt6sub.employeeNo = t14.employeeNo
+              ORDER BY tt6sub.admissionStartDate DESC
+              LIMIT 1
+          )) AS admissionStartDate,
+		(select admissionEndDate from T006EmployeeSiteInfo tt6 where tt6.employeeNo=t14.employeeNo order by admissionStartDate DESC limit 1) admissionEndDate,
 		(select workstate from T006EmployeeSiteInfo tt6 where tt6.employeeNo=t14.employeeNo order by admissionStartDate DESC limit 1) workState,
 		(select t7.customerAbbreviation from T011BpInfoSupplement t11 left join T007CustomerInfo t7 on t11.bpBelongCustomerCode = t7.customerNo 
 			where t11.bpEmployeeNo=t14.employeeNo 
