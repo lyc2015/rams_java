@@ -17,17 +17,18 @@ public class ProjectInfoService {
 
 	@Autowired
 	ProjectInfoMapper projectInfoMapper;
-	
+
 	/**
 	 * 責任者Dropの取得
+	 * 
 	 * @return
 	 */
 	public ArrayList<ProjectInfoModel> getPersonInCharge(String customerNo) {
 		ArrayList<ProjectInfoModel> resultList = new ArrayList<ProjectInfoModel>();
 		ArrayList<ProjectInfoModel> infoList = projectInfoMapper.getPersonInCharge(customerNo);
 		int i = 0;
-		for(ProjectInfoModel p:infoList) {
-			if(p != null && !(UtilsCheckMethod.isNullOrEmpty(p.getName()) && 
+		for (ProjectInfoModel p : infoList) {
+			if (p != null && !(UtilsCheckMethod.isNullOrEmpty(p.getName()) &&
 					UtilsCheckMethod.isNullOrEmpty(p.getMail()))) {
 				p.setCode(Integer.toString(i));
 				resultList.add(p);
@@ -36,9 +37,10 @@ public class ProjectInfoService {
 		}
 		return resultList;
 	}
-	
+
 	/**
 	 * 追加の場合
+	 * 
 	 * @param wagesInfoModel
 	 * @return
 	 */
@@ -54,9 +56,10 @@ public class ProjectInfoService {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 更新の場合
+	 * 
 	 * @param wagesInfoModel
 	 * @return
 	 */
@@ -72,9 +75,10 @@ public class ProjectInfoService {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 案件情報のsendmap作成
+	 * 
 	 * @param projectInfoModel
 	 * @return
 	 */
@@ -111,6 +115,7 @@ public class ProjectInfoService {
 		sendMap.put("requiredItem1", projectInfoModel.getRequiredItem1());
 		sendMap.put("requiredItem2", projectInfoModel.getRequiredItem2());
 		sendMap.put("salesStaff", projectInfoModel.getSalesStaff());
+		sendMap.put("admissionDay", projectInfoModel.getAdmissionDay());
 		sendMap.put("remark", projectInfoModel.getRemark());
 		sendMap.put("recruitmentNumbers", projectInfoModel.getRecruitmentNumbers());
 		sendMap.put("updateUser", projectInfoModel.getUpdateUser());

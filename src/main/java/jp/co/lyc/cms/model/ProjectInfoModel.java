@@ -44,6 +44,16 @@ public class ProjectInfoModel {
 	String payOffRangeHighest;
 	String workStartPeriod;
 	String requiredItem1;
+	String admissionDay;
+
+	public String getAdmissionDay() {
+		return admissionDay;
+	}
+
+	public void setAdmissionDay(String admissionDay) {
+		this.admissionDay = admissionDay;
+	}
+
 	public String getKeyWordOfFrameWork1() {
 		return keyWordOfFrameWork1;
 	}

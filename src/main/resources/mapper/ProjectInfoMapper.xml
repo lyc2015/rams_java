@@ -75,7 +75,8 @@
 		recruitmentNumbers,
 		updateTime,
 		createTime,
-		updateUser
+		updateUser,
+		admissionDay
 	) 
 	VALUES(
 		#{projectNo},
@@ -114,7 +115,8 @@
 		#{recruitmentNumbers},
 		date_add(now(), interval 9 hour),
 		date_add(now(), interval 9 hour),
-		#{updateUser}
+		#{updateUser},
+		#{admissionDay}
 	)
 	</insert>
 	<!-- アップデート -->
@@ -220,6 +222,9 @@
 		<if test="recruitmentNumbers != null">
 			recruitmentNumbers = #{recruitmentNumbers},
 		</if>
+		<if test="admissionDay != null">
+			admissionDay = #{admissionDay},
+		</if>
 		updateTime = date_add(now(), interval 9 hour),
 		updateUser = #{updateUser}
 		WHERE 
@@ -264,7 +269,8 @@
 		T022.remark,
 		T022.updateTime,
 		T022.createTime,
-		T022.updateUser
+		T022.updateUser,
+		T022.admissionDay
 	FROM
 		T022ProjectInfo AS T022
 	WHERE
