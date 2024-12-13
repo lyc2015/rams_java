@@ -738,10 +738,11 @@
 		or T002EmployeeDetail.occupationCode = "1"
 		or
 		T002EmployeeDetail.occupationCode = "5")
-		<!-- AND (T002EmployeeDetail.employeeFormCode !=
-		"4" or
-		T002EmployeeDetail.retirementResonClassification = "2" or
-		T002EmployeeDetail.retirementYearAndMonth &gt; now()); -->
+		AND (T002EmployeeDetail.employeeFormCode != "4" or
+		<!-- T002EmployeeDetail.retirementResonClassification = "2" or -->
+		T002EmployeeDetail.retirementYearAndMonth &gt; now())
+		ORDER BY 
+    		T002EmployeeDetail.employeeFormCode ASC;
 	</select>
 
 	<!--フレームワーク -->
