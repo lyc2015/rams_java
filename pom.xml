@@ -92,7 +92,7 @@
 		    <artifactId>jasperreports-fonts</artifactId>
 		    <version>1.0</version>
 		    <scope>system</scope>
-		    <systemPath>C:/Users/LYC PC/Desktop/sauce/rams_java/bin/jasperreports-fonts-6.10.0.jar</systemPath>
+		    <systemPath>${project.basedir}/bin/jasperreports-fonts-6.10.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
@@ -119,12 +119,6 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
         </dependency>
-				<!-- https://mvnrepository.com/artifact/com.darwinsys/hirondelle-date4j -->
-				<dependency>
-						<groupId>com.darwinsys</groupId>
-						<artifactId>hirondelle-date4j</artifactId>
-						<version>1.5.1</version>
-				</dependency>
 	</dependencies>
 	<build>
 		<finalName>CMS</finalName>
