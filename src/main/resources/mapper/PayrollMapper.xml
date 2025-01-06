@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jp.co.lyc.cms.mapper.PayrollMapper">
+	<resultMap  id="StringResult" type="String"></resultMap>
+	<resultMap id="PayrollModel" type="jp.co.lyc.cms.model.PayrollModel" ></resultMap>
+	<resultMap id="PayrollCustomerModel" type="jp.co.lyc.cms.model.PayrollCustomerModel" ></resultMap>
+	<resultMap id="PayrollAveragedModel" type="jp.co.lyc.cms.model.PayrollAveragedModel" ></resultMap>
+	
+	<!-- 給料精算の取得 -->
+	<select id="getPayroll" parameterType="String" resultMap="PayrollModel">
+		SELECT DISTINCT
+		    T005.employeeNo,
+		    T005.employeeStatus,
+			COALESCE(T005.fristTimeBonusAmount, 0) + COALESCE(T005.secondTimeBonusAmount, 0) AS bonusPayoff,
+		    T005.insuranceFeeAmount AS socialInsurancePayoff,
+		    T005.reflectYearAndMonth,
+			T002.intoCompanyYearAndMonth,
+			CASE
+				WHEN T005.salary = '' OR T005.salary IS NULL THEN 1
+				ELSE 0
+			END AS isWaiting,
+		    CASE
+		        WHEN T005.salary = '' OR T005.salary IS NULL THEN CONCAT(T005.waitingCost, '(非)')
+		        ELSE T005.salary
+		    END AS salary
+		FROM
+		    T005WagesInfo AS T005
+		LEFT JOIN 
+		    T002EmployeeDetail AS T002
+		ON 
+		    T005.employeeNo = T002.employeeNo
+		WHERE
+		    T005.employeeNo = #{employeeNo}
+		GROUP BY T005.reflectYearAndMonth
+		ORDER BY
+			T005.reflectYearAndMonth ASC;
+	</select>
+	
+	<!-- 現場精算の取得 -->
+	<select id="getCustomer" parameterType="String" resultMap="PayrollCustomerModel">
+		SELECT DISTINCT
+			T006.customerNo,
+		    T006.unitPrice,
+		    T006.admissionEndDate,
+		    T006.admissionStartDate,
+		    T007.customerName
+		FROM
+		    T006EmployeeSiteInfo AS T006
+		LEFT JOIN 
+		    T007CustomerInfo AS T007 
+		ON 
+		    T006.customerNo = T007.customerNo
+		WHERE
+		    T006.employeeNo = #{employeeNo}
+		ORDER BY
+		    T006.admissionStartDate ASC;
+
+	</select>
+
+	<!-- 精算平均値の取得 -->
+	<select id="getAveraged" parameterType="String" resultMap="PayrollAveragedModel">
+		SELECT DISTINCT
+			T027.employeeNo,
+		    T027.salaryStartYear,
+		    T027.salaryEndYear,
+		    T027.salary,
+		    T027.bonusPayoffAmount,
+		    T027.trafficPayoffAmount,
+		    T027.socialInsurancePayoffAmount,
+		    T027.othersPayoffAmount,
+		    T027.totalPayoffAmount
+		FROM
+		    T027_1EmployeeAnnualSalarySettlement AS T027
+		WHERE
+		    T027.employeeNo = #{employeeNo}
+		ORDER BY
+		    T027.salaryStartYear ASC;
+	</select>
+
+	<!-- 精算平均値のデポジット -->
+	<insert id="insertAverage" parameterType="jp.co.lyc.cms.model.PayrollAveragedModel">
+		INSERT INTO T027_1EmployeeAnnualSalarySettlement(
+			employeeNo,
+			salaryStartYear,
+			salaryEndYear,
+			salary,
+			bonusPayoffAmount,
+			trafficPayoffAmount,
+			socialInsurancePayoffAmount,
+			othersPayoffAmount,
+			totalPayoffAmount,
+			updateTime,
+			createTime,
+			updateUser
+		)
+		VALUES(
+			#{employeeNo},
+			#{salaryStartYear},
+			#{salaryEndYear},
+			#{salary},
+			#{bonusPayoffAmount},
+			#{trafficPayoffAmount},
+			#{socialInsurancePayoffAmount},
+			#{othersPayoffAmount},
+			#{totalPayoffAmount},
+			date_add(now(), interval 9 hour),
+			date_add(now(), interval 9 hour),
+			#{updateUser}
+		)
+	</insert>
+	
+	<!-- 精算平均値のアップデート -->
+	<update id="updateAverage" parameterType="jp.co.lyc.cms.model.PayrollAveragedModel">
+		UPDATE T027_1EmployeeAnnualSalarySettlement
+		SET
+			<if test="salaryStartYear != null">
+				salaryStartYear = #{salaryStartYear},
+			</if>
+			<if test="salaryEndYear != null">
+				salaryEndYear = #{salaryEndYear},
+			</if>
+			<if test="salary != null">
+				salary = #{salary},
+			</if>
+			<if test="bonusPayoffAmount != null">
+				bonusPayoffAmount = #{bonusPayoffAmount},
+			</if>
+			<if test="trafficPayoffAmount != null">
+				trafficPayoffAmount = #{trafficPayoffAmount},
+			</if>
+			<if test="socialInsurancePayoffAmount != null">
+				socialInsurancePayoffAmount = #{socialInsurancePayoffAmount},
+			</if>
+			<if test="othersPayoffAmount != null">
+				othersPayoffAmount = #{othersPayoffAmount},
+			</if>
+			<if test="totalPayoffAmount != null">
+				totalPayoffAmount = #{totalPayoffAmount},
+			</if>
+			updateTime = date_add(now(), interval 9 hour),
+			updateUser = #{updateUser}
+		WHERE
+			employeeNo = #{employeeNo}
+		AND salaryStartYear = #{salaryStartYear}
+		AND salaryEndYear = #{salaryEndYear}
+	</update>
+</mapper>
