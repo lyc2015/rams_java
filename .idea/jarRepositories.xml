@@ -12,6 +12,16 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="jaspersoft-third-party" />
+      <option name="name" value="Jaspersoft Third Party" />
+      <option name="url" value="https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jr-ce-releases" />
+      <option name="name" value="Jaspersoft CE Releases" />
+      <option name="url" value="https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />

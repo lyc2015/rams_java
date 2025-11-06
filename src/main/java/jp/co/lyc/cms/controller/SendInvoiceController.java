@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.AccountInfoModel;
 import jp.co.lyc.cms.model.CostRegistrationModel;

@@ -27,7 +27,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.io.path.Path;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.BreakTimeModel;
 import jp.co.lyc.cms.model.DutyRegistrationModel;
@@ -150,7 +150,7 @@ public class DutyRegistrationController extends BaseController {
 			parameters.put("systemName", dutyData.get("systemName"));
 			parameters.put("user", user);
 
-			ArrayList<Map<String, ?>> tableData = new ArrayList<>();
+			ArrayList<Map<String, Object>> tableData = new ArrayList<>();
 			Map<String, Object> rowData = new Hashtable<>();
 			int totalWorkDays = 0;
 			Double totalWorkTime = 0.0;
