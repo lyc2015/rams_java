@@ -168,7 +168,7 @@
 		resultType="jp.co.lyc.cms.model.ModelClass">
 		SELECT customerNo code,if(customerAbbreviation is
 		null or
-		trim(customerAbbreviation)='',customerName,customerAbbreviation) name
+		trim(customerAbbreviation)='',customerName,customerAbbreviation) name,customerName
 		FROM
 		T007CustomerInfo;
 	</select>
