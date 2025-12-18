@@ -1,5 +1,8 @@
 package jp.co.lyc.cms.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,6 +130,23 @@ public class DutyManagementController extends BaseController {
 			returnMod.get(i).setRowNo(i + 1);
 		}
 
+        for (DutyManagementModel model : returnMod) {
+            String cost = model.getCost();
+            if (cost.endsWith(".0")) {
+                int value = Integer.parseInt(cost.substring(0, cost.indexOf(".")));
+                model.setCost(value+"");
+            }
+            String updateTime = model.getUpdateTime();
+            try{
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                LocalDateTime dateTime = LocalDateTime.parse(updateTime, inputFormatter);
+                String output = dateTime.format(outputFormatter);
+                model.setUpdateTime(output);
+            }catch (Exception e) {
+                logger.error("Convert worktime failed :" + e.getMessage());
+            }
+        }
 		logger.info("DutyManagementController.selectDutyManagement:" + "検索終了");
 		return returnMod;
 	}
