@@ -9,8 +9,7 @@
 		resultMap="bpInfoModel">
 		SELECT
 		T011.bpEmployeeNo,
-		max(T011.unitPriceStartMonth) as
-		unitPriceStartMonth,
+		T011.unitPriceStartMonth,
 		T011.bpUnitPrice,
 		T011.bpBelongCustomerCode,
 		T011.bpSalesProgressCode,
@@ -23,6 +22,9 @@
 		T011BpInfoSupplement AS T011
 		WHERE
 		bpEmployeeNo = #{bpEmployeeNo}
+
+        ORDER BY unitPriceStartMonth DESC
+        LIMIT 1;
 	</select>
 
 	<select id="getBpInfoList" parameterType="String"
@@ -34,6 +36,7 @@
 		WHERE
 		bpEmployeeNo =
 		#{bpEmployeeNo}
+
 	</select>
 
 	<!-- 諸費用情報インサート -->
@@ -97,4 +100,20 @@
 		WHERE
 		bpEmployeeNo = #{bpEmployeeNo};
 	</delete>
+
+
+    <select id="getAllBpInfoList" parameterType="String"
+            resultMap="bpInfoModel">
+        SELECT t.*
+        FROM T011BpInfoSupplement t
+        JOIN (
+        SELECT
+        bpEmployeeNo,
+        MAX(unitPriceStartMonth) AS unitPriceStartMonth
+        FROM T011BpInfoSupplement
+        GROUP BY bpEmployeeNo
+        ) m
+        ON t.bpEmployeeNo = m.bpEmployeeNo
+        AND t.unitPriceStartMonth = m.unitPriceStartMonth
+    </select>
 </mapper>

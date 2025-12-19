@@ -1,5 +1,6 @@
 package jp.co.lyc.cms.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,26 @@ public class DutyManagementService {
 	 */
 
 	public List<DutyManagementModel> selectDutyManagement(HashMap<String, String> sendMap) {
-		List<DutyManagementModel> resultMod = dutyManagementMapper.selectDutyManagement(sendMap);
+		//List<DutyManagementModel> resultMod = dutyManagementMapper.selectDutyManagement(sendMap);
+        List<DutyManagementModel> resultMod = new ArrayList<>();
+
+        for(int i=0;i<30;i++) {
+            DutyManagementModel mod = new DutyManagementModel();
+            mod.setEmployeeNo("LYC005");
+            mod.setEmployeeName("11111");
+            mod.setCustomerName("customername");
+            mod.setCost("100");
+            mod.setStationName("东京");
+            mod.setCheckSection("东京1");
+            mod.setBpBelongCustomerAbbreviation("abbr");
+            mod.setDeductionsAndOvertimePay("200");
+            mod.setPayOffRange("300");
+            mod.setDeductionsAndOvertimePay("500");
+            mod.setUpdateTime("2025-12-16 09:18:56");
+            mod.setWorkTime("2025-12-23 09:18:56");
+            resultMod.add(mod);
+        }
+
 		return resultMod;
 	}
 

@@ -46,4 +46,8 @@ public interface BpInfoMapper {
 	 * @return
 	 */
 	public List<BpInfoModel> getBpInfoList(Map<String, Object> sendMap);
+
+
+    public List<BpInfoModel> getAllBpInfoList(Map<String, Object> sendMap);
+
 }
