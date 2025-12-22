@@ -25,17 +25,87 @@ public class BpInfoModel {
 
 	public String bpOtherCompanyAdmissionEndDate;// 所属現場終年月
 
+    public String customerName;
+
+    public  int countPeo;//稼働人数
+
+    public  String pecList;//稼働人数
+
+    public String totalUnitPriceFormat;
+
+    public String averUnitPrice; //粗利
+
+    public String totalUnitPrice;//単価合計
+
 	public String updateUser;// 更新者
+
+    public String employeeName;
 
 	public String getOldUnitPriceStartMonth() {
 		return oldUnitPriceStartMonth;
 	}
 
-	public void setOldUnitPriceStartMonth(String oldUnitPriceStartMonth) {
+    public String getAverUnitPrice() {
+        return averUnitPrice;
+    }
+
+    public int getCountPeo() {
+        return countPeo;
+    }
+
+    public void setCountPeo(int countPeo) {
+        this.countPeo = countPeo;
+    }
+
+    public String getPecList() {
+        return pecList;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public void setPecList(String pecList) {
+        this.pecList = pecList;
+    }
+
+    public String getTotalUnitPrice() {
+        return totalUnitPrice;
+    }
+
+    public void setTotalUnitPrice(String totalUnitPrice) {
+        this.totalUnitPrice = totalUnitPrice;
+    }
+
+    public void setAverUnitPrice(String averUnitPrice) {
+        this.averUnitPrice = averUnitPrice;
+    }
+
+    public void setOldUnitPriceStartMonth(String oldUnitPriceStartMonth) {
 		this.oldUnitPriceStartMonth = oldUnitPriceStartMonth;
 	}
 
-	public String getRowNo() {
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getTotalUnitPriceFormat() {
+        return totalUnitPriceFormat;
+    }
+
+    public void setTotalUnitPriceFormat(String totalUnitPriceFormat) {
+        this.totalUnitPriceFormat = totalUnitPriceFormat;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getRowNo() {
 		return rowNo;
 	}
 
