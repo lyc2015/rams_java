@@ -30,4 +30,8 @@ public class BpInfoService {
 	public List<BpInfoModel> getBpInfoList(Map<String, Object> sendMap) {
 		return bpInfoMapper.getBpInfoList(sendMap);
 	}
+
+    public List<BpInfoModel> getAllBpInfoList(Map<String, Object> sendMap) {
+        return bpInfoMapper.getAllBpInfoList(sendMap);
+    }
 }

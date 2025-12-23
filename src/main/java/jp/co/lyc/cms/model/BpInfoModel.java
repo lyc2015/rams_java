@@ -24,18 +24,143 @@ public class BpInfoModel {
 	public String unitPriceStartMonth;// 単価開始年月
 
 	public String bpOtherCompanyAdmissionEndDate;// 所属現場終年月
+    public String adminCustomerAbb;
+    public String customerName;
+    public String customerCode;
+    public  int countPeo;//稼働人数
+
+    public String admissionEndDate;
+    public String admissionStartDate;
+
+    public  String pecList;//稼働人数
+
+    public String totalUnitPriceFormat;
+
+    public String averUnitPrice; //粗利
+
+    public String totalUnitPrice;//単価合計
 
 	public String updateUser;// 更新者
+
+    public String employeeName;
+
+    public String employeeStr;
+
+    public String customerAbbreviation;
 
 	public String getOldUnitPriceStartMonth() {
 		return oldUnitPriceStartMonth;
 	}
 
-	public void setOldUnitPriceStartMonth(String oldUnitPriceStartMonth) {
+    public String getAverUnitPrice() {
+        return averUnitPrice;
+    }
+
+    public String getEmployeeStr() {
+        return employeeStr;
+    }
+
+    public void setEmployeeStr(String employeeStr) {
+        this.employeeStr = employeeStr;
+    }
+
+    public int getCountPeo() {
+        return countPeo;
+    }
+
+    public void setCountPeo(int countPeo) {
+        this.countPeo = countPeo;
+    }
+
+    public String getAdmissionEndDate() {
+        return admissionEndDate;
+    }
+
+    public void setAdmissionEndDate(String admissionEndDate) {
+        this.admissionEndDate = admissionEndDate;
+    }
+
+    public String getAdmissionStartDate() {
+        return admissionStartDate;
+    }
+
+    public void setAdmissionStartDate(String admissionStartDate) {
+        this.admissionStartDate = admissionStartDate;
+    }
+
+    public String getAdminCustomerAbb() {
+        return adminCustomerAbb;
+    }
+
+    public void setAdminCustomerAbb(String adminCustomerAbb) {
+        this.adminCustomerAbb = adminCustomerAbb;
+    }
+
+    public String getCustomerAbbreviation() {
+        return customerAbbreviation;
+    }
+
+    public void setCustomerAbbreviation(String customerAbbreviation) {
+        this.customerAbbreviation = customerAbbreviation;
+    }
+
+    public String getPecList() {
+        return pecList;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public void setPecList(String pecList) {
+        this.pecList = pecList;
+    }
+
+    public String getTotalUnitPrice() {
+        return totalUnitPrice;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    public void setTotalUnitPrice(String totalUnitPrice) {
+        this.totalUnitPrice = totalUnitPrice;
+    }
+
+    public void setAverUnitPrice(String averUnitPrice) {
+        this.averUnitPrice = averUnitPrice;
+    }
+
+    public void setOldUnitPriceStartMonth(String oldUnitPriceStartMonth) {
 		this.oldUnitPriceStartMonth = oldUnitPriceStartMonth;
 	}
 
-	public String getRowNo() {
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getTotalUnitPriceFormat() {
+        return totalUnitPriceFormat;
+    }
+
+    public void setTotalUnitPriceFormat(String totalUnitPriceFormat) {
+        this.totalUnitPriceFormat = totalUnitPriceFormat;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getRowNo() {
 		return rowNo;
 	}
 

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import jp.co.lyc.cms.model.AccountInfoModel;
+import org.jfree.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import jp.co.lyc.cms.common.BaseController;
 import jp.co.lyc.cms.model.BpInfoModel;
@@ -69,5 +69,76 @@ public class BpInfoController extends BaseController {
 		}
 		return sendMap;
 	}
+
+
+    @RequestMapping(value = "/getPartnerBpInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getPartnerBpInfo(@RequestBody BpInfoModel bpInfoModel) {
+        logger.info("BpInfoController.getPartnerBpInfo:" + "検索開始");
+        Map<String, Object> resultMap = new HashMap<>();// 戻す
+        List<BpInfoModel> bpInfoList = new ArrayList<BpInfoModel>();
+        Map<String, Object> sendMap = new HashMap<>();
+        sendMap.put("givenDateTime",bpInfoModel.getUnitPriceStartMonth());
+        sendMap.put("customerCode",bpInfoModel.getCustomerCode());
+        bpInfoList = bpInfoService.getAllBpInfoList(sendMap);
+        Map<String, BpInfoModel> resMap = new HashMap<>();
+        Map<String, String> companyNames = new HashMap<>();
+
+        Map<String, List<BpInfoModel>> groupedMap =
+                bpInfoList.stream()
+                        .collect(Collectors.groupingBy(
+                                BpInfoModel::getBpBelongCustomerCode
+                        ));
+        List<BpInfoModel> resList = new ArrayList<BpInfoModel>();
+        for (Map.Entry<String, List<BpInfoModel>> entry : groupedMap.entrySet()) {
+            String key = entry.getKey();
+            List<BpInfoModel> value = entry.getValue();
+            BpInfoModel model = value.get(0);
+            String employeeName = "";
+            for(int i=0;i<value.size();i++){
+                int sum = i+1;
+                BpInfoModel eachModel = value.get(i);
+                model.setCountPeo(sum);
+                String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+","+eachModel.getBpUnitPrice()+")";
+                if(employeeName.isEmpty()){
+                    employeeName = item;
+                }else{
+                    employeeName += ", "+item;
+                }
+            }
+            model.setEmployeeStr(employeeName);
+            int averUnitPrice = value.stream()
+                    .mapToInt(bp -> {
+                        try {
+                            return Integer.parseInt(bp.getAverUnitPrice());
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+            model.setAverUnitPrice(averUnitPrice+"");
+            int totalUnitPrice = value.stream()
+                    .mapToInt(bp -> {
+                        try {
+                            return Integer.parseInt(bp.getTotalUnitPrice());
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+            model.setTotalUnitPrice(totalUnitPrice+"");
+
+            resList.add(model);
+        }
+        for (int i = 0; i < resList.size(); i++) {
+            resList.get(i).setRowNo(String.valueOf(i + 1));
+        }
+        resultMap.put("bpInfoList", resList);
+        resultMap.put("allbpInfoList", bpInfoList);
+
+        logger.info("BpInfoController.getBpInfo:" + "検索結束");
+        return resultMap;
+    }
+
 
 }
