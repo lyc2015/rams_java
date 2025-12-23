@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import jp.co.lyc.cms.model.AccountInfoModel;
+import org.jfree.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,33 +79,63 @@ public class BpInfoController extends BaseController {
         List<BpInfoModel> bpInfoList = new ArrayList<BpInfoModel>();
         Map<String, Object> sendMap = new HashMap<>();
         sendMap.put("givenDateTime",bpInfoModel.getUnitPriceStartMonth());
+        sendMap.put("customerCode",bpInfoModel.getCustomerCode());
         bpInfoList = bpInfoService.getBpInfoList(sendMap);
-
         Map<String, BpInfoModel> resMap = new HashMap<>();
         Map<String, String> companyNames = new HashMap<>();
 
-        for(BpInfoModel each:bpInfoList) {
-            if(resMap.containsKey(each.getBpBelongCustomerCode())){
-                BpInfoModel cu = resMap.get(each.getBpBelongCustomerCode());
-                String averUnitPrice = cu.getAverUnitPrice();
-                int sum1 = Integer.parseInt(averUnitPrice) + Integer.parseInt(each.getAverUnitPrice());
-                sum1 = (int) (sum1 / 10000);
-                resMap.get(each.getBpBelongCustomerCode()).setAverUnitPrice(sum1+"");
-                String bpUnitPrice = cu.getBpUnitPrice();
-                int sum2 = Integer.parseInt(bpUnitPrice) + Integer.parseInt(each.getBpUnitPrice());
-                resMap.get(each.getBpBelongCustomerCode()).setTotalUnitPrice(sum2+"");
-                cu.setCountPeo(cu.getCountPeo()+1);
-                String tempName = resMap.get(each.getBpBelongCustomerCode()).getEmployeeName();
-                resMap.get(each.getBpBelongCustomerCode()).setEmployeeName(tempName+","+each.getEmployeeName());
-            }else{
-                resMap.put(each.getBpBelongCustomerCode(),each);
-                companyNames.put(each.getBpBelongCustomerCode(),each.getEmployeeName());
+        Map<String, List<BpInfoModel>> groupedMap =
+                bpInfoList.stream()
+                        .collect(Collectors.groupingBy(
+                                BpInfoModel::getBpBelongCustomerCode
+                        ));
+        List<BpInfoModel> resList = new ArrayList<BpInfoModel>();
+        for (Map.Entry<String, List<BpInfoModel>> entry : groupedMap.entrySet()) {
+            String key = entry.getKey();
+            List<BpInfoModel> value = entry.getValue();
+            BpInfoModel model = value.get(0);
+            String employeeName = "";
+            for(int i=0;i<value.size();i++){
+                int sum = i+1;
+                BpInfoModel eachModel = value.get(i);
+                model.setCountPeo(sum);
+                String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+","+eachModel.getBpUnitPrice()+")";
+                if(employeeName.isEmpty()){
+                    employeeName = item;
+                }else{
+                    employeeName += ", "+item;
+                }
             }
+            model.setEmployeeStr(employeeName);
+            int averUnitPrice = value.stream()
+                    .mapToInt(bp -> {
+                        try {
+                            return Integer.parseInt(bp.getAverUnitPrice());
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+            model.setAverUnitPrice(averUnitPrice+"");
+            int totalUnitPrice = value.stream()
+                    .mapToInt(bp -> {
+                        try {
+                            return Integer.parseInt(bp.getTotalUnitPrice());
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+            model.setTotalUnitPrice(totalUnitPrice+"");
+
+            resList.add(model);
         }
-        for (int i = 0; i < bpInfoList.size(); i++) {
-            bpInfoList.get(i).setRowNo(String.valueOf(i + 1));
+        for (int i = 0; i < resList.size(); i++) {
+            resList.get(i).setRowNo(String.valueOf(i + 1));
         }
-        resultMap.put("bpInfoList", bpInfoList);
+        resultMap.put("bpInfoList", resList);
+        resultMap.put("allbpInfoList", bpInfoList);
+
         logger.info("BpInfoController.getBpInfo:" + "検索結束");
         return resultMap;
     }

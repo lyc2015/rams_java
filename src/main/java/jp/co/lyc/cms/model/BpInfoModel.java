@@ -24,10 +24,13 @@ public class BpInfoModel {
 	public String unitPriceStartMonth;// 単価開始年月
 
 	public String bpOtherCompanyAdmissionEndDate;// 所属現場終年月
-
+    public String adminCustomerAbb;
     public String customerName;
-
+    public String customerCode;
     public  int countPeo;//稼働人数
+
+    public String admissionEndDate;
+    public String admissionStartDate;
 
     public  String pecList;//稼働人数
 
@@ -41,6 +44,10 @@ public class BpInfoModel {
 
     public String employeeName;
 
+    public String employeeStr;
+
+    public String customerAbbreviation;
+
 	public String getOldUnitPriceStartMonth() {
 		return oldUnitPriceStartMonth;
 	}
@@ -49,12 +56,52 @@ public class BpInfoModel {
         return averUnitPrice;
     }
 
+    public String getEmployeeStr() {
+        return employeeStr;
+    }
+
+    public void setEmployeeStr(String employeeStr) {
+        this.employeeStr = employeeStr;
+    }
+
     public int getCountPeo() {
         return countPeo;
     }
 
     public void setCountPeo(int countPeo) {
         this.countPeo = countPeo;
+    }
+
+    public String getAdmissionEndDate() {
+        return admissionEndDate;
+    }
+
+    public void setAdmissionEndDate(String admissionEndDate) {
+        this.admissionEndDate = admissionEndDate;
+    }
+
+    public String getAdmissionStartDate() {
+        return admissionStartDate;
+    }
+
+    public void setAdmissionStartDate(String admissionStartDate) {
+        this.admissionStartDate = admissionStartDate;
+    }
+
+    public String getAdminCustomerAbb() {
+        return adminCustomerAbb;
+    }
+
+    public void setAdminCustomerAbb(String adminCustomerAbb) {
+        this.adminCustomerAbb = adminCustomerAbb;
+    }
+
+    public String getCustomerAbbreviation() {
+        return customerAbbreviation;
+    }
+
+    public void setCustomerAbbreviation(String customerAbbreviation) {
+        this.customerAbbreviation = customerAbbreviation;
     }
 
     public String getPecList() {
@@ -75,6 +122,14 @@ public class BpInfoModel {
 
     public String getTotalUnitPrice() {
         return totalUnitPrice;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
     }
 
     public void setTotalUnitPrice(String totalUnitPrice) {

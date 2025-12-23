@@ -106,7 +106,8 @@
             resultMap="bpInfoModel">
         SELECT t.bpEmployeeNo, t.unitPriceStartMonth, t.bpUnitPrice, t007.customerName,t.bpBelongCustomerCode,t006.unitPrice,
         CAST((t006.unitPrice-t.bpUnitPrice*10000) AS UNSIGNED) as averUnitPrice,t006.unitPrice as totalUnitPrice, 1 as countPeo,
-        CONCAT(T001.employeeFristName,T001.employeeLastName)as employeeName
+        CONCAT(T001.employeeFristName,T001.employeeLastName)as employeeName,t006.admissionEndDate ,t006.admissionStartDate,t007.customerAbbreviation,
+        t0071.customerAbbreviation as adminCustomerAbb
         FROM T011BpInfoSupplement t
         JOIN (
         SELECT
@@ -121,9 +122,14 @@
         on t.bpBelongCustomerCode  = t007.customerNo
         join T006EmployeeSiteInfo t006
         on t.bpEmployeeNo  = t006.employeeNo
+        join t007customerinfo t0071
+        on t006.customerNo  = t0071.customerNo
         join t001employee t001
         on t.bpEmployeeNo  = t001.employeeNo
         WHERE t006.admissionStartDate &lt;= #{givenDateTime}
         AND t006.admissionEndDate &gt;= #{givenDateTime}
+        <if test="customerCode != null  and customerCode != ''">
+            and t.bpBelongCustomerCode = #{customerCode}
+        </if>
     </select>
 </mapper>
