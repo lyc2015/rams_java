@@ -47,7 +47,7 @@
 		employeeLastName,
         too2.employeeFormCode
         FROM T001Employee too1
-        Left join t002employeedetail too2 on too1.employeeNo = too2.employeeNo
+        Left join T002EmployeeDetail too2 on too1.employeeNo = too2.employeeNo
 		order by
 		left(too1.employeeNo,2)="BP",left(too1.employeeNo,2)="SC",left(too1.employeeNo,2)="SP",too1.employeeNo
 	</select>
