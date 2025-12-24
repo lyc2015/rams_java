@@ -87,18 +87,24 @@ public class BpInfoController extends BaseController {
         Map<String, BpInfoModel> resMap = new HashMap<>();
         Map<String, String> companyNames = new HashMap<>();
 
-        for(BpInfoModel each: bpInfoList ) {
-            String start = each.getAdmissionStartDate();
-            String end = each.getAdmissionEndDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            LocalDate date1 = LocalDate.parse(end, formatter);
-            LocalDate date2 = LocalDate.parse(start, formatter);
-            long monthsBetween = ChronoUnit.MONTHS.between(
-                    date2.withDayOfMonth(1),
-                    date1.withDayOfMonth(1)
-            );
-            each.setManMonths((int)monthsBetween);
-        }
+//        for(BpInfoModel each: bpInfoList ) {
+//            long monthsBetween = 0;
+//            try{
+//                String start = each.getAdmissionStartDate();
+//                String end = each.getAdmissionEndDate();
+//                logger.info("Parse AdmissionDate: {} , {}",start, end);
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+//                LocalDate date1 = LocalDate.parse(end, formatter);
+//                LocalDate date2 = LocalDate.parse(start, formatter);
+//                monthsBetween = ChronoUnit.MONTHS.between(
+//                        date2.withDayOfMonth(1),
+//                        date1.withDayOfMonth(1)
+//                );
+//            }catch (Exception e) {
+//                logger.error("Parse AdmissionDate error: {}",e.getMessage());
+//            }
+//            each.setManMonths((int)monthsBetween);
+//        }
 
         Map<String, List<BpInfoModel>> groupedMap =
                 bpInfoList.stream()
@@ -116,8 +122,7 @@ public class BpInfoController extends BaseController {
                 BpInfoModel eachModel = value.get(i);
                 model.setCountPeo(sum);
                 String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+",<span>"+eachModel.getBpUnitPrice()+"</span>)";
-
-
+                
                 if(employeeName.isEmpty()){
                     employeeName = item;
                 }else{
