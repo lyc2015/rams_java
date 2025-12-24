@@ -29,6 +29,8 @@ public class BpInfoModel {
     public String customerCode;
     public  int countPeo;//稼働人数
 
+    public int manMonths; //稼動人月
+
     public String admissionEndDate;
     public String admissionStartDate;
 
@@ -48,9 +50,19 @@ public class BpInfoModel {
 
     public String customerAbbreviation;
 
+    public String adminCustomerAbbCode;//お客様名Code
+
 	public String getOldUnitPriceStartMonth() {
 		return oldUnitPriceStartMonth;
 	}
+
+    public String getAdminCustomerAbbCode() {
+        return adminCustomerAbbCode;
+    }
+
+    public void setAdminCustomerAbbCode(String adminCustomerAbbCode) {
+        this.adminCustomerAbbCode = adminCustomerAbbCode;
+    }
 
     public String getAverUnitPrice() {
         return averUnitPrice;
@@ -70,6 +82,14 @@ public class BpInfoModel {
 
     public void setCountPeo(int countPeo) {
         this.countPeo = countPeo;
+    }
+
+    public int getManMonths() {
+        return manMonths;
+    }
+
+    public void setManMonths(int manMonths) {
+        this.manMonths = manMonths;
     }
 
     public String getAdmissionEndDate() {

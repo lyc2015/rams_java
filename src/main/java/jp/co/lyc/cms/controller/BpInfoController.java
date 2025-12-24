@@ -1,5 +1,8 @@
 package jp.co.lyc.cms.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +83,22 @@ public class BpInfoController extends BaseController {
         Map<String, Object> sendMap = new HashMap<>();
         sendMap.put("givenDateTime",bpInfoModel.getUnitPriceStartMonth());
         sendMap.put("customerCode",bpInfoModel.getCustomerCode());
-        bpInfoList = bpInfoService.getBpInfoList(sendMap);
+        bpInfoList = bpInfoService.getAllBpInfoList(sendMap);
         Map<String, BpInfoModel> resMap = new HashMap<>();
         Map<String, String> companyNames = new HashMap<>();
+
+        for(BpInfoModel each: bpInfoList ) {
+            String start = each.getAdmissionStartDate();
+            String end = each.getAdmissionEndDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate date1 = LocalDate.parse(end, formatter);
+            LocalDate date2 = LocalDate.parse(start, formatter);
+            long monthsBetween = ChronoUnit.MONTHS.between(
+                    date2.withDayOfMonth(1),
+                    date1.withDayOfMonth(1)
+            );
+            each.setManMonths((int)monthsBetween);
+        }
 
         Map<String, List<BpInfoModel>> groupedMap =
                 bpInfoList.stream()
@@ -99,7 +115,9 @@ public class BpInfoController extends BaseController {
                 int sum = i+1;
                 BpInfoModel eachModel = value.get(i);
                 model.setCountPeo(sum);
-                String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+","+eachModel.getBpUnitPrice()+")";
+                String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+",<span>"+eachModel.getBpUnitPrice()+"</span>)";
+
+
                 if(employeeName.isEmpty()){
                     employeeName = item;
                 }else{
@@ -128,6 +146,17 @@ public class BpInfoController extends BaseController {
                     .sum();
             model.setTotalUnitPrice(totalUnitPrice+"");
 
+            int manMonths = value.stream()
+                    .mapToInt(bp -> {
+                        try {
+                            return bp.getManMonths();
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .sum();
+            model.setManMonths(manMonths);
+
             resList.add(model);
         }
         for (int i = 0; i < resList.size(); i++) {
@@ -136,7 +165,11 @@ public class BpInfoController extends BaseController {
         resultMap.put("bpInfoList", resList);
         resultMap.put("allbpInfoList", bpInfoList);
 
-        logger.info("BpInfoController.getBpInfo:" + "検索結束");
+        Map<String, Object> sendMap1 = new HashMap<>();
+        List<BpInfoModel> bpInfoCusList = bpInfoService.getAllBpInfoList(sendMap1);
+        resultMap.put("bpInfoCusList", bpInfoCusList);
+
+        logger.info("BpInfoController.getPartnerBpInfo:" + "検索結束");
         return resultMap;
     }
 
