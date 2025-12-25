@@ -1,6 +1,7 @@
 package jp.co.lyc.cms.controller;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -121,8 +122,16 @@ public class BpInfoController extends BaseController {
                 int sum = i+1;
                 BpInfoModel eachModel = value.get(i);
                 model.setCountPeo(sum);
-                String item = sum+"."+"("+eachModel.getEmployeeName()+","+eachModel.getAdminCustomerAbb()+","+eachModel.getUnitPriceStartMonth()+",<span>"+eachModel.getBpUnitPrice()+"</span>)";
-                
+                String unitPriceStartMonth = model.getUnitPriceStartMonth();
+                try{
+                    YearMonth ym = YearMonth.parse(unitPriceStartMonth, DateTimeFormatter.ofPattern("yyyyMM"));
+                    unitPriceStartMonth = ym.format(DateTimeFormatter.ofPattern("yyyy/MM"));
+                }catch (Exception e) {
+                    logger.error("convert unitPriceStartMonth failed: {}" ,e.getMessage());
+                }
+
+                String item = sum+"."+"(<span style=\"color: red;\">"+eachModel.getEmployeeName()+",</span>"+eachModel.getAdminCustomerAbb()+","+unitPriceStartMonth+",<span style=\"color: red;\">"+eachModel.getBpUnitPrice()+"</span>)";
+
                 if(employeeName.isEmpty()){
                     employeeName = item;
                 }else{
